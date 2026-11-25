@@ -1123,7 +1123,6 @@ kbd {
     </div>
     <nav class="tabs" role="tablist" aria-label="화면 전환">
       <button class="tab active" data-tab="packs" role="tab" aria-selected="true">추천 팩</button>
-      <button class="tab" data-tab="shadow" role="tab" aria-selected="false">직접 추가</button>
       <button class="tab" data-tab="review" role="tab" aria-selected="false">
         복습 <span class="badge zero" id="dueBadge">0</span>
       </button>
@@ -1143,7 +1142,7 @@ kbd {
       </div>
       <div class="pack-grid" id="packGrid"></div>
       <div class="hint" style="margin-top:14px">
-        내 링크로 직접 문장을 만들고 싶을 땐 위의 <b>직접 추가</b> 탭을 쓰면 됩니다.
+        내 카드의 구간을 다시 들으며 다듬고 싶으면 <b>라이브러리</b>에서 <b>연습</b>을 누르세요.
       </div>
     </div>
 
@@ -1195,10 +1194,11 @@ kbd {
     </div>
   </section>
 
-  <!-- ================= 쉐도잉 (직접 추가) ================= -->
-  <section class="tabpane" id="tab-shadow" role="tabpanel" aria-label="직접 추가">
-    <div class="hint" style="margin:0 0 12px">
-      내 유튜브 링크로 직접 문장을 만들 때 쓰는 화면이에요. 링크 없이 바로 시작하려면 <b>추천 팩</b> 탭을 보세요.
+  <!-- ================= 카드 연습 (라이브러리에서 들어오는 화면) ================= -->
+  <section class="tabpane" id="tab-shadow" role="tabpanel" aria-label="카드 연습">
+    <div class="row wrap" style="margin:0 0 12px;gap:10px;align-items:center">
+      <button class="btn sm ghost" id="shadowBackBtn">← 라이브러리</button>
+      <span class="hint" style="margin:0">내 카드의 구간을 다시 들으며 문장을 다듬는 화면이에요. 새 문장은 <b>추천 팩</b>에서 시작하세요.</span>
     </div>
     <div class="grid shadow-grid">
 
@@ -1803,8 +1803,8 @@ kbd {
       emoji: "💼",
       name: "비즈니스·회의 영어",
       level: "B1 → B2",
-      sub: "Oxford Online English · 회의 표현 6문장",
-      desc: "의견 말하기, 정중한 반대, 질문·명확화, 불가능한 일 설명까지 회의에서 바로 쓰는 문장.",
+      sub: "Oxford Online English · 회의·마감 표현 10문장",
+      desc: "의견 말하기, 정중한 반대, 질문·명확화, 불가능한 일 설명에 마감·회신 약속까지 — 회의에서 바로 쓰는 문장.",
       cards: [
         {
           videoId: "NEKZFA7L7Lg", start: 394.7, end: 399.1,
@@ -1841,6 +1841,30 @@ kbd {
           sentence: "Unfortunately, we won't be able to complete the project any sooner because we don't have the supplies yet.",
           meaning: "안타깝지만 자재가 아직 없어서 프로젝트를 더 앞당겨 끝낼 수는 없습니다.\n· 불가능한 일을 이유와 함께 정중히 설명할 때 — Unfortunately, we won't be able to ... because ...",
           tags: ["비즈니스", "회의", "B2"], level: "B2"
+        },
+        {
+          videoId: "NEKZFA7L7Lg", start: 283.0, end: 289.0,
+          sentence: "We might want to consider looking for another engineer to help with this.",
+          meaning: "이 일을 도와줄 다른 엔지니어를 찾는 것도 고려해볼 수 있을 것 같아요.\n· We might want to consider ~ = 강하게 밀지 않고 대안을 꺼내는 표현. 회의에서 반대 대신 다른 선택지를 제안할 때 씁니다.",
+          tags: ["비즈니스", "회의", "제안"], level: "B1"
+        },
+        {
+          videoId: "NEKZFA7L7Lg", start: 683.0, end: 692.0,
+          sentence: "I'll discuss this with the rest of my team and get back to you by the end of the week.",
+          meaning: "나머지 팀원들과 논의한 뒤 이번 주말까지 다시 말씀드릴게요.\n· get back to you by + 시점 = ~까지 회신드리다. 마감·회신 약속을 할 때 그대로 쓰는 문장입니다.",
+          tags: ["비즈니스", "회의", "마감"], level: "B2"
+        },
+        {
+          videoId: "NEKZFA7L7Lg", start: 700.0, end: 706.0,
+          sentence: "I'm going to get a team together for this project.",
+          meaning: "이 프로젝트를 위해 팀을 꾸릴 예정입니다.\n· be going to + 동사 = 이미 마음먹은 계획. get a team together = 팀을 모으다.",
+          tags: ["비즈니스", "회의", "계획"], level: "B1"
+        },
+        {
+          videoId: "NEKZFA7L7Lg", start: 706.0, end: 714.0,
+          sentence: "I'm planning to do one more round of testing, and then we can go live.",
+          meaning: "테스트를 한 번 더 돌린 다음에 서비스에 올리면 되겠습니다.\n· be planning to ~ = 예정된 계획. go live = 실제로 서비스를 오픈하다(배포하다).",
+          tags: ["비즈니스", "회의", "계획"], level: "B2"
         }
       ]
     },
@@ -1849,7 +1873,7 @@ kbd {
       emoji: "🎤",
       name: "학회·TED 발표 영어",
       level: "B2",
-      sub: "Robert Waldinger · Julian Treasure (TED) 6문장",
+      sub: "Waldinger · Treasure · Chris Anderson (TED) 10문장",
       desc: "연구를 소개하고 방법·결과를 말하는 문장, 발표에서 주장을 부드럽게 세우는 문장.",
       cards: [
         {
@@ -1887,6 +1911,30 @@ kbd {
           sentence: "I'd like to suggest that there are four really powerful cornerstones, foundations, that we can stand on if we want our speech to be powerful and to make change in the world.",
           meaning: "제안하고 싶습니다. 힘 있는 말을 하고 세상을 바꾸고 싶다면 우리가 딛고 설 수 있는 네 가지 든든한 초석이 있습니다.\n· I'd like to suggest that ... 로 발표의 구조를 예고하는 문장입니다.",
           tags: ["TED", "발표", "B2"], level: "B2"
+        },
+        {
+          videoId: "-FOCpMAww28", start: 63.0, end: 76.0,
+          sentence: "Your number one task as a speaker is to transfer into your listeners' minds an extraordinary gift — a strange and beautiful object that we call an idea.",
+          meaning: "발표자로서 첫 번째 임무는 청중의 마음속에 '아이디어'라는 특별한 선물을 옮겨 심는 것입니다.\n· transfer A into B = A를 B 안으로 옮기다. 발표의 목적을 한 문장으로 규정하는 틀입니다.",
+          tags: ["TED", "발표", "정의"], level: "B2"
+        },
+        {
+          videoId: "-FOCpMAww28", start: 333.0, end: 337.0,
+          sentence: "Two, give your listeners a reason to care.",
+          meaning: "둘째, 청중이 관심을 가질 이유를 주세요.\n· give someone a reason to ~ = ~할 이유를 주다. 발표 구조를 숫자로 예고하는 짧은 문장입니다.",
+          tags: ["TED", "발표", "구조"], level: "B1"
+        },
+        {
+          videoId: "-FOCpMAww28", start: 370.0, end: 377.0,
+          sentence: "Three, build your idea, piece by piece, out of concepts that your audience already understands.",
+          meaning: "셋째, 청중이 이미 이해하는 개념으로 아이디어를 하나씩 쌓아 올리세요.\n· piece by piece = 하나씩 차근차근. build A out of B = B로 A를 만들어 올리다.",
+          tags: ["TED", "발표", "설명"], level: "B2"
+        },
+        {
+          videoId: "-FOCpMAww28", start: 437.0, end: 443.0,
+          sentence: "Four, here's the final tip: Make your idea worth sharing.",
+          meaning: "넷째, 마지막 조언입니다. 당신의 아이디어를 공유할 가치가 있는 것으로 만드세요.\n· here's the final tip = 마지막 조언을 꺼낼 때. worth ~ing = ~할 가치가 있는.",
+          tags: ["TED", "발표", "마무리"], level: "B1"
         }
       ]
     },
@@ -1894,8 +1942,8 @@ kbd {
       id: "de-a1",
       emoji: "🇩🇪",
       name: "독일어 A1 기초 회화",
-      level: "A1",
-      sub: "Easy German · 자기소개 + 주문 6문장",
+      level: "A1 → A2",
+      sub: "Easy German · 자기소개·취미 8문장",
       desc: "이름·출신 묻고 답하기부터 카페에서 주문하기까지, 천천히 또박또박 말하는 문장.",
       cards: [
         {
@@ -1933,6 +1981,116 @@ kbd {
           sentence: "Ich hätte gerne einen Kaffee.",
           meaning: "커피 한 잔 주세요.\n· 독일 카페에서 가장 자연스러운 주문 표현(hätte gerne ~). Ich möchte보다 부드럽습니다.",
           tags: ["독일어", "A1", "주문"], level: "A1"
+        },
+        {
+          videoId: "Yaelm87PTvg", start: 143.0, end: 151.0,
+          sentence: "Ich reise gerne und ich lese gerne und ich trinke gerne Kaffee.",
+          meaning: "나는 여행하는 것도, 책 읽는 것도, 커피 마시는 것도 좋아해요.\n· gerne = 즐겨서. 동사 뒤에 붙이면 '~하는 걸 좋아한다'가 됩니다.",
+          tags: ["독일어", "A1", "취미"], level: "A1"
+        },
+        {
+          videoId: "Yaelm87PTvg", start: 191.0, end: 199.0,
+          sentence: "Mein Hobby ist, sich mit Freunden zu treffen und das Leben zu genießen.",
+          meaning: "제 취미는 친구들을 만나고 삶을 즐기는 거예요.\n· sich mit Freunden treffen = 친구들을 만나다. das Leben genießen = 삶을 즐기다.",
+          tags: ["독일어", "A2", "취미"], level: "A2"
+        }
+      ]
+    },
+    {
+      id: "energy",
+      emoji: "🧪",
+      name: "에너지·기후·공학 영어",
+      level: "B1 → B2",
+      sub: "DW Planet A · 수소·CCS 7문장",
+      desc: "수소 생산 방식부터 블루 수소·CCS, 에너지 밀도와 효율까지 — 실제 에너지 영상에서 뽑은 문장.",
+      cards: [
+        {
+          videoId: "AGTjKJHu99c", start: 53.0, end: 61.0,
+          sentence: "It's a very clingy gas, though, so you'll usually find it bound up with other elements – for example with oxygen in water.",
+          meaning: "다만 수소는 붙는 성질이 강해서, 보통 다른 원소와 결합한 상태로 존재합니다. 예를 들어 물속의 산소처럼요.\n· clingy = 달라붙는. be bound up with = ~와 결합해 있다.",
+          tags: ["에너지", "수소", "B1"], level: "B1"
+        },
+        {
+          videoId: "AGTjKJHu99c", start: 61.0, end: 70.0,
+          sentence: "If we want to get pure hydrogen, we have to split up these bonds. And a simple way to do this is called electrolysis.",
+          meaning: "순수한 수소를 얻으려면 이 결합을 끊어야 합니다. 그 간단한 방법이 바로 전기분해(electrolysis)입니다.\n· split up bonds = 결합을 끊다. '정의 → 방법'으로 넘어가는 발표 문장입니다.",
+          tags: ["에너지", "수소", "전기분해"], level: "B1"
+        },
+        {
+          videoId: "AGTjKJHu99c", start: 202.0, end: 209.0,
+          sentence: "But hydrogen can get the job done as well – while also being clean-burning, so only leaving behind water.",
+          meaning: "하지만 수소도 그 일을 해낼 수 있습니다. 게다가 연소해도 물만 남기는 청정 연료입니다.\n· get the job done = 일을 해내다. while also ~ing = 동시에 ~하면서.",
+          tags: ["에너지", "수소", "철강"], level: "B2"
+        },
+        {
+          videoId: "AGTjKJHu99c", start: 323.0, end: 331.0,
+          sentence: "When we're talking about blue hydrogen, we're referring to fossil fuels with carbon capture and storage.",
+          meaning: "블루 수소라고 하면, 탄소 포집·저장(CCS)을 결합한 화석연료를 말합니다.\n· When we're talking about A, we're referring to B = 용어를 정의하는 가장 깔끔한 발표 화법.",
+          tags: ["에너지", "블루수소", "CCS"], level: "B2"
+        },
+        {
+          videoId: "AGTjKJHu99c", start: 402.0, end: 413.0,
+          sentence: "These release methane into the atmosphere, a greenhouse gas that in the short term is more than 80 times more powerful in warming the planet than CO2.",
+          meaning: "이 과정에서 메탄이 대기로 새는데, 메탄은 단기적으로 CO2보다 80배 이상 강력한 온실가스입니다.\n· in the short term = 단기적으로. more powerful than = ~보다 강력한.",
+          tags: ["에너지", "메탄", "온실가스"], level: "B2"
+        },
+        {
+          videoId: "AGTjKJHu99c", start: 537.0, end: 545.0,
+          sentence: "One big challenge that remains is hydrogen's relatively low energy density.",
+          meaning: "남아 있는 큰 문제는 수소의 상대적으로 낮은 에너지 밀도입니다.\n· One challenge that remains is ~ = 남은 과제를 짚고 넘어가는 문장.",
+          tags: ["에너지", "수소", "한계"], level: "B2"
+        },
+        {
+          videoId: "AGTjKJHu99c", start: 585.0, end: 596.0,
+          sentence: "But turning electricity into hydrogen, transporting it to refuelling stations, pumping it into a fuel cell to then convert it back to electricity is just not very efficient.",
+          meaning: "전기를 수소로 바꾸고, 충전소로 옮기고, 다시 연료전지에 넣어 전기로 되돌리는 과정은 효율이 좋지 않습니다.\n· 긴 주어를 A, B, C로 나열한 뒤 is not very efficient로 결론을 맺는 구조입니다.",
+          tags: ["에너지", "효율", "연료전지"], level: "B2"
+        }
+      ]
+    },
+    {
+      id: "talk",
+      emoji: "🗣️",
+      name: "일상·스몰토크 영어",
+      level: "B1 → B2",
+      sub: "Harvard Business Review · 스몰토크 6문장",
+      desc: "가벼운 대화에서 바로 쓰는 말투 — 시작, 맞장구, 자연스럽게 빠져나오기까지.",
+      cards: [
+        {
+          videoId: "IRG-YubP1rw", start: 27.0, end: 34.0,
+          sentence: "It's like a tennis match, where I've got to lob something over to the person or people I'm talking to, and I hope it lands and goes well.",
+          meaning: "테니스 경기처럼, 말하는 상대에게 뭔가를 넘겨주고 그게 잘 받아지길 바라는 거죠.\n· lob something over = (공을) 넘겨주다. 대화를 주고받는 느낌을 비유로 설명할 때 씁니다.",
+          tags: ["일상", "스몰토크", "비유"], level: "B2"
+        },
+        {
+          videoId: "IRG-YubP1rw", start: 102.0, end: 109.0,
+          sentence: "You can reduce the intensity of that spotlight we feel by putting your attention on the other.",
+          meaning: "우리가 느끼는 그 스포트라이트 부담은 상대에게 주의를 돌리면 줄어듭니다.\n· put your attention on ~ = ~에 주의를 두다.",
+          tags: ["일상", "스몰토크", "긴장"], level: "B2"
+        },
+        {
+          videoId: "IRG-YubP1rw", start: 271.0, end: 275.0,
+          sentence: "Spontaneous communication is about connection, not perfection.",
+          meaning: "즉석 대화에서 중요한 건 완벽함이 아니라 연결입니다.\n· A is about B, not C — 핵심을 대비로 강조하는 짧은 문장입니다.",
+          tags: ["일상", "스몰토크", "태도"], level: "B1"
+        },
+        {
+          videoId: "IRG-YubP1rw", start: 343.0, end: 349.0,
+          sentence: "I know she didn't create it, but it's tell me the time, don't build me the clock.",
+          meaning: "그 말을 어머니가 만든 건 아니지만, '시각만 알려주고 시계를 만들지는 마라'는 뜻이에요.\n· tell me the time, don't build me the clock = 요점만 말하라는 관용적 표현.",
+          tags: ["일상", "스몰토크", "표현"], level: "B2"
+        },
+        {
+          videoId: "IRG-YubP1rw", start: 439.0, end: 444.0,
+          sentence: "So if I'm engaging you in conversation I can say, hey, what brings you here? That's the what.",
+          meaning: "대화를 시작할 때 '여긴 어떻게 오셨어요?'라고 물을 수 있죠. 그게 'what'입니다.\n· What brings you here? = 여기엔 웬일이세요? 스몰토크 첫 질문으로 자주 씁니다.",
+          tags: ["일상", "스몰토크", "시작"], level: "B1"
+        },
+        {
+          videoId: "IRG-YubP1rw", start: 591.0, end: 594.0,
+          sentence: "I need to get going because there's some friends over there I need to meet.",
+          meaning: "저쪽에 만나야 할 친구들이 있어서 이만 가봐야 해요.\n· I need to get going = 이만 가봐야겠다. 대화를 자연스럽게 끝낼 때 쓰는 표현입니다.",
+          tags: ["일상", "스몰토크", "마무리"], level: "B1"
         }
       ]
     }
@@ -1942,6 +2100,9 @@ kbd {
     NEKZFA7L7Lg: "Attending a Meeting in English - Useful Phrases for Meetings - Business English",
     "8KkKuTCFvzI": "What Makes a Good Life? Lessons from the Longest Study on Happiness | Robert Waldinger | TED",
     eIho2S0ZahI: "How to Speak So That People Want to Listen | Julian Treasure | TED",
+    "-FOCpMAww28": "TED's secret to great public speaking | Chris Anderson | TED",
+    AGTjKJHu99c: "The truth about hydrogen | DW Planet A",
+    "IRG-YubP1rw": "How to Get Good at Small Talk, and Even Enjoy It | Harvard Business Review",
     Yaelm87PTvg: "Introduce yourself in German (for absolute beginners) | Super Easy German (76)",
     h5085YiFRnI: "How to order drinks in German | Super Easy German (109)"
   };
@@ -2051,8 +2212,9 @@ kbd {
   function switchTab(name) {
     if (name === currentTab) return;
     currentTab = name;
+    var navName = name === "shadow" ? "library" : name;
     qsa(".tab").forEach(function (b) {
-      var on = b.getAttribute("data-tab") === name;
+      var on = b.getAttribute("data-tab") === navName;
       b.classList.toggle("active", on);
       b.setAttribute("aria-selected", on ? "true" : "false");
     });
@@ -3563,6 +3725,7 @@ kbd {
       openPack(b.getAttribute("data-open"));
     });
     el("packBackBtn").addEventListener("click", closePack);
+    el("shadowBackBtn").addEventListener("click", function () { switchTab("library"); });
     el("packPrevBtn").addEventListener("click", function () { goPack(-1); });
     el("packNextBtn").addEventListener("click", function () { goPack(1); });
     el("packPlayBtn").addEventListener("click", function () {
