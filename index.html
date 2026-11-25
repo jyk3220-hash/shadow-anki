@@ -2477,6 +2477,15 @@ kbd {
 
   function switchTab(name) {
     if (name === currentTab) return;
+    // 탭을 옮길 때 열려 있던 하위 화면은 닫고 쌓아둔 히스토리도 정리한다
+    if (name !== "packs" && packViewOpen()) {
+      closePackView();
+      historyDropSilent();
+    }
+    if (name !== "shadow" && shadow && shadow.open) {
+      stopPractice();
+      historyDropSilent();
+    }
     currentTab = name;
     var navName = name === "shadow" ? "library" : name;
     qsa(".tab").forEach(function (b) {
@@ -2515,6 +2524,96 @@ kbd {
     el("reviewStartPanel").hidden = rv.active;
     el("rsDue").textContent = String(n);
     el("reviewStartBtn").disabled = n === 0;
+  }
+
+  /* =========================================================
+     안드로이드 뒤로가기 — 팩·연습·복습 안에서 브라우저가 닫히지 않도록
+     하위 화면에 들어갈 때 history state를 쌓고, popstate에서 화면만 되돌린다.
+     ========================================================= */
+  var historyNav = { silentAt: 0 };
+
+  function historyPushView(view, extra) {
+    try {
+      var h = window.history;
+      if (!h || typeof h.pushState !== "function") return false;
+      var st = { __sa: 1, view: view };
+      if (extra) {
+        for (var k in extra) {
+          if (Object.prototype.hasOwnProperty.call(extra, k)) st[k] = extra[k];
+        }
+      }
+      h.pushState(st, "");
+      return true;
+    } catch (e) { return false; }
+  }
+
+  function historyOurs() {
+    try {
+      var h = window.history;
+      var st = h ? h.state : null;
+      return !!(st && st.__sa === 1);
+    } catch (e) { return false; }
+  }
+
+  // 탭 이동처럼 스스로 화면을 버릴 때: 쌓아둔 state를 조용히 되돌린다(유령 히스토리 방지)
+  function historyDropSilent() {
+    if (!historyOurs()) return;
+    historyNav.silentAt = Date.now();
+    try { window.history.back(); } catch (e) { historyNav.silentAt = 0; }
+  }
+
+  // 인앱 뒤로가기 버튼: 우리가 쌓은 state면 history.back()으로 함께 정리하고
+  // (그때는 popstate가 화면을 되돌린다), 아니면 화면만 되돌린다.
+  function historyBackOr(fallback) {
+    if (historyOurs()) {
+      try { window.history.back(); return; } catch (e) {}
+    }
+    fallback();
+  }
+
+  function packViewOpen() {
+    if (typeof packState === "undefined" || !packState) return false;
+    return !!(packState.active || (el("packStage") && !el("packStage").hidden));
+  }
+
+  function closePackView() {          // 화면만 되돌리기(history는 popstate/드롭이 담당)
+    if (typeof packState === "undefined" || !packState) return;
+    if (!packState.active && el("packStage").hidden) return;
+    if (packState.player) packState.player.pause();
+    packState.active = null;
+    packState.lock = false;
+    el("packStage").hidden = true;
+    el("packHome").hidden = false;
+    renderPacks();
+    if (currentTab === "packs") window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function stopPractice() {          // 화면만 멈추기(탭은 그대로)
+    if (shadow && shadow.player) shadow.player.pause();
+    if (shadow) shadow.open = false;
+  }
+
+  function closePracticeView() {
+    if (!shadow || !shadow.open) return;
+    stopPractice();
+    if (currentTab === "shadow") switchTab("library");
+  }
+
+  function closeReviewView() {
+    if (!rv.active) return;
+    rv.active = false;
+    if (rv.player) rv.player.pause();
+    el("reviewStage").hidden = true;
+    el("reviewDone").hidden = true;
+    el("reviewStartPanel").hidden = false;
+    refreshReviewStart();
+  }
+
+  function onPopState() {
+    if (Date.now() - historyNav.silentAt < 600) return;   // 방금 우리가 정리한 항목
+    if (packViewOpen()) { closePackView(); return; }
+    if (shadow && shadow.open) { closePracticeView(); return; }
+    if (rv.active && currentTab === "review") { closeReviewView(); return; }
   }
 
   /* =========================================================
@@ -2909,7 +3008,8 @@ kbd {
     player: null,
     videoId: null,
     title: "",
-    loadedOnce: false
+    loadedOnce: false,
+    open: false          // 카드 연습 화면(라이브러리에서 들어온 상태)
   };
 
   function getShadowPlayer() {
@@ -3236,16 +3336,11 @@ kbd {
     el("packStage").hidden = false;
     el("packTitle").textContent = pack.name;
     showPackSentence(true);
+    historyPushView("pack", { packId: pack.id });
   }
 
   function closePack() {
-    if (packState.player) packState.player.pause();
-    packState.active = null;
-    packState.lock = false;
-    el("packStage").hidden = true;
-    el("packHome").hidden = false;
-    renderPacks();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    historyBackOr(closePackView);
   }
 
   function goPack(delta) {
@@ -3667,6 +3762,7 @@ kbd {
     switchTab("shadow");
     el("urlInput").value = "https://www.youtube.com/watch?v=" + card.videoId;
     shadow.videoId = card.videoId;
+    shadow.open = true;
     var p = getShadowPlayer();
     p.setSegment(card.start, card.end);
     p.loop = true;
@@ -3675,6 +3771,8 @@ kbd {
     el("loopToggle").checked = true;
     syncSegmentUI();
     p.playCard(card.videoId, card.start, card.end);
+    updateSegCardInfo();
+    historyPushView("practice", { cardId: card.id });
     el("sentenceInput").value = card.sentence;
     el("meaningInput").value = card.meaning || "";
     el("tagInput").value = card.tags.join(", ");
@@ -3906,6 +4004,7 @@ kbd {
     el("reviewDone").hidden = true;
     el("reviewStage").hidden = false;
     showCard();
+    historyPushView("review");
   }
 
   function showCard() {
@@ -3982,6 +4081,7 @@ kbd {
   function finishReview() {
     rv.active = false;
     if (rv.player) rv.player.pause();
+    historyDropSilent();
     el("reviewStage").hidden = true;
     el("reviewStartPanel").hidden = true;
     el("reviewDone").hidden = false;
@@ -4042,6 +4142,9 @@ kbd {
      events
      ========================================================= */
   function bind() {
+    // 안드로이드 하드웨어 뒤로가기 (팩·연습·복습 안에서 페이지가 닫히지 않게)
+    window.addEventListener("popstate", onPopState);
+
     // tabs
     qsa(".tab").forEach(function (b) {
       b.addEventListener("click", function () { switchTab(b.getAttribute("data-tab")); });
@@ -4054,7 +4157,12 @@ kbd {
       openPack(b.getAttribute("data-open"));
     });
     el("packBackBtn").addEventListener("click", closePack);
-    el("shadowBackBtn").addEventListener("click", function () { switchTab("library"); });
+    el("shadowBackBtn").addEventListener("click", function () {
+      historyBackOr(function () {
+        switchTab("library");
+        stopPractice();
+      });
+    });
     el("packPrevBtn").addEventListener("click", function () { goPack(-1); });
     el("packNextBtn").addEventListener("click", function () { goPack(1); });
     el("packPlayBtn").addEventListener("click", function () {
