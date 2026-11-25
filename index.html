@@ -1021,18 +1021,71 @@ kbd {
 .pack-nav { display: flex; gap: 8px; margin-top: 12px; }
 .pack-nav .btn { flex: 1 1 auto; }
 
-.pack-list-mini { display: flex; flex-direction: column; gap: 2px; margin-top: 14px; }
-.plm-row {
-  display: flex; align-items: center; gap: 8px;
-  font-size: 12px; padding: 6px 8px; border-radius: 8px;
-  color: var(--muted-2);
+/* 문장 목록 (바로 점프) */
+.pack-list-card { margin-top: 14px; }
+.plm-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.plm-title { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 800; letter-spacing: -0.02em; }
+.plm-dot { width: 7px; height: 7px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 0 0 4px rgba(124, 140, 255, 0.12); flex: 0 0 auto; }
+.plm-meta { font-family: var(--mono); font-size: 11.5px; color: var(--muted-2); flex: 0 0 auto; }
+.plm-note { margin-top: 3px; font-size: 11.5px; color: var(--muted-2); line-height: 1.5; }
+
+.pack-list {
+  display: flex; flex-direction: column; gap: 6px;
+  margin-top: 11px;
+  max-height: min(56vh, 430px);
+  overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+  padding-right: 2px;
+  scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
 }
-.plm-row .n { width: 16px; font-family: var(--mono); flex: 0 0 auto; }
-.plm-row .t { flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.plm-row .st { font-family: var(--mono); font-size: 10.5px; flex: 0 0 auto; }
-.plm-row.done .t { color: var(--muted); }
-.plm-row.on { background: rgba(124, 140, 255, 0.14); color: var(--text); }
-.plm-row.on .t { color: var(--text); }
+.pack-list::-webkit-scrollbar { width: 6px; }
+.pack-list::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.14); border-radius: 999px; }
+.pack-list::-webkit-scrollbar-track { background: transparent; }
+
+.plm-row {
+  display: flex; align-items: flex-start; gap: 10px; width: 100%;
+  flex: 0 0 auto;
+  text-align: left; font: inherit; -webkit-appearance: none; appearance: none;
+  padding: 10px 11px; min-height: 46px; border-radius: 12px;
+  background: rgba(255, 255, 255, 0.028);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: var(--muted);
+  transition: background 0.16s ease, border-color 0.16s ease, transform 0.1s ease;
+}
+.plm-row:active { transform: scale(0.995); }
+.plm-row .n {
+  flex: 0 0 auto; min-width: 20px; height: 20px; padding: 0 5px; margin-top: 1px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 6px; background: rgba(255, 255, 255, 0.06);
+  font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--muted-2);
+}
+.plm-row .b { flex: 1 1 auto; min-width: 0; display: block; }
+.plm-row .t {
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  font-size: 13px; line-height: 1.45; color: var(--text); word-break: break-word;
+}
+.plm-row .m {
+  display: block; margin-top: 3px; font-size: 11.5px; line-height: 1.35; color: var(--muted-2);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.plm-row .bdg {
+  flex: 0 0 auto; margin-top: 1px; padding: 2px 7px; border-radius: 999px;
+  font-size: 10px; font-weight: 800; line-height: 1.5; border: 1px solid transparent;
+}
+.plm-row .bdg.saved { color: #a7b4ff; background: rgba(124, 140, 255, 0.12); border-color: rgba(124, 140, 255, 0.28); }
+.plm-row .bdg.review { color: #ffd6a1; background: rgba(255, 180, 84, 0.12); border-color: rgba(255, 180, 84, 0.3); }
+.plm-row .bdg.mastered { color: #e2d1ff; background: rgba(169, 112, 255, 0.14); border-color: rgba(169, 112, 255, 0.34); }
+.plm-row.done .t { color: #cdd6e6; }
+.plm-row.on {
+  background: rgba(124, 140, 255, 0.12);
+  border-color: rgba(124, 140, 255, 0.5);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+.plm-row.on .t { color: var(--text); font-weight: 600; }
+.plm-row.on .n { background: rgba(124, 140, 255, 0.28); color: #fff; }
+@media (hover: hover) {
+  .plm-row:hover { background: rgba(255, 255, 255, 0.055); border-color: rgba(255, 255, 255, 0.13); }
+  .plm-row.on:hover { background: rgba(124, 140, 255, 0.16); border-color: rgba(124, 140, 255, 0.6); }
+}
 
 .chip.mastered { color: #dcc4ff; background: rgba(169, 112, 255, 0.14); border-color: rgba(169, 112, 255, 0.32); }
 
@@ -1187,9 +1240,16 @@ kbd {
             <button class="rate" data-grade="mastered"><span class="key">4</span><b>외움</b><small class="pv">완료</small></button>
           </div>
           <div class="hint" id="packHint" style="margin-top:8px">버튼을 누르면 이 문장이 내 덱에 저장되고 다음 문장으로 넘어갑니다.</div>
-
-          <div class="pack-list-mini" id="packMiniList"></div>
         </div>
+      </div>
+
+      <div class="card pack-list-card">
+        <div class="plm-head">
+          <span class="plm-title"><span class="plm-dot"></span>문장 목록</span>
+          <span class="plm-meta" id="packListMeta">—</span>
+        </div>
+        <div class="plm-note">번호를 누르면 그 문장으로 바로 이동해요.</div>
+        <div class="pack-list" id="packMiniList" role="group" aria-label="팩 문장 목록"></div>
       </div>
     </div>
   </section>
@@ -1801,304 +1861,150 @@ kbd {
     {
       id: "biz",
       emoji: "💼",
-      name: "비즈니스·회의 영어",
+      name: "비즈니스·학회·발표 영어",
       level: "B1 → B2",
-      sub: "Oxford Online English · 회의·마감 표현 10문장",
-      desc: "의견 말하기, 정중한 반대, 질문·명확화, 불가능한 일 설명에 마감·회신 약속까지 — 회의에서 바로 쓰는 문장.",
+      sub: "Oxford Online English · TED · 회의·발표 20문장",
+      desc: "회의에서 의견·반대·질문·마감을 말하는 문장부터, TED에서 연구를 소개하고 주장을 세우는 문장까지 — 일과 발표에 바로 쓰는 20문장.",
       cards: [
         {
+          id: "pack-biz-1",
           videoId: "NEKZFA7L7Lg", start: 394.7, end: 399.1,
           sentence: "To be honest, I'm not sure about this idea.",
           meaning: "솔직히 말하면, 이 아이디어는 잘 모르겠어요.\n· 회의에서 완곡하게 반대를 꺼낼 때 쓰는 첫 문장. To be honest로 부드럽게 시작합니다.",
           tags: ["비즈니스", "회의", "B1"], level: "B1"
         },
         {
+          id: "pack-biz-2",
           videoId: "NEKZFA7L7Lg", start: 415.5, end: 422.3,
           sentence: "I see your point, however, I don't think advertising in a magazine is a good idea.",
           meaning: "그 말씀은 이해해요. 다만 잡지 광고는 좋은 생각 같지 않아요.\n· I see your point, however + 내 의견. 상대를 인정한 뒤 반대하는 구조입니다.",
           tags: ["비즈니스", "회의", "B2"], level: "B2"
         },
         {
-          videoId: "NEKZFA7L7Lg", start: 431.9, end: 438.0,
+          id: "pack-biz-3",
+          videoId: "NEKZFA7L7Lg", start: 431.9, end: 438,
           sentence: "I think improving our website UI is a higher priority right now.",
           meaning: "지금은 웹사이트 UI를 개선하는 게 더 우선순위라고 생각해요.\n· I think + 우선순위 주장. 회의에서 내 의견에 이유를 붙이는 기본형입니다.",
           tags: ["비즈니스", "회의", "B2"], level: "B2"
         },
         {
+          id: "pack-biz-4",
           videoId: "NEKZFA7L7Lg", start: 521.3, end: 527.1,
           sentence: "Excuse me, how will the new requirements affect the project deadline?",
           meaning: "실례합니다, 새 요구사항이 프로젝트 마감일에 어떤 영향을 주나요?\n· Excuse me로 주의를 끌고 how will ~ 로 질문하는 회의용 질문 틀입니다.",
           tags: ["비즈니스", "회의", "Q&A"], level: "B2"
         },
         {
+          id: "pack-biz-5",
           videoId: "NEKZFA7L7Lg", start: 584.8, end: 590.3,
           sentence: "Sorry, can you clarify the third step in your proposal?",
           meaning: "죄송하지만, 제안서의 세 번째 단계를 좀 명확히 설명해 주시겠어요?\n· clarify = 명확히 하다. 못 알아들었을 때 정중하게 되묻는 표현입니다.",
           tags: ["비즈니스", "회의", "Q&A"], level: "B1"
         },
         {
+          id: "pack-biz-6",
           videoId: "NEKZFA7L7Lg", start: 779.7, end: 788.1,
           sentence: "Unfortunately, we won't be able to complete the project any sooner because we don't have the supplies yet.",
           meaning: "안타깝지만 자재가 아직 없어서 프로젝트를 더 앞당겨 끝낼 수는 없습니다.\n· 불가능한 일을 이유와 함께 정중히 설명할 때 — Unfortunately, we won't be able to ... because ...",
           tags: ["비즈니스", "회의", "B2"], level: "B2"
         },
         {
-          videoId: "NEKZFA7L7Lg", start: 283.0, end: 289.0,
+          id: "pack-biz-7",
+          videoId: "NEKZFA7L7Lg", start: 283, end: 289,
           sentence: "We might want to consider looking for another engineer to help with this.",
           meaning: "이 일을 도와줄 다른 엔지니어를 찾는 것도 고려해볼 수 있을 것 같아요.\n· We might want to consider ~ = 강하게 밀지 않고 대안을 꺼내는 표현. 회의에서 반대 대신 다른 선택지를 제안할 때 씁니다.",
           tags: ["비즈니스", "회의", "제안"], level: "B1"
         },
         {
-          videoId: "NEKZFA7L7Lg", start: 683.0, end: 692.0,
+          id: "pack-biz-8",
+          videoId: "NEKZFA7L7Lg", start: 683, end: 692,
           sentence: "I'll discuss this with the rest of my team and get back to you by the end of the week.",
           meaning: "나머지 팀원들과 논의한 뒤 이번 주말까지 다시 말씀드릴게요.\n· get back to you by + 시점 = ~까지 회신드리다. 마감·회신 약속을 할 때 그대로 쓰는 문장입니다.",
           tags: ["비즈니스", "회의", "마감"], level: "B2"
         },
         {
-          videoId: "NEKZFA7L7Lg", start: 700.0, end: 706.0,
+          id: "pack-biz-9",
+          videoId: "NEKZFA7L7Lg", start: 700, end: 706,
           sentence: "I'm going to get a team together for this project.",
           meaning: "이 프로젝트를 위해 팀을 꾸릴 예정입니다.\n· be going to + 동사 = 이미 마음먹은 계획. get a team together = 팀을 모으다.",
           tags: ["비즈니스", "회의", "계획"], level: "B1"
         },
         {
-          videoId: "NEKZFA7L7Lg", start: 706.0, end: 714.0,
+          id: "pack-biz-10",
+          videoId: "NEKZFA7L7Lg", start: 706, end: 714,
           sentence: "I'm planning to do one more round of testing, and then we can go live.",
           meaning: "테스트를 한 번 더 돌린 다음에 서비스에 올리면 되겠습니다.\n· be planning to ~ = 예정된 계획. go live = 실제로 서비스를 오픈하다(배포하다).",
           tags: ["비즈니스", "회의", "계획"], level: "B2"
-        }
-      ]
-    },
-    {
-      id: "ted",
-      emoji: "🎤",
-      name: "학회·TED 발표 영어",
-      level: "B2",
-      sub: "Waldinger · Treasure · Chris Anderson (TED) 10문장",
-      desc: "연구를 소개하고 방법·결과를 말하는 문장, 발표에서 주장을 부드럽게 세우는 문장.",
-      cards: [
+        },
         {
+          id: "pack-ted-1",
           videoId: "8KkKuTCFvzI", start: 117.5, end: 124.8,
           sentence: "The Harvard Study of Adult Development may be the longest study of adult life that's ever been done.",
           meaning: "하버드 성인발달 연구는 지금까지 진행된 성인 삶 연구 중 가장 오래된 것일 거예요.\n· 연구 소개 — may be로 단정하지 않고 소개하는 발표 화법입니다.",
           tags: ["TED", "발표", "연구"], level: "B2"
         },
         {
-          videoId: "8KkKuTCFvzI", start: 125.6, end: 138.0,
+          id: "pack-ted-2",
+          videoId: "8KkKuTCFvzI", start: 125.6, end: 138,
           sentence: "For 75 years, we've tracked the lives of 724 men, year after year, asking about their work, their home lives, their health.",
           meaning: "75년 동안 우리는 724명의 남성 삶을 해마다 추적하며 일, 가정, 건강을 물었습니다.\n· 방법 설명 — For 75 years, we've tracked ... asking about ... 구조로 기간·대상·항목을 한 번에 말합니다.",
           tags: ["TED", "발표", "연구"], level: "B2"
         },
         {
-          videoId: "8KkKuTCFvzI", start: 507.0, end: 514.5,
+          id: "pack-ted-3",
+          videoId: "8KkKuTCFvzI", start: 507, end: 514.5,
           sentence: "The people who were the most satisfied in their relationships at age 50 were the healthiest at age 80.",
           meaning: "50세에 관계에 가장 만족했던 사람들이 80세에 가장 건강했습니다.\n· 결과 보고 — The people who ~ were ~ 로 대상과 결과를 연결합니다.",
           tags: ["TED", "발표", "연구"], level: "B2"
         },
         {
+          id: "pack-ted-4",
           videoId: "8KkKuTCFvzI", start: 548.8, end: 553.6,
           sentence: "Good relationships don't just protect our bodies, they protect our brains.",
           meaning: "좋은 관계는 몸만이 아니라 뇌도 지켜줍니다.\n· not just A, (but) B — 강조하는 핵심 문장 만들기.",
           tags: ["TED", "발표", "연구"], level: "B1"
         },
         {
+          id: "pack-ted-5",
           videoId: "eIho2S0ZahI", start: 41.4, end: 49.2,
           sentence: "I'm not pretending this is an exhaustive list, but these seven, I think, are pretty large habits that we can all fall into.",
           meaning: "이게 전부라고 주장하는 건 아니지만, 이 일곱 가지는 누구나 빠지기 쉬운 큰 습관이라고 생각해요.\n· 헤지 표현 — I'm not pretending ..., I think. 발표에서 단정을 피할 때 씁니다.",
           tags: ["TED", "발표", "B2"], level: "B2"
         },
         {
+          id: "pack-ted-6",
           videoId: "eIho2S0ZahI", start: 170.3, end: 181.8,
           sentence: "I'd like to suggest that there are four really powerful cornerstones, foundations, that we can stand on if we want our speech to be powerful and to make change in the world.",
           meaning: "제안하고 싶습니다. 힘 있는 말을 하고 세상을 바꾸고 싶다면 우리가 딛고 설 수 있는 네 가지 든든한 초석이 있습니다.\n· I'd like to suggest that ... 로 발표의 구조를 예고하는 문장입니다.",
           tags: ["TED", "발표", "B2"], level: "B2"
         },
         {
-          videoId: "-FOCpMAww28", start: 63.0, end: 76.0,
+          id: "pack-ted-7",
+          videoId: "-FOCpMAww28", start: 63, end: 76,
           sentence: "Your number one task as a speaker is to transfer into your listeners' minds an extraordinary gift — a strange and beautiful object that we call an idea.",
           meaning: "발표자로서 첫 번째 임무는 청중의 마음속에 '아이디어'라는 특별한 선물을 옮겨 심는 것입니다.\n· transfer A into B = A를 B 안으로 옮기다. 발표의 목적을 한 문장으로 규정하는 틀입니다.",
           tags: ["TED", "발표", "정의"], level: "B2"
         },
         {
-          videoId: "-FOCpMAww28", start: 333.0, end: 337.0,
+          id: "pack-ted-8",
+          videoId: "-FOCpMAww28", start: 333, end: 337,
           sentence: "Two, give your listeners a reason to care.",
           meaning: "둘째, 청중이 관심을 가질 이유를 주세요.\n· give someone a reason to ~ = ~할 이유를 주다. 발표 구조를 숫자로 예고하는 짧은 문장입니다.",
           tags: ["TED", "발표", "구조"], level: "B1"
         },
         {
-          videoId: "-FOCpMAww28", start: 370.0, end: 377.0,
+          id: "pack-ted-9",
+          videoId: "-FOCpMAww28", start: 370, end: 377,
           sentence: "Three, build your idea, piece by piece, out of concepts that your audience already understands.",
           meaning: "셋째, 청중이 이미 이해하는 개념으로 아이디어를 하나씩 쌓아 올리세요.\n· piece by piece = 하나씩 차근차근. build A out of B = B로 A를 만들어 올리다.",
           tags: ["TED", "발표", "설명"], level: "B2"
         },
         {
-          videoId: "-FOCpMAww28", start: 437.0, end: 443.0,
+          id: "pack-ted-10",
+          videoId: "-FOCpMAww28", start: 437, end: 443,
           sentence: "Four, here's the final tip: Make your idea worth sharing.",
           meaning: "넷째, 마지막 조언입니다. 당신의 아이디어를 공유할 가치가 있는 것으로 만드세요.\n· here's the final tip = 마지막 조언을 꺼낼 때. worth ~ing = ~할 가치가 있는.",
           tags: ["TED", "발표", "마무리"], level: "B1"
-        }
-      ]
-    },
-    {
-      id: "de-a1",
-      emoji: "🇩🇪",
-      name: "독일어 A1 기초 회화",
-      level: "A1 → A2",
-      sub: "Easy German · 자기소개·직업·주문 12문장",
-      desc: "이름·출신·직업 묻고 답하기부터 카페에서 주문하기까지, 천천히 또박또박 말하는 문장.",
-      cards: [
-        {
-          videoId: "Yaelm87PTvg", start: 0.5, end: 2.6,
-          sentence: "Wie heißt du?",
-          meaning: "이름이 뭐야?\n· du = 친구·동료에게. 격식은 Wie heißen Sie?",
-          tags: ["독일어", "A1", "자기소개"], level: "A1"
-        },
-        {
-          videoId: "Yaelm87PTvg", start: 3.0, end: 4.7,
-          sentence: "Ich heiße Angela.",
-          meaning: "나는 앙겔라라고 해.\n· Ich heiße ~ / Mein Name ist ~ 둘 다 A1 기본 자기소개입니다.",
-          tags: ["독일어", "A1", "자기소개"], level: "A1"
-        },
-        {
-          videoId: "Yaelm87PTvg", start: 25.3, end: 27.8,
-          sentence: "Woher kommst du?",
-          meaning: "어디에서 왔어?\n· woher = 어디서부터. kommen 동사와 함께 출신을 물을 때 씁니다.",
-          tags: ["독일어", "A1", "자기소개"], level: "A1"
-        },
-        {
-          videoId: "Yaelm87PTvg", start: 29.9, end: 32.2,
-          sentence: "Ich komme aus der Schweiz.",
-          meaning: "나는 스위스에서 왔어.\n· aus + 나라. 여성·복수 국가에는 관사를 붙입니다(aus der Schweiz, aus den USA).",
-          tags: ["독일어", "A1", "자기소개"], level: "A1"
-        },
-        {
-          videoId: "h5085YiFRnI", start: 80.2, end: 83.6,
-          sentence: "Ich möchte einen Orangensaft.",
-          meaning: "오렌지 주스 하나 주세요.\n· Ich möchte ~ = ~을 원합니다. 카페·식당에서 바로 쓰는 주문 표현입니다.",
-          tags: ["독일어", "A1", "주문"], level: "A1"
-        },
-        {
-          videoId: "h5085YiFRnI", start: 138.9, end: 142.2,
-          sentence: "Ich hätte gerne einen Kaffee.",
-          meaning: "커피 한 잔 주세요.\n· 독일 카페에서 가장 자연스러운 주문 표현(hätte gerne ~). Ich möchte보다 부드럽습니다.",
-          tags: ["독일어", "A1", "주문"], level: "A1"
-        },
-        {
-          videoId: "Yaelm87PTvg", start: 143.0, end: 151.0,
-          sentence: "Ich reise gerne und ich lese gerne und ich trinke gerne Kaffee.",
-          meaning: "나는 여행하는 것도, 책 읽는 것도, 커피 마시는 것도 좋아해요.\n· gerne = 즐겨서. 동사 뒤에 붙이면 '~하는 걸 좋아한다'가 됩니다.",
-          tags: ["독일어", "A1", "취미"], level: "A1"
-        },
-        {
-          videoId: "Yaelm87PTvg", start: 191.0, end: 199.0,
-          sentence: "Schwimmen, lesen. Mein Hobby ist, sich mit Freunden zu treffen und das Leben zu genießen.",
-          meaning: "수영, 독서요. 제 취미는 친구들을 만나고 삶을 즐기는 거예요.\n· 앞의 'Schwimmen, lesen'은 앞사람 대답이라 같이 들립니다. sich mit Freunden treffen = 친구들을 만나다.",
-          tags: ["독일어", "A2", "취미"], level: "A2"
-        },
-        {
-          videoId: "Yaelm87PTvg", start: 63.0, end: 65.0,
-          sentence: "Ich lebe in Zürich.",
-          meaning: "나는 취리히에 살아요.\n· leben = 살다. wohnen과 거의 같지만 leben이 조금 더 넓은 의미(생활)입니다.",
-          tags: ["독일어", "A1", "거주"], level: "A1"
-        },
-        {
-          videoId: "Yaelm87PTvg", start: 93.0, end: 96.0,
-          sentence: "Was ist dein Beruf?",
-          meaning: "직업이 뭐예요?\n· 격식으로 물을 때는 Was ist Ihr Beruf? / Was machen Sie beruflich?",
-          tags: ["독일어", "A1", "직업"], level: "A1"
-        },
-        {
-          videoId: "Yaelm87PTvg", start: 104.0, end: 107.0,
-          sentence: "Ich gehe noch zur Schule.",
-          meaning: "나는 아직 학교에 다녀요.\n· zur Schule gehen = 학교에 다니다. noch = 아직.",
-          tags: ["독일어", "A1", "직업"], level: "A1"
-        },
-        {
-          videoId: "h5085YiFRnI", start: 21.1, end: 23.3,
-          sentence: "Kann ich bitte ein Leitungswasser bekommen?",
-          meaning: "수돗물 한 잔 받을 수 있을까요?\n· Kann ich bitte ~ bekommen? = 가장 무난한 정중한 요청. Leitungswasser = 수돗물.",
-          tags: ["독일어", "A1", "주문"], level: "A1"
-        }
-      ]
-    },
-    {
-      id: "de-a2",
-      emoji: "🇩🇪",
-      name: "독일어 일상·식당 회화",
-      level: "A1 → A2",
-      sub: "Easy German · 식당 주문·일상 질문 12문장",
-      desc: "식당에서 자리 잡고 주문하고 계산하기까지, 그리고 나이·직업·취미를 묻고 답하는 짧은 문장. 천천히 말하는 Easy German 영상이라 따라 말하기 좋아요.",
-      cards: [
-        {
-          videoId: "OFSHdj_2FQA", start: 21.5, end: 24.0,
-          sentence: "Ich habe Hunger.",
-          meaning: "배고파요.\n· Hunger haben = 배고프다. 독일어는 '배고픔을 가지고 있다'라고 말합니다.",
-          tags: ["독일어", "A1", "일상"], level: "A1"
-        },
-        {
-          videoId: "OFSHdj_2FQA", start: 117.1, end: 119.1,
-          sentence: "Und würden Sie gerne erst mal Getränke bestellen?",
-          meaning: "그럼 먼저 음료를 주문하시겠어요?\n· würden Sie gerne ~? = 정중한 권유. erst mal = 우선.",
-          tags: ["독일어", "A2", "식당"], level: "A2"
-        },
-        {
-          videoId: "OFSHdj_2FQA", start: 131.6, end: 133.7,
-          sentence: "Einmal groß oder klein für Sie?",
-          meaning: "큰 걸로 드릴까요, 작은 걸로 드릴까요?\n· Einmal ~ = 하나요. groß/klein은 음료 사이즈를 묻는 말입니다.",
-          tags: ["독일어", "A2", "식당"], level: "A2"
-        },
-        {
-          videoId: "OFSHdj_2FQA", start: 146.8, end: 149.5,
-          sentence: "Ich kann mich gar nicht entscheiden.",
-          meaning: "정말 못 고르겠어요.\n· sich entscheiden = 결정하다. gar nicht = 전혀 ~않다.",
-          tags: ["독일어", "A2", "식당"], level: "A2"
-        },
-        {
-          videoId: "OFSHdj_2FQA", start: 186.4, end: 190.6,
-          sentence: "Wie wär's mit der Frühlingsrolle mit Nudeln?",
-          meaning: "춘권에 국수 곁들인 건 어때요?\n· Wie wär's mit ~? = ~하는 게 어때요? 메뉴를 추천할 때 자주 쓰는 표현.",
-          tags: ["독일어", "A2", "제안"], level: "A2"
-        },
-        {
-          videoId: "OFSHdj_2FQA", start: 255.2, end: 259.3,
-          sentence: "Ich hätte gerne die Nummer 74.",
-          meaning: "74번으로 주세요.\n· Ich hätte gerne ~ = ~을 주세요(가장 공손한 주문). 메뉴판 번호로 주문할 때 씁니다.",
-          tags: ["독일어", "A2", "주문"], level: "A2"
-        },
-        {
-          videoId: "OFSHdj_2FQA", start: 259.4, end: 262.3,
-          sentence: "Gibt es Milchprodukte in der Soße?",
-          meaning: "소스에 유제품이 들어가나요?\n· Gibt es ~? = ~이 있나요? 알레르기·채식 여부를 확인하는 기본 질문입니다.",
-          tags: ["독일어", "A2", "식당"], level: "A2"
-        },
-        {
-          videoId: "OFSHdj_2FQA", start: 688.1, end: 690.0,
-          sentence: "Können wir auch direkt zahlen?",
-          meaning: "바로 계산해도 될까요?\n· direkt zahlen = 바로 계산하다. 식사 중간에 계산을 요청할 때 씁니다.",
-          tags: ["독일어", "A2", "계산"], level: "A2"
-        },
-        {
-          videoId: "huwi-cjPPXU", start: 126.0, end: 128.9,
-          sentence: "Wo wohnst du?",
-          meaning: "어디에 살아요?\n· wohnen = 살다(거주). 격식은 Wo wohnen Sie?",
-          tags: ["독일어", "A1", "일상"], level: "A1"
-        },
-        {
-          videoId: "huwi-cjPPXU", start: 156.1, end: 160.9,
-          sentence: "Ich wohne seit zehn Jahren in Berlin.",
-          meaning: "나는 베를린에 산 지 10년 됐어요.\n· seit + 기간 = ~부터 (지금까지). Jahren은 Jahr의 복수 3격입니다.",
-          tags: ["독일어", "A2", "일상"], level: "A2"
-        },
-        {
-          videoId: "huwi-cjPPXU", start: 436.1, end: 439.9,
-          sentence: "Was machst du beruflich?",
-          meaning: "직업이 뭐예요? (무슨 일을 해요?)\n· beruflich = 직업상. Was machst du?보다 '일'을 묻는 자연스러운 표현입니다.",
-          tags: ["독일어", "A2", "직업"], level: "A2"
-        },
-        {
-          videoId: "huwi-cjPPXU", start: 618.0, end: 622.0,
-          sentence: "Was ist dein Lieblingsessen?",
-          meaning: "가장 좋아하는 음식이 뭐예요?\n· Lieblings- = 가장 좋아하는 ~. Lieblingsessen / Lieblingsfilm처럼 붙여 씁니다.",
-          tags: ["독일어", "A2", "일상"], level: "A2"
         }
       ]
     },
@@ -2111,46 +2017,217 @@ kbd {
       desc: "수소 생산 방식부터 블루 수소·CCS, 에너지 밀도와 효율까지 — 실제 에너지 영상에서 뽑은 문장.",
       cards: [
         {
-          videoId: "AGTjKJHu99c", start: 53.0, end: 61.0,
+          id: "pack-energy-1",
+          videoId: "AGTjKJHu99c", start: 53, end: 61,
           sentence: "It's a very clingy gas, though, so you'll usually find it bound up with other elements – for example with oxygen in water.",
           meaning: "다만 수소는 붙는 성질이 강해서, 보통 다른 원소와 결합한 상태로 존재합니다. 예를 들어 물속의 산소처럼요.\n· clingy = 달라붙는. be bound up with = ~와 결합해 있다.",
           tags: ["에너지", "수소", "B1"], level: "B1"
         },
         {
-          videoId: "AGTjKJHu99c", start: 61.0, end: 70.0,
+          id: "pack-energy-2",
+          videoId: "AGTjKJHu99c", start: 61, end: 70,
           sentence: "If we want to get pure hydrogen, we have to split up these bonds. And a simple way to do this is called electrolysis.",
           meaning: "순수한 수소를 얻으려면 이 결합을 끊어야 합니다. 그 간단한 방법이 바로 전기분해(electrolysis)입니다.\n· split up bonds = 결합을 끊다. '정의 → 방법'으로 넘어가는 발표 문장입니다.",
           tags: ["에너지", "수소", "전기분해"], level: "B1"
         },
         {
-          videoId: "AGTjKJHu99c", start: 202.0, end: 209.0,
+          id: "pack-energy-3",
+          videoId: "AGTjKJHu99c", start: 202, end: 209,
           sentence: "But hydrogen can get the job done as well – while also being clean-burning, so only leaving behind water.",
           meaning: "하지만 수소도 그 일을 해낼 수 있습니다. 게다가 연소해도 물만 남기는 청정 연료입니다.\n· get the job done = 일을 해내다. while also ~ing = 동시에 ~하면서.",
           tags: ["에너지", "수소", "철강"], level: "B2"
         },
         {
-          videoId: "AGTjKJHu99c", start: 323.0, end: 331.0,
+          id: "pack-energy-4",
+          videoId: "AGTjKJHu99c", start: 323, end: 331,
           sentence: "When we're talking about blue hydrogen, we're referring to fossil fuels with carbon capture and storage.",
           meaning: "블루 수소라고 하면, 탄소 포집·저장(CCS)을 결합한 화석연료를 말합니다.\n· When we're talking about A, we're referring to B = 용어를 정의하는 가장 깔끔한 발표 화법.",
           tags: ["에너지", "블루수소", "CCS"], level: "B2"
         },
         {
-          videoId: "AGTjKJHu99c", start: 402.0, end: 413.0,
+          id: "pack-energy-5",
+          videoId: "AGTjKJHu99c", start: 402, end: 413,
           sentence: "These release methane into the atmosphere, a greenhouse gas that in the short term is more than 80 times more powerful in warming the planet than CO2.",
           meaning: "이 과정에서 메탄이 대기로 새는데, 메탄은 단기적으로 CO2보다 80배 이상 강력한 온실가스입니다.\n· in the short term = 단기적으로. more powerful than = ~보다 강력한.",
           tags: ["에너지", "메탄", "온실가스"], level: "B2"
         },
         {
-          videoId: "AGTjKJHu99c", start: 537.0, end: 545.0,
+          id: "pack-energy-6",
+          videoId: "AGTjKJHu99c", start: 537, end: 545,
           sentence: "One big challenge that remains is hydrogen's relatively low energy density.",
           meaning: "남아 있는 큰 문제는 수소의 상대적으로 낮은 에너지 밀도입니다.\n· One challenge that remains is ~ = 남은 과제를 짚고 넘어가는 문장.",
           tags: ["에너지", "수소", "한계"], level: "B2"
         },
         {
-          videoId: "AGTjKJHu99c", start: 585.0, end: 596.0,
+          id: "pack-energy-7",
+          videoId: "AGTjKJHu99c", start: 585, end: 596,
           sentence: "But turning electricity into hydrogen, transporting it to refuelling stations, pumping it into a fuel cell to then convert it back to electricity is just not very efficient.",
           meaning: "전기를 수소로 바꾸고, 충전소로 옮기고, 다시 연료전지에 넣어 전기로 되돌리는 과정은 효율이 좋지 않습니다.\n· 긴 주어를 A, B, C로 나열한 뒤 is not very efficient로 결론을 맺는 구조입니다.",
           tags: ["에너지", "효율", "연료전지"], level: "B2"
+        }
+      ]
+    },
+    {
+      id: "celeb",
+      emoji: "🎙️",
+      name: "셀럽 인터뷰 영어",
+      level: "B1 → B2",
+      sub: "Vogue 73 Questions · Taylor·Margot·Zendaya 먼저, 22문장",
+      desc: "Taylor Swift·Margot Robbie·Zendaya의 인터뷰를 먼저, 이어서 Zac Efron·Robert Downey Jr.의 농담과 리액션까지 — 실제 인터뷰 말투 22문장.",
+      cards: [
+        {
+          id: "pack-female-celeb-1",
+          videoId: "XnbCSboujF4", start: 249, end: 258.3,
+          sentence: "Well, when I'm sitting there, usually I just do this with my leg and people think that I'm nervous and then they get nervous and then everybody's nervous.",
+          meaning: "그게, 제가 거기 앉아 있으면 보통 다리를 이렇게 떠는데, 사람들이 제가 긴장한 줄 알고, 그러면 그 사람들도 긴장하고, 결국 다 같이 긴장해요.\n· do this with my leg = 다리를 이렇게 하다(몸짓을 말로 설명하는 표현). people think (that) I'm nervous = 사람들이 내가 긴장한 줄 안다. then A, then B, then C = 그러면 A, 그러면 B, 결국 C — 말이 이어지는 구어체 리듬입니다.",
+          tags: ["여성 셀럽", "인터뷰", "습관"], level: "B2"
+        },
+        {
+          id: "pack-female-celeb-2",
+          videoId: "XnbCSboujF4", start: 264, end: 272.3,
+          sentence: "I'm pleasantly surprised by the fact that I tell my friends absolutely everything and it never ends up getting out.",
+          meaning: "저는 친구들에게 정말 모든 걸 다 말하는데도 그 얘기가 절대 밖으로 새지 않는다는 게 기분 좋게 놀라워요.\n· be pleasantly surprised by the fact that ~ = ~라는 사실에 기분 좋게 놀라다. tell someone everything = 속마음까지 다 털어놓다. end up getting out = 결국 밖으로 새나가다(end up ~ing = 결국 ~하게 되다).",
+          tags: ["여성 셀럽", "인터뷰", "관계"], level: "B2"
+        },
+        {
+          id: "pack-female-celeb-3",
+          videoId: "XnbCSboujF4", start: 364, end: 373.3,
+          sentence: "Yeah, I stretch, I warm up my voice, and then my band and dancers and I get in a huddle, and it's just good vibes.",
+          meaning: "네, 스트레칭하고 목을 풀고, 그다음에 밴드랑 댄서들이랑 다 같이 모여서 원을 짜요. 그냥 분위기가 좋아요.\n· warm up one's voice = 목을 풀다(공연 전 발성 준비). get in a huddle = (운동선수처럼) 다 같이 모여 동그랗게 원을 짜다. good vibes = 좋은 기운·분위기(구어체).",
+          tags: ["여성 셀럽", "인터뷰", "루틴"], level: "B2"
+        },
+        {
+          id: "pack-female-celeb-4",
+          videoId: "XnbCSboujF4", start: 503, end: 511.3,
+          sentence: "Something I will not be doing in 10 years, I'll be 36, I really hope that I'm not stressed about the idea of approaching 40.",
+          meaning: "10년 뒤에 제가 하고 있지 않았으면 하는 게 하나 있는데, 그때 서른여섯이거든요. 40살이 다가온다는 생각에 스트레스받지 않았으면 정말 좋겠어요.\n· Something I will not be doing = 내가 하지 않을 일 — 문장 맨 앞에 주제를 먼저 던지는 구어체 방식. I'll be 36 = 그때 나는 서른여섯일 것이다. approach 40 = 40살에 가까워지다. be stressed about ~ = ~에 스트레스받다.",
+          tags: ["여성 셀럽", "인터뷰", "나이"], level: "B2"
+        },
+        {
+          id: "pack-female-celeb-5",
+          videoId: "Bl5630CeYFs", start: 309, end: 318.3,
+          sentence: "Well, I always feel a sense of responsibility for a character, whether they're real or not, but definitely an added sense of responsibility when they are real life people, yeah.",
+          meaning: "저는 그 인물이 실제 사람이든 아니든 항상 책임감을 느껴요. 그런데 실제로 있었던 사람이면 책임감이 확실히 더 커지죠.\n· a sense of responsibility for ~ = ~에 대한 책임감. whether A or not = A이든 아니든. an added sense of ~ = 더해진 ~감. real-life people = 실존 인물.",
+          tags: ["여성 셀럽", "인터뷰", "일"], level: "B2"
+        },
+        {
+          id: "pack-female-celeb-6",
+          videoId: "Bl5630CeYFs", start: 185, end: 190.3,
+          sentence: "I love producing, but acting will always be my big love.",
+          meaning: "프로듀싱도 정말 좋아하지만, 연기는 언제나 제 가장 큰 사랑이에요.\n· my big love = 내 인생의 가장 큰 사랑(첫사랑·가장 아끼는 일). A but B will always be my big love = A도 좋지만 B가 으뜸이라는 틀입니다.",
+          tags: ["여성 셀럽", "인터뷰", "일"], level: "B1"
+        },
+        {
+          id: "pack-female-celeb-7",
+          videoId: "Bl5630CeYFs", start: 382, end: 388.3,
+          sentence: "I don't know if that was a thing here, but it was when I was a kid.",
+          meaning: "이 나라에서도 그게 유행이었는지는 모르겠는데, 제가 어렸을 때는 그랬어요.\n· be a thing = 유행이다, 흔한 일이다. it was when I was a kid = 내가 어릴 때는 그랬다(앞의 was a thing을 it was로 받습니다).",
+          tags: ["여성 셀럽", "인터뷰", "구어체"], level: "B1"
+        },
+        {
+          id: "pack-female-celeb-8",
+          videoId: "Bl5630CeYFs", start: 121, end: 126.6,
+          sentence: "I find real life people on YouTube, then I just kind of mimic them.",
+          meaning: "유튜브에서 실제로 그렇게 말하는 사람을 찾아서, 그 사람을 그냥 따라 해요.\n· find someone on YouTube = 유튜브에서 ~하는 사람을 찾다. mimic = 흉내 내다. kind of = 그냥 어느 정도(말을 부드럽게 만드는 filler).",
+          tags: ["여성 셀럽", "인터뷰", "방법"], level: "B1"
+        },
+        {
+          id: "pack-female-celeb-9",
+          videoId: "MGO4_8YRKro", start: 210, end: 217.3,
+          sentence: "I try to keep in mind that everyone is dealing with something that we have no idea about, you know? So, I just try to have compassion for them, you know?",
+          meaning: "모두가 우리가 전혀 모르는 어떤 문제를 겪고 있다는 걸 기억하려고 해요. 그래서 그냥 그 사람들에게 연민을 가지려고 하죠.\n· keep in mind that ~ = ~을 명심하다·기억하다. deal with something = 어떤 문제를 겪다·감당하다. have compassion for ~ = ~에게 연민을 느끼다. 끝의 you know?는 구어체 추임새입니다.",
+          tags: ["여성 셀럽", "인터뷰", "태도"], level: "B2"
+        },
+        {
+          id: "pack-female-celeb-10",
+          videoId: "MGO4_8YRKro", start: 229, end: 236.3,
+          sentence: "My fans, they keep me on my toes, they keep me politically aware, they keep me socially aware, and they always correct my grammar and spelling.",
+          meaning: "제 팬들은 저를 늘 긴장하게 만들고, 정치적으로도 사회적으로도 계속 눈을 뜨게 해줘요. 그리고 항상 제 문법과 철자를 고쳐주죠.\n· keep someone on their toes = 긴장을 늦추지 않게 하다. keep me aware = 계속 인식하게 하다. keep me + 형용사를 세 번 반복해 리듬을 만드는 구조입니다.",
+          tags: ["여성 셀럽", "인터뷰", "팬"], level: "B2"
+        },
+        {
+          id: "pack-female-celeb-11",
+          videoId: "MGO4_8YRKro", start: 426, end: 431.3,
+          sentence: "It would probably be to follow your instincts and follow your gut, because it's always right.",
+          meaning: "아마도 자기 직감을 따르라는 말을 하겠어요. 그게 항상 맞거든요.\n· follow your instincts = 본능·직감을 따르다(여기서 your는 특정인이 아니라 일반인 you). follow your gut = 촉·배짱을 믿고 따르다. 거의 같은 뜻을 두 번 반복해 힘을 줍니다.",
+          tags: ["여성 셀럽", "인터뷰", "조언"], level: "B2"
+        },
+        {
+          id: "pack-female-celeb-12",
+          videoId: "MGO4_8YRKro", start: 89, end: 96.3,
+          sentence: "The most Californian thing about me is that I still get excited when I see snow. I think it's really, really cool, because obviously we never get snow.",
+          meaning: "제가 가장 캘리포니아 사람다운 점은, 눈을 보면 아직도 신이 난다는 거예요. 여기선 눈이 안 오니까 정말 멋지다고 생각해요.\n· the most ~ thing about me is that ~ = 내가 가장 ~한 점은 ~라는 것. get excited = 신이 나다·설레다. obviously = 당연히(여기서는 '이곳엔 눈이 안 오니까'를 강조).",
+          tags: ["여성 셀럽", "인터뷰", "자기소개"], level: "B1"
+        },
+        {
+          id: "pack-celeb-1",
+          videoId: "Y2GVVC_cD_E", start: 242, end: 247,
+          sentence: "Best habit is I always, always come through and get the job done.",
+          meaning: "제 장점은 항상, 정말 항상 끝까지 해내고 결과를 낸다는 거예요.\n· come through = (기대·약속을) 끝내 지켜내다. get the job done = 일을 끝내다. 앞 질문이 '최고의 습관'이라 Best habit is ~로 받습니다.",
+          tags: ["셀럽", "인터뷰", "습관"], level: "B2"
+        },
+        {
+          id: "pack-celeb-2",
+          videoId: "Y2GVVC_cD_E", start: 289, end: 297,
+          sentence: "And it was improv, so she wasn't expecting it. It was pretty funny.",
+          meaning: "그리고 즉흥 연기였으니까 그분은 전혀 예상 못 했어요. 꽤 웃겼어요.\n· improv = 즉흥 연기. wasn't expecting it = 예상하지 못했다. 과거 일을 이어 말할 때 And it was ~, so ~ 로 이유를 붙이는 구조입니다.",
+          tags: ["셀럽", "인터뷰", "일화"], level: "B1"
+        },
+        {
+          id: "pack-celeb-3",
+          videoId: "Y2GVVC_cD_E", start: 342, end: 349,
+          sentence: "Just, do what I say, dude. Come on, just, like, do what your big bro says to do.",
+          meaning: "그냥 내가 하라는 대로 해, 얘야. 그러니까, 형이 하라는 대로 하라고.\n· dude = 얘/친구(가벼운 호칭). big bro = 형·오빠. Come on, just like ~ 는 말을 고쳐 다시 강조하는 구어체 틀입니다.",
+          tags: ["셀럽", "인터뷰", "구어체"], level: "B1"
+        },
+        {
+          id: "pack-celeb-4",
+          videoId: "fez7X_oevNs", start: 392, end: 395,
+          sentence: "If Christopher Nolan had directed \"The Avengers,\" we would still be shooting it.",
+          meaning: "크리스토퍼 놀란이 '어벤져스'를 연출했다면, 우린 아직도 촬영하고 있었을 거예요.\n· If + had p.p., would + 동사원형 = 가정법 과거완료. still be shooting it = 아직도 찍고 있는 중일 것이다 — 과장해서 웃기게 말할 때 그대로 쓰는 틀입니다.",
+          tags: ["셀럽", "인터뷰", "가정법"], level: "B2"
+        },
+        {
+          id: "pack-celeb-5",
+          videoId: "fez7X_oevNs", start: 457, end: 461,
+          sentence: "Just remember, this was someone's idea to pair us up here.",
+          meaning: "기억해 두세요, 우리를 여기 짝으로 붙여준 건 누군가의 아이디어였다는 걸요.\n· pair up = 짝을 짓다, 둘을 붙여주다. Just remember, ~ = ~라는 점만 기억하세요. 농담조로 책임을 남에게 넘길 때 씁니다.",
+          tags: ["셀럽", "인터뷰", "농담"], level: "B1"
+        },
+        {
+          id: "pack-celeb-6",
+          videoId: "fez7X_oevNs", start: 502, end: 511,
+          sentence: "If by godfather you mean I do light yard work for him on Thursdays and detail his car every other Saturday, then yes.",
+          meaning: "대부라는 게 목요일마다 가벼운 마당일을 해주고 격주 토요일마다 차를 광내주는 거라면, 네, 맞아요.\n· If by X you mean Y, then yes = X가 Y라는 뜻이라면 맞다. detail a car = 차를 세차·광택하다. every other Saturday = 격주 토요일.",
+          tags: ["셀럽", "인터뷰", "농담"], level: "B2"
+        },
+        {
+          id: "pack-celeb-7",
+          videoId: "dSQ0jO2_jno", start: 196, end: 205,
+          sentence: "Knowing that your work has meant something to someone in a real way, I think is the coolest part.",
+          meaning: "내 작업이 누군가에게 실제로 의미가 있었다는 걸 아는 것, 그게 가장 멋진 부분인 것 같아요.\n· Knowing that + 문장 = ~라는 걸 아는 것. mean something to someone = 누군가에게 의미가 있다. 실제 발화에서는 Knowing that like, ... 처럼 like를 끼워 넣습니다.",
+          tags: ["셀럽", "인터뷰", "일"], level: "B2"
+        },
+        {
+          id: "pack-celeb-8",
+          videoId: "dSQ0jO2_jno", start: 367, end: 379,
+          sentence: "And they're like, \"Can you stop sweating?\" I'm like, \"We're in the desert. I sweat in England.\"",
+          meaning: "그러면 사람들이 '땀 좀 그만 흘려줄래?' 그러는데, 저는 '여기가 사막인데요. 전 영국에서도 땀 흘려요'라고 하죠.\n· be like = ~라고 말하다(구어체 인용). I'm like = 저는 ~라고 해요. 대화를 생생하게 옮길 때 쓰는 틀입니다.",
+          tags: ["셀럽", "인터뷰", "인용"], level: "B2"
+        },
+        {
+          id: "pack-celeb-9",
+          videoId: "dSQ0jO2_jno", start: 733, end: 737,
+          sentence: "I've figured out ways to kind of deal with anxiety over the years.",
+          meaning: "저는 지난 몇 년간 불안을 다루는 방법을 하나씩 터득해 왔어요.\n· figure out = 알아내다, 터득하다. kind of = 약간, 어느 정도. over the years = 지난 세월 동안.",
+          tags: ["셀럽", "인터뷰", "경험"], level: "B1"
+        },
+        {
+          id: "pack-celeb-10",
+          videoId: "dSQ0jO2_jno", start: 867, end: 872,
+          sentence: "I feel like we did a good job, and we all like, locked in 'cause it's the four of us, the dinner thing.",
+          meaning: "우리 다 잘 해낸 것 같아요. 넷이서 그 저녁 장면을 찍을 때 다들 완전히 집중했거든요.\n· lock in = 정신을 집중하다, 몰입하다. the four of us = 우리 넷. like는 여기서 특별한 뜻 없이 말을 잇는 filler입니다.",
+          tags: ["셀럽", "인터뷰", "칭찬"], level: "B2"
         }
       ]
     },
@@ -2163,37 +2240,43 @@ kbd {
       desc: "가벼운 대화에서 바로 쓰는 말투 — 시작, 맞장구, 자연스럽게 빠져나오기까지.",
       cards: [
         {
-          videoId: "IRG-YubP1rw", start: 27.0, end: 34.0,
+          id: "pack-talk-1",
+          videoId: "IRG-YubP1rw", start: 27, end: 34,
           sentence: "It's like a tennis match, where I've got to lob something over to the person or people I'm talking to, and I hope it lands and goes well.",
           meaning: "테니스 경기처럼, 말하는 상대에게 뭔가를 넘겨주고 그게 잘 받아지길 바라는 거죠.\n· lob something over = (공을) 넘겨주다. 대화를 주고받는 느낌을 비유로 설명할 때 씁니다.",
           tags: ["일상", "스몰토크", "비유"], level: "B2"
         },
         {
-          videoId: "IRG-YubP1rw", start: 102.0, end: 109.0,
+          id: "pack-talk-2",
+          videoId: "IRG-YubP1rw", start: 102, end: 109,
           sentence: "You can reduce the intensity of that spotlight we feel by putting your attention on the other.",
           meaning: "우리가 느끼는 그 스포트라이트 부담은 상대에게 주의를 돌리면 줄어듭니다.\n· put your attention on ~ = ~에 주의를 두다.",
           tags: ["일상", "스몰토크", "긴장"], level: "B2"
         },
         {
-          videoId: "IRG-YubP1rw", start: 271.0, end: 275.0,
+          id: "pack-talk-3",
+          videoId: "IRG-YubP1rw", start: 271, end: 275,
           sentence: "Spontaneous communication is about connection, not perfection.",
           meaning: "즉석 대화에서 중요한 건 완벽함이 아니라 연결입니다.\n· A is about B, not C — 핵심을 대비로 강조하는 짧은 문장입니다.",
           tags: ["일상", "스몰토크", "태도"], level: "B1"
         },
         {
-          videoId: "IRG-YubP1rw", start: 343.0, end: 349.0,
+          id: "pack-talk-4",
+          videoId: "IRG-YubP1rw", start: 343, end: 349,
           sentence: "I know she didn't create it, but it's tell me the time, don't build me the clock.",
           meaning: "그 말을 어머니가 만든 건 아니지만, '시각만 알려주고 시계를 만들지는 마라'는 뜻이에요.\n· tell me the time, don't build me the clock = 요점만 말하라는 관용적 표현.",
           tags: ["일상", "스몰토크", "표현"], level: "B2"
         },
         {
-          videoId: "IRG-YubP1rw", start: 439.0, end: 444.0,
+          id: "pack-talk-5",
+          videoId: "IRG-YubP1rw", start: 439, end: 444,
           sentence: "So if I'm engaging you in conversation I can say, hey, what brings you here? That's the what.",
           meaning: "대화를 시작할 때 '여긴 어떻게 오셨어요?'라고 물을 수 있죠. 그게 'what'입니다.\n· What brings you here? = 여기엔 웬일이세요? 스몰토크 첫 질문으로 자주 씁니다.",
           tags: ["일상", "스몰토크", "시작"], level: "B1"
         },
         {
-          videoId: "IRG-YubP1rw", start: 591.0, end: 594.0,
+          id: "pack-talk-6",
+          videoId: "IRG-YubP1rw", start: 591, end: 594,
           sentence: "I need to get going because there's some friends over there I need to meet.",
           meaning: "저쪽에 만나야 할 친구들이 있어서 이만 가봐야 해요.\n· I need to get going = 이만 가봐야겠다. 대화를 자연스럽게 끝낼 때 쓰는 표현입니다.",
           tags: ["일상", "스몰토크", "마무리"], level: "B1"
@@ -2201,154 +2284,180 @@ kbd {
       ]
     },
     {
-      id: "celeb",
-      emoji: "🎬",
-      name: "셀럽 인터뷰 영어",
-      level: "B1 → B2",
-      sub: "Vogue 73 Questions · WIRED · GQ 10문장",
-      desc: "Zac Efron·Robert Downey Jr.·Zendaya의 실제 인터뷰에서 뽑은 문장 — 농담, 리액션, 자기 이야기를 자연스러운 말투로.",
+      id: "de",
+      emoji: "🇩🇪",
+      name: "독일어 기초·일상 회화",
+      level: "A1 → A2",
+      sub: "Easy German · 자기소개·주문·식당 24문장",
+      desc: "이름·출신·직업을 묻고 답하기부터 카페·식당에서 주문하고 계산하기까지, 천천히 또박또박 말하는 문장 24개.",
       cards: [
         {
-          videoId: "Y2GVVC_cD_E", start: 242.0, end: 247.0,
-          sentence: "Best habit is I always, always come through and get the job done.",
-          meaning: "제 장점은 항상, 정말 항상 끝까지 해내고 결과를 낸다는 거예요.\n· come through = (기대·약속을) 끝내 지켜내다. get the job done = 일을 끝내다. 앞 질문이 '최고의 습관'이라 Best habit is ~로 받습니다.",
-          tags: ["셀럽", "인터뷰", "습관"], level: "B2"
+          id: "pack-de-a1-1",
+          videoId: "Yaelm87PTvg", start: 0.5, end: 2.6,
+          sentence: "Wie heißt du?",
+          meaning: "이름이 뭐야?\n· du = 친구·동료에게. 격식은 Wie heißen Sie?",
+          tags: ["독일어", "A1", "자기소개"], level: "A1"
         },
         {
-          videoId: "Y2GVVC_cD_E", start: 289.0, end: 297.0,
-          sentence: "And it was improv, so she wasn't expecting it. It was pretty funny.",
-          meaning: "그리고 즉흥 연기였으니까 그분은 전혀 예상 못 했어요. 꽤 웃겼어요.\n· improv = 즉흥 연기. wasn't expecting it = 예상하지 못했다. 과거 일을 이어 말할 때 And it was ~, so ~ 로 이유를 붙이는 구조입니다.",
-          tags: ["셀럽", "인터뷰", "일화"], level: "B1"
+          id: "pack-de-a1-2",
+          videoId: "Yaelm87PTvg", start: 3, end: 4.7,
+          sentence: "Ich heiße Angela.",
+          meaning: "나는 앙겔라라고 해.\n· Ich heiße ~ / Mein Name ist ~ 둘 다 A1 기본 자기소개입니다.",
+          tags: ["독일어", "A1", "자기소개"], level: "A1"
         },
         {
-          videoId: "Y2GVVC_cD_E", start: 342.0, end: 349.0,
-          sentence: "Just, do what I say, dude. Come on, just, like, do what your big bro says to do.",
-          meaning: "그냥 내가 하라는 대로 해, 얘야. 그러니까, 형이 하라는 대로 하라고.\n· dude = 얘/친구(가벼운 호칭). big bro = 형·오빠. Come on, just like ~ 는 말을 고쳐 다시 강조하는 구어체 틀입니다.",
-          tags: ["셀럽", "인터뷰", "구어체"], level: "B1"
+          id: "pack-de-a1-3",
+          videoId: "Yaelm87PTvg", start: 25.3, end: 27.8,
+          sentence: "Woher kommst du?",
+          meaning: "어디에서 왔어?\n· woher = 어디서부터. kommen 동사와 함께 출신을 물을 때 씁니다.",
+          tags: ["독일어", "A1", "자기소개"], level: "A1"
         },
         {
-          videoId: "fez7X_oevNs", start: 392.0, end: 395.0,
-          sentence: "If Christopher Nolan had directed \"The Avengers,\" we would still be shooting it.",
-          meaning: "크리스토퍼 놀란이 '어벤져스'를 연출했다면, 우린 아직도 촬영하고 있었을 거예요.\n· If + had p.p., would + 동사원형 = 가정법 과거완료. still be shooting it = 아직도 찍고 있는 중일 것이다 — 과장해서 웃기게 말할 때 그대로 쓰는 틀입니다.",
-          tags: ["셀럽", "인터뷰", "가정법"], level: "B2"
+          id: "pack-de-a1-4",
+          videoId: "Yaelm87PTvg", start: 29.9, end: 32.2,
+          sentence: "Ich komme aus der Schweiz.",
+          meaning: "나는 스위스에서 왔어.\n· aus + 나라. 여성·복수 국가에는 관사를 붙입니다(aus der Schweiz, aus den USA).",
+          tags: ["독일어", "A1", "자기소개"], level: "A1"
         },
         {
-          videoId: "fez7X_oevNs", start: 457.0, end: 461.0,
-          sentence: "Just remember, this was someone's idea to pair us up here.",
-          meaning: "기억해 두세요, 우리를 여기 짝으로 붙여준 건 누군가의 아이디어였다는 걸요.\n· pair up = 짝을 짓다, 둘을 붙여주다. Just remember, ~ = ~라는 점만 기억하세요. 농담조로 책임을 남에게 넘길 때 씁니다.",
-          tags: ["셀럽", "인터뷰", "농담"], level: "B1"
+          id: "pack-de-a1-5",
+          videoId: "h5085YiFRnI", start: 80.2, end: 83.6,
+          sentence: "Ich möchte einen Orangensaft.",
+          meaning: "오렌지 주스 하나 주세요.\n· Ich möchte ~ = ~을 원합니다. 카페·식당에서 바로 쓰는 주문 표현입니다.",
+          tags: ["독일어", "A1", "주문"], level: "A1"
         },
         {
-          videoId: "fez7X_oevNs", start: 502.0, end: 511.0,
-          sentence: "If by godfather you mean I do light yard work for him on Thursdays and detail his car every other Saturday, then yes.",
-          meaning: "대부라는 게 목요일마다 가벼운 마당일을 해주고 격주 토요일마다 차를 광내주는 거라면, 네, 맞아요.\n· If by X you mean Y, then yes = X가 Y라는 뜻이라면 맞다. detail a car = 차를 세차·광택하다. every other Saturday = 격주 토요일.",
-          tags: ["셀럽", "인터뷰", "농담"], level: "B2"
+          id: "pack-de-a1-6",
+          videoId: "h5085YiFRnI", start: 138.9, end: 142.2,
+          sentence: "Ich hätte gerne einen Kaffee.",
+          meaning: "커피 한 잔 주세요.\n· 독일 카페에서 가장 자연스러운 주문 표현(hätte gerne ~). Ich möchte보다 부드럽습니다.",
+          tags: ["독일어", "A1", "주문"], level: "A1"
         },
         {
-          videoId: "dSQ0jO2_jno", start: 196.0, end: 205.0,
-          sentence: "Knowing that your work has meant something to someone in a real way, I think is the coolest part.",
-          meaning: "내 작업이 누군가에게 실제로 의미가 있었다는 걸 아는 것, 그게 가장 멋진 부분인 것 같아요.\n· Knowing that + 문장 = ~라는 걸 아는 것. mean something to someone = 누군가에게 의미가 있다. 실제 발화에서는 Knowing that like, ... 처럼 like를 끼워 넣습니다.",
-          tags: ["셀럽", "인터뷰", "일"], level: "B2"
+          id: "pack-de-a1-7",
+          videoId: "Yaelm87PTvg", start: 143, end: 151,
+          sentence: "Ich reise gerne und ich lese gerne und ich trinke gerne Kaffee.",
+          meaning: "나는 여행하는 것도, 책 읽는 것도, 커피 마시는 것도 좋아해요.\n· gerne = 즐겨서. 동사 뒤에 붙이면 '~하는 걸 좋아한다'가 됩니다.",
+          tags: ["독일어", "A1", "취미"], level: "A1"
         },
         {
-          videoId: "dSQ0jO2_jno", start: 367.0, end: 379.0,
-          sentence: "And they're like, \"Can you stop sweating?\" I'm like, \"We're in the desert. I sweat in England.\"",
-          meaning: "그러면 사람들이 '땀 좀 그만 흘려줄래?' 그러는데, 저는 '여기가 사막인데요. 전 영국에서도 땀 흘려요'라고 하죠.\n· be like = ~라고 말하다(구어체 인용). I'm like = 저는 ~라고 해요. 대화를 생생하게 옮길 때 쓰는 틀입니다.",
-          tags: ["셀럽", "인터뷰", "인용"], level: "B2"
+          id: "pack-de-a1-8",
+          videoId: "Yaelm87PTvg", start: 191, end: 199,
+          sentence: "Schwimmen, lesen. Mein Hobby ist, sich mit Freunden zu treffen und das Leben zu genießen.",
+          meaning: "수영, 독서요. 제 취미는 친구들을 만나고 삶을 즐기는 거예요.\n· 앞의 'Schwimmen, lesen'은 앞사람 대답이라 같이 들립니다. sich mit Freunden treffen = 친구들을 만나다.",
+          tags: ["독일어", "A2", "취미"], level: "A2"
         },
         {
-          videoId: "dSQ0jO2_jno", start: 733.0, end: 737.0,
-          sentence: "I've figured out ways to kind of deal with anxiety over the years.",
-          meaning: "저는 지난 몇 년간 불안을 다루는 방법을 하나씩 터득해 왔어요.\n· figure out = 알아내다, 터득하다. kind of = 약간, 어느 정도. over the years = 지난 세월 동안.",
-          tags: ["셀럽", "인터뷰", "경험"], level: "B1"
+          id: "pack-de-a1-9",
+          videoId: "Yaelm87PTvg", start: 63, end: 65,
+          sentence: "Ich lebe in Zürich.",
+          meaning: "나는 취리히에 살아요.\n· leben = 살다. wohnen과 거의 같지만 leben이 조금 더 넓은 의미(생활)입니다.",
+          tags: ["독일어", "A1", "거주"], level: "A1"
         },
         {
-          videoId: "dSQ0jO2_jno", start: 867.0, end: 872.0,
-          sentence: "I feel like we did a good job, and we all like, locked in 'cause it's the four of us, the dinner thing.",
-          meaning: "우리 다 잘 해낸 것 같아요. 넷이서 그 저녁 장면을 찍을 때 다들 완전히 집중했거든요.\n· lock in = 정신을 집중하다, 몰입하다. the four of us = 우리 넷. like는 여기서 특별한 뜻 없이 말을 잇는 filler입니다.",
-          tags: ["셀럽", "인터뷰", "칭찬"], level: "B2"
-        }
-      ]
-    },
-    {
-      id: "female-celeb",
-      emoji: "🎙️",
-      name: "여자 셀럽 인터뷰 영어",
-      level: "B1 → B2",
-      sub: "Vogue 73 Questions · Taylor · Margot · Zendaya 12문장",
-      desc: "Taylor Swift·Margot Robbie·Zendaya가 직접 말한 문장만 골랐어요 — 일하는 태도, 사람을 대하는 방식, 자기 이야기를 자연스러운 말투로.",
-      cards: [
-        {
-          videoId: "XnbCSboujF4", start: 249.0, end: 258.3,
-          sentence: "Well, when I'm sitting there, usually I just do this with my leg and people think that I'm nervous and then they get nervous and then everybody's nervous.",
-          meaning: "그게, 제가 거기 앉아 있으면 보통 다리를 이렇게 떠는데, 사람들이 제가 긴장한 줄 알고, 그러면 그 사람들도 긴장하고, 결국 다 같이 긴장해요.\n· do this with my leg = 다리를 이렇게 하다(몸짓을 말로 설명하는 표현). people think (that) I'm nervous = 사람들이 내가 긴장한 줄 안다. then A, then B, then C = 그러면 A, 그러면 B, 결국 C — 말이 이어지는 구어체 리듬입니다.",
-          tags: ["여성 셀럽", "인터뷰", "습관"], level: "B2"
+          id: "pack-de-a1-10",
+          videoId: "Yaelm87PTvg", start: 93, end: 96,
+          sentence: "Was ist dein Beruf?",
+          meaning: "직업이 뭐예요?\n· 격식으로 물을 때는 Was ist Ihr Beruf? / Was machen Sie beruflich?",
+          tags: ["독일어", "A1", "직업"], level: "A1"
         },
         {
-          videoId: "XnbCSboujF4", start: 264.0, end: 272.3,
-          sentence: "I'm pleasantly surprised by the fact that I tell my friends absolutely everything and it never ends up getting out.",
-          meaning: "저는 친구들에게 정말 모든 걸 다 말하는데도 그 얘기가 절대 밖으로 새지 않는다는 게 기분 좋게 놀라워요.\n· be pleasantly surprised by the fact that ~ = ~라는 사실에 기분 좋게 놀라다. tell someone everything = 속마음까지 다 털어놓다. end up getting out = 결국 밖으로 새나가다(end up ~ing = 결국 ~하게 되다).",
-          tags: ["여성 셀럽", "인터뷰", "관계"], level: "B2"
+          id: "pack-de-a1-11",
+          videoId: "Yaelm87PTvg", start: 104, end: 107,
+          sentence: "Ich gehe noch zur Schule.",
+          meaning: "나는 아직 학교에 다녀요.\n· zur Schule gehen = 학교에 다니다. noch = 아직.",
+          tags: ["독일어", "A1", "직업"], level: "A1"
         },
         {
-          videoId: "XnbCSboujF4", start: 364.0, end: 373.3,
-          sentence: "Yeah, I stretch, I warm up my voice, and then my band and dancers and I get in a huddle, and it's just good vibes.",
-          meaning: "네, 스트레칭하고 목을 풀고, 그다음에 밴드랑 댄서들이랑 다 같이 모여서 원을 짜요. 그냥 분위기가 좋아요.\n· warm up one's voice = 목을 풀다(공연 전 발성 준비). get in a huddle = (운동선수처럼) 다 같이 모여 동그랗게 원을 짜다. good vibes = 좋은 기운·분위기(구어체).",
-          tags: ["여성 셀럽", "인터뷰", "루틴"], level: "B2"
+          id: "pack-de-a1-12",
+          videoId: "h5085YiFRnI", start: 21.1, end: 23.3,
+          sentence: "Kann ich bitte ein Leitungswasser bekommen?",
+          meaning: "수돗물 한 잔 받을 수 있을까요?\n· Kann ich bitte ~ bekommen? = 가장 무난한 정중한 요청. Leitungswasser = 수돗물.",
+          tags: ["독일어", "A1", "주문"], level: "A1"
         },
         {
-          videoId: "XnbCSboujF4", start: 503.0, end: 511.3,
-          sentence: "Something I will not be doing in 10 years, I'll be 36, I really hope that I'm not stressed about the idea of approaching 40.",
-          meaning: "10년 뒤에 제가 하고 있지 않았으면 하는 게 하나 있는데, 그때 서른여섯이거든요. 40살이 다가온다는 생각에 스트레스받지 않았으면 정말 좋겠어요.\n· Something I will not be doing = 내가 하지 않을 일 — 문장 맨 앞에 주제를 먼저 던지는 구어체 방식. I'll be 36 = 그때 나는 서른여섯일 것이다. approach 40 = 40살에 가까워지다. be stressed about ~ = ~에 스트레스받다.",
-          tags: ["여성 셀럽", "인터뷰", "나이"], level: "B2"
+          id: "pack-de-a2-1",
+          videoId: "OFSHdj_2FQA", start: 21.5, end: 24,
+          sentence: "Ich habe Hunger.",
+          meaning: "배고파요.\n· Hunger haben = 배고프다. 독일어는 '배고픔을 가지고 있다'라고 말합니다.",
+          tags: ["독일어", "A1", "일상"], level: "A1"
         },
         {
-          videoId: "Bl5630CeYFs", start: 309.0, end: 318.3,
-          sentence: "Well, I always feel a sense of responsibility for a character, whether they're real or not, but definitely an added sense of responsibility when they are real life people, yeah.",
-          meaning: "저는 그 인물이 실제 사람이든 아니든 항상 책임감을 느껴요. 그런데 실제로 있었던 사람이면 책임감이 확실히 더 커지죠.\n· a sense of responsibility for ~ = ~에 대한 책임감. whether A or not = A이든 아니든. an added sense of ~ = 더해진 ~감. real-life people = 실존 인물.",
-          tags: ["여성 셀럽", "인터뷰", "일"], level: "B2"
+          id: "pack-de-a2-2",
+          videoId: "OFSHdj_2FQA", start: 117.1, end: 119.1,
+          sentence: "Und würden Sie gerne erst mal Getränke bestellen?",
+          meaning: "그럼 먼저 음료를 주문하시겠어요?\n· würden Sie gerne ~? = 정중한 권유. erst mal = 우선.",
+          tags: ["독일어", "A2", "식당"], level: "A2"
         },
         {
-          videoId: "Bl5630CeYFs", start: 185.0, end: 190.3,
-          sentence: "I love producing, but acting will always be my big love.",
-          meaning: "프로듀싱도 정말 좋아하지만, 연기는 언제나 제 가장 큰 사랑이에요.\n· my big love = 내 인생의 가장 큰 사랑(첫사랑·가장 아끼는 일). A but B will always be my big love = A도 좋지만 B가 으뜸이라는 틀입니다.",
-          tags: ["여성 셀럽", "인터뷰", "일"], level: "B1"
+          id: "pack-de-a2-3",
+          videoId: "OFSHdj_2FQA", start: 131.6, end: 133.7,
+          sentence: "Einmal groß oder klein für Sie?",
+          meaning: "큰 걸로 드릴까요, 작은 걸로 드릴까요?\n· Einmal ~ = 하나요. groß/klein은 음료 사이즈를 묻는 말입니다.",
+          tags: ["독일어", "A2", "식당"], level: "A2"
         },
         {
-          videoId: "Bl5630CeYFs", start: 382.0, end: 388.3,
-          sentence: "I don't know if that was a thing here, but it was when I was a kid.",
-          meaning: "이 나라에서도 그게 유행이었는지는 모르겠는데, 제가 어렸을 때는 그랬어요.\n· be a thing = 유행이다, 흔한 일이다. it was when I was a kid = 내가 어릴 때는 그랬다(앞의 was a thing을 it was로 받습니다).",
-          tags: ["여성 셀럽", "인터뷰", "구어체"], level: "B1"
+          id: "pack-de-a2-4",
+          videoId: "OFSHdj_2FQA", start: 146.8, end: 149.5,
+          sentence: "Ich kann mich gar nicht entscheiden.",
+          meaning: "정말 못 고르겠어요.\n· sich entscheiden = 결정하다. gar nicht = 전혀 ~않다.",
+          tags: ["독일어", "A2", "식당"], level: "A2"
         },
         {
-          videoId: "Bl5630CeYFs", start: 121.0, end: 126.6,
-          sentence: "I find real life people on YouTube, then I just kind of mimic them.",
-          meaning: "유튜브에서 실제로 그렇게 말하는 사람을 찾아서, 그 사람을 그냥 따라 해요.\n· find someone on YouTube = 유튜브에서 ~하는 사람을 찾다. mimic = 흉내 내다. kind of = 그냥 어느 정도(말을 부드럽게 만드는 filler).",
-          tags: ["여성 셀럽", "인터뷰", "방법"], level: "B1"
+          id: "pack-de-a2-5",
+          videoId: "OFSHdj_2FQA", start: 186.4, end: 190.6,
+          sentence: "Wie wär's mit der Frühlingsrolle mit Nudeln?",
+          meaning: "춘권에 국수 곁들인 건 어때요?\n· Wie wär's mit ~? = ~하는 게 어때요? 메뉴를 추천할 때 자주 쓰는 표현.",
+          tags: ["독일어", "A2", "제안"], level: "A2"
         },
         {
-          videoId: "MGO4_8YRKro", start: 210.0, end: 217.3,
-          sentence: "I try to keep in mind that everyone is dealing with something that we have no idea about, you know? So, I just try to have compassion for them, you know?",
-          meaning: "모두가 우리가 전혀 모르는 어떤 문제를 겪고 있다는 걸 기억하려고 해요. 그래서 그냥 그 사람들에게 연민을 가지려고 하죠.\n· keep in mind that ~ = ~을 명심하다·기억하다. deal with something = 어떤 문제를 겪다·감당하다. have compassion for ~ = ~에게 연민을 느끼다. 끝의 you know?는 구어체 추임새입니다.",
-          tags: ["여성 셀럽", "인터뷰", "태도"], level: "B2"
+          id: "pack-de-a2-6",
+          videoId: "OFSHdj_2FQA", start: 255.2, end: 259.3,
+          sentence: "Ich hätte gerne die Nummer 74.",
+          meaning: "74번으로 주세요.\n· Ich hätte gerne ~ = ~을 주세요(가장 공손한 주문). 메뉴판 번호로 주문할 때 씁니다.",
+          tags: ["독일어", "A2", "주문"], level: "A2"
         },
         {
-          videoId: "MGO4_8YRKro", start: 229.0, end: 236.3,
-          sentence: "My fans, they keep me on my toes, they keep me politically aware, they keep me socially aware, and they always correct my grammar and spelling.",
-          meaning: "제 팬들은 저를 늘 긴장하게 만들고, 정치적으로도 사회적으로도 계속 눈을 뜨게 해줘요. 그리고 항상 제 문법과 철자를 고쳐주죠.\n· keep someone on their toes = 긴장을 늦추지 않게 하다. keep me aware = 계속 인식하게 하다. keep me + 형용사를 세 번 반복해 리듬을 만드는 구조입니다.",
-          tags: ["여성 셀럽", "인터뷰", "팬"], level: "B2"
+          id: "pack-de-a2-7",
+          videoId: "OFSHdj_2FQA", start: 259.4, end: 262.3,
+          sentence: "Gibt es Milchprodukte in der Soße?",
+          meaning: "소스에 유제품이 들어가나요?\n· Gibt es ~? = ~이 있나요? 알레르기·채식 여부를 확인하는 기본 질문입니다.",
+          tags: ["독일어", "A2", "식당"], level: "A2"
         },
         {
-          videoId: "MGO4_8YRKro", start: 426.0, end: 431.3,
-          sentence: "It would probably be to follow your instincts and follow your gut, because it's always right.",
-          meaning: "아마도 자기 직감을 따르라는 말을 하겠어요. 그게 항상 맞거든요.\n· follow your instincts = 본능·직감을 따르다(여기서 your는 특정인이 아니라 일반인 you). follow your gut = 촉·배짱을 믿고 따르다. 거의 같은 뜻을 두 번 반복해 힘을 줍니다.",
-          tags: ["여성 셀럽", "인터뷰", "조언"], level: "B2"
+          id: "pack-de-a2-8",
+          videoId: "OFSHdj_2FQA", start: 688.1, end: 690,
+          sentence: "Können wir auch direkt zahlen?",
+          meaning: "바로 계산해도 될까요?\n· direkt zahlen = 바로 계산하다. 식사 중간에 계산을 요청할 때 씁니다.",
+          tags: ["독일어", "A2", "계산"], level: "A2"
         },
         {
-          videoId: "MGO4_8YRKro", start: 89.0, end: 96.3,
-          sentence: "The most Californian thing about me is that I still get excited when I see snow. I think it's really, really cool, because obviously we never get snow.",
-          meaning: "제가 가장 캘리포니아 사람다운 점은, 눈을 보면 아직도 신이 난다는 거예요. 여기선 눈이 안 오니까 정말 멋지다고 생각해요.\n· the most ~ thing about me is that ~ = 내가 가장 ~한 점은 ~라는 것. get excited = 신이 나다·설레다. obviously = 당연히(여기서는 '이곳엔 눈이 안 오니까'를 강조).",
-          tags: ["여성 셀럽", "인터뷰", "자기소개"], level: "B1"
+          id: "pack-de-a2-9",
+          videoId: "huwi-cjPPXU", start: 126, end: 128.9,
+          sentence: "Wo wohnst du?",
+          meaning: "어디에 살아요?\n· wohnen = 살다(거주). 격식은 Wo wohnen Sie?",
+          tags: ["독일어", "A1", "일상"], level: "A1"
+        },
+        {
+          id: "pack-de-a2-10",
+          videoId: "huwi-cjPPXU", start: 156.1, end: 160.9,
+          sentence: "Ich wohne seit zehn Jahren in Berlin.",
+          meaning: "나는 베를린에 산 지 10년 됐어요.\n· seit + 기간 = ~부터 (지금까지). Jahren은 Jahr의 복수 3격입니다.",
+          tags: ["독일어", "A2", "일상"], level: "A2"
+        },
+        {
+          id: "pack-de-a2-11",
+          videoId: "huwi-cjPPXU", start: 436.1, end: 439.9,
+          sentence: "Was machst du beruflich?",
+          meaning: "직업이 뭐예요? (무슨 일을 해요?)\n· beruflich = 직업상. Was machst du?보다 '일'을 묻는 자연스러운 표현입니다.",
+          tags: ["독일어", "A2", "직업"], level: "A2"
+        },
+        {
+          id: "pack-de-a2-12",
+          videoId: "huwi-cjPPXU", start: 618, end: 622,
+          sentence: "Was ist dein Lieblingsessen?",
+          meaning: "가장 좋아하는 음식이 뭐예요?\n· Lieblings- = 가장 좋아하는 ~. Lieblingsessen / Lieblingsfilm처럼 붙여 씁니다.",
+          tags: ["독일어", "A2", "일상"], level: "A2"
         }
       ]
     }
@@ -3243,7 +3352,12 @@ kbd {
      ========================================================= */
   var packState = { active: null, idx: 0, player: null, lock: false };
 
-  function packCardId(pack, idx) { return "pack-" + pack.id + "-" + (idx + 1); }
+  function packCardId(pack, idx) {
+    var item = pack && pack.cards ? pack.cards[idx] : null;
+    // 카드에 고정 id가 있으면 그걸 쓴다 — 팩을 합치거나 순서를 바꿔도 저장된 카드가 깨지지 않게
+    if (item && item.id) return item.id;
+    return "pack-" + pack.id + "-" + (idx + 1);
+  }
 
   function packDeckCard(pack, idx) { return findCard(packCardId(pack, idx)); }
 
@@ -3402,22 +3516,81 @@ kbd {
     updateSpeedUI();
   }
 
+  function packRowState(card, now) {
+    if (!card) return null;
+    if (card.mastered) return { cls: "mastered", label: "외움" };
+    if (card.due <= now) return { cls: "review", label: "복습" };
+    return { cls: "saved", label: "저장" };
+  }
+
   function renderPackMini() {
     var pack = packState.active;
     var box = el("packMiniList");
     if (!pack || !box) return;
     var now = Date.now();
+    var saved = 0;
     var html = "";
     for (var i = 0; i < pack.cards.length; i++) {
-      var c = packDeckCard(pack, i);
-      var st = c ? (c.mastered ? "외움" : (c.due <= now ? "복습" : "저장")) : "—";
-      html += '<div class="plm-row' + (i === packState.idx ? " on" : "") + (c ? " done" : "") + '">' +
+      var item = pack.cards[i];
+      var st = packRowState(packDeckCard(pack, i), now);
+      if (st) saved++;
+      html += '<button type="button" class="plm-row' + (i === packState.idx ? " on" : "") + (st ? " done" : "") + '"' +
+        ' data-jump="' + i + '"' + (i === packState.idx ? ' aria-current="true"' : "") + '>' +
         '<span class="n">' + (i + 1) + "</span>" +
-        '<span class="t">' + esc(pack.cards[i].sentence) + "</span>" +
-        '<span class="st">' + st + "</span>" +
-      "</div>";
+        '<span class="b">' +
+          '<span class="t">' + esc(item.sentence) + "</span>" +
+          (item.meaning ? '<span class="m">' + esc(item.meaning) + "</span>" : "") +
+        "</span>" +
+        (st ? '<span class="bdg ' + st.cls + '">' + st.label + "</span>" : "") +
+      "</button>";
     }
     box.innerHTML = html;
+    var meta = el("packListMeta");
+    if (meta) meta.textContent = "전체 " + pack.cards.length + " · 저장 " + saved;
+    keepPackRowVisible(box);
+  }
+
+  // 목록 안에서 현재 문장이 보이도록만 맞춘다(페이지는 건드리지 않는다)
+  function keepPackRowVisible(box) {
+    if (!box || typeof box.querySelector !== "function") return;
+    var row = null;
+    try { row = box.querySelector('[data-jump="' + packState.idx + '"]'); } catch (e) { return; }
+    if (!row || typeof row.getBoundingClientRect !== "function" || typeof box.getBoundingClientRect !== "function") return;
+    var rb = row.getBoundingClientRect();
+    var bb = box.getBoundingClientRect();
+    if (!bb.height) return;
+    var pad = 6;
+    var top = Number(box.scrollTop) || 0;
+    if (rb.top < bb.top + pad) box.scrollTop = Math.max(0, top - (bb.top + pad - rb.top));
+    else if (rb.bottom > bb.bottom - pad) box.scrollTop = top + (rb.bottom - bb.bottom + pad);
+  }
+
+  // 문장을 누르면 그 구간으로 바로 이동
+  function jumpToPackSentence(idx) {
+    var pack = packState.active;
+    if (!pack) return false;
+    var i = Number(idx);
+    if (!isFinite(i)) return false;
+    i = Math.floor(i);
+    if (i < 0 || i > pack.cards.length - 1) return false;
+    packState.idx = i;
+    packState.lock = false;
+    showPackSentence(true);
+    scrollPackPlayerIntoView();
+    return true;
+  }
+
+  // 플레이어가 화면에 다 보이지 않을 때만 부드럽게 올려 준다(상단 고정 헤더 높이만큼 비켜서)
+  function scrollPackPlayerIntoView() {
+    var box = el("playerPackBox");
+    if (!box || typeof box.getBoundingClientRect !== "function") return;
+    var vh = window.innerHeight || 0;
+    var r = box.getBoundingClientRect();
+    if (r.top >= 8 && (!vh || r.bottom <= vh - 8)) return;
+    var y = r.top + (window.pageYOffset || window.scrollY || 0) - 72;
+    if (y < 0) y = 0;
+    try { window.scrollTo({ top: y, behavior: "smooth" }); }
+    catch (e) { try { window.scrollTo(0, y); } catch (e2) {} }
   }
 
   function applyPackGrade(card, grade, isNew, now) {
@@ -4167,6 +4340,13 @@ kbd {
     });
     el("packPrevBtn").addEventListener("click", function () { goPack(-1); });
     el("packNextBtn").addEventListener("click", function () { goPack(1); });
+    // 문장 목록: 누른 항목으로 바로 점프
+    el("packMiniList").addEventListener("click", function (e) {
+      var row = e.target && e.target.closest ? e.target.closest("[data-jump]") : null;
+      if (!row) return;
+      e.preventDefault();
+      jumpToPackSentence(row.getAttribute("data-jump"));
+    });
     el("packPlayBtn").addEventListener("click", function () {
       var p = packState.player;
       if (!p || !p.ready) { toast("문장을 먼저 골라주세요."); return; }
