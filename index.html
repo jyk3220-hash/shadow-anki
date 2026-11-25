@@ -3410,11 +3410,14 @@ kbd {
       this.pendingSeek = false;
       this.gapActive = false;
       this.transitioning = false;
+      this.lastEndAt = 0;
       clearTimeout(this.gapTimer);
       clearTimeout(this.transTimer);
       this.needRate = true;
       try { this.player.seekTo(this.start, true); } catch (e) {}
       try { this.player.playVideo(); } catch (e) {}
+      // seek가 잠시 무시되어도 PLAYING에서 A로 한 번 더 보정한다(광고는 없음)
+      this.markPending();
       this.startMonitor();
       return;
     }
