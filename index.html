@@ -789,6 +789,28 @@ kbd {
 .done-stats span { font-size: 11.5px; color: var(--muted-2); font-weight: 700; }
 
 /* ---------------- library ---------------- */
+.backup-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 14px;
+  padding: 13px 14px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(124, 140, 255, 0.32);
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(124, 140, 255, 0.13), rgba(169, 112, 255, 0.07));
+}
+.backup-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.backup-text b { font-size: 13px; font-weight: 800; letter-spacing: -0.01em; }
+.backup-text span { font-size: 12px; color: var(--muted); }
+.backup-actions { display: flex; gap: 8px; flex: 1 1 auto; justify-content: flex-end; }
+.backup-save { min-height: 46px; padding: 12px 18px; font-size: 14.5px; }
+.backup-load { min-height: 46px; }
+@media (max-width: 560px) {
+  .backup-actions { flex-direction: column; width: 100%; }
+  .backup-save, .backup-load { width: 100%; }
+}
 .lib-head { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
 .lib-head .input { flex: 1 1 220px; }
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
@@ -1509,6 +1531,18 @@ kbd {
       <div class="stat"><b id="statMastered">0</b><span>외운 카드</span></div>
     </div>
 
+    <div class="backup-box" role="group" aria-label="백업">
+      <div class="backup-text">
+        <b>기록은 이 브라우저에 저장돼요.</b>
+        <span>가끔 백업해 두시면 안전해요.</span>
+      </div>
+      <div class="backup-actions">
+        <button class="btn primary backup-save" id="exportBtn">⬇ 백업 파일 저장 (JSON)</button>
+        <button class="btn backup-load" id="importBtn">JSON 불러오기</button>
+      </div>
+      <input type="file" id="importFile" accept="application/json,.json" hidden>
+    </div>
+
     <div class="lib-head">
       <input class="input" id="libSearch" placeholder="문장·뜻·태그·영상으로 검색" autocomplete="off">
       <select class="select gap-select" id="libSort" aria-label="정렬">
@@ -1516,17 +1550,14 @@ kbd {
         <option value="created">최근 추가순</option>
         <option value="alpha">문장 가나다순</option>
       </select>
-      <button class="btn sm" id="exportBtn">JSON 내보내기</button>
-      <button class="btn sm" id="importBtn">가져오기</button>
       <button class="btn sm danger" id="deleteSamplesBtn">샘플 삭제</button>
-      <input type="file" id="importFile" accept="application/json,.json" hidden>
     </div>
 
     <div class="tagbar" id="tagBar"></div>
     <div class="lib-list" id="libList"></div>
 
     <div class="footer">
-      카드는 이 브라우저의 localStorage에 저장됩니다. 기기를 바꾸거나 백업하려면 <b>JSON 내보내기</b>로 파일을 보관하세요.
+      카드는 이 브라우저의 localStorage에 저장됩니다. 기기를 바꾸기 전에는 <b>백업 파일 저장 (JSON)</b>으로 꼭 보관해 두세요.
     </div>
   </section>
 </main>
@@ -2013,8 +2044,8 @@ kbd {
       emoji: "🧪",
       name: "에너지·기후·공학 영어",
       level: "B1 → B2",
-      sub: "DW Planet A · 수소·CCS·배터리·e-fuel 22문장",
-      desc: "수소 생산과 블루 수소, 탄소 포집(CCS·DAC)과 비용, EV 배터리 재활용, 합성연료(e-fuel)의 효율까지 — 실제 에너지·기후 영상 4편에서 뽑은 22문장.",
+      sub: "DW Planet A · 수소·CCS·배터리·e-fuel·지열·리튬 28문장",
+      desc: "수소 생산과 블루 수소, 탄소 포집(CCS·DAC)과 비용, EV 배터리 재활용, 합성연료(e-fuel)의 효율, 차세대 지열과 지열 리튬까지 — 실제 에너지·기후 영상 6편에서 뽑은 28문장.",
       cards: [
         {
           id: "pack-energy-1",
@@ -2169,6 +2200,48 @@ kbd {
           sentence: "So, while eFuels might have their use cases, they're extremely unlikely to save the internal combustion engine.",
           meaning: "그래서 e-fuel이 쓰일 곳은 있겠지만, 내연기관을 구해 주기는 거의 불가능합니다.\n· while + 절 = ~이긴 하지만(양보). be unlikely to + 동사 = ~할 가능성이 낮다. use case = 용도.",
           tags: ["에너지", "e-fuel", "결론"], level: "B2"
+        },
+        {
+          id: "pack-energy-23",
+          videoId: "_GCd30CSYa4", start: 131, end: 135.3,
+          sentence: "So, the deeper you drill, the more energy you can potentially harvest.",
+          meaning: "그래서 더 깊이 시추할수록 잠재적으로 더 많은 에너지를 얻을 수 있습니다.\n· the 비교급 ~, the 비교급 … = ~할수록 더 …하다. harvest energy = 에너지를 얻다(수확하듯 끌어올린다는 느낌).",
+          tags: ["에너지", "지열", "시추"], level: "B1"
+        },
+        {
+          id: "pack-energy-24",
+          videoId: "_GCd30CSYa4", start: 308, end: 315.3,
+          sentence: "The idea being that horizontal drilling makes the heat transfer process more efficient and boosts water throughput.",
+          meaning: "수평 시추가 열 전달 과정을 더 효율적으로 만들고 물의 처리량을 늘린다는 게 핵심 아이디어입니다.\n· The idea being that ~ = 핵심은 ~라는 것(분사구문). throughput = 처리량. 공정 설명에서 원리를 한 문장으로 붙일 때 쓰는 구조입니다.",
+          tags: ["에너지", "지열", "공학"], level: "B2"
+        },
+        {
+          id: "pack-energy-25",
+          videoId: "_GCd30CSYa4", start: 761, end: 771.3,
+          sentence: "If the technology keeps developing, stays safe, and costs come down even more it could deliver at least 15% of the entire global electricity demand by 2050.",
+          meaning: "기술이 계속 발전하고 안전성을 유지하며 비용이 더 내려간다면, 2050년까지 전 세계 전력 수요의 최소 15%를 공급할 수 있습니다.\n· if 절 안에 동사 세 개를 병렬로. costs come down = 비용이 내려가다. at least = 최소한.",
+          tags: ["에너지", "지열", "전망"], level: "B2"
+        },
+        {
+          id: "pack-energy-26",
+          videoId: "PmMFRhlKjuI", start: 229, end: 238.3,
+          sentence: "But there's a problem, and the opponents of EVs can't stop talking about it: Lithium mining isn't exactly a clean business.",
+          meaning: "그런데 문제가 하나 있습니다. 전기차 반대론자들이 늘 하는 말이죠. 리튬 채굴은 그렇게 깨끗한 사업이 아닙니다.\n· can't stop ~ing = ~하지 않을 수 없다·계속 ~하다. not exactly = 딱 그렇지는 않은. 콜론 뒤에 핵심 주장을 붙이는 발표식 문장입니다.",
+          tags: ["에너지", "리튬", "광산"], level: "B2"
+        },
+        {
+          id: "pack-energy-27",
+          videoId: "PmMFRhlKjuI", start: 562, end: 573.3,
+          sentence: "But more treatment means you need more energy and chemical additives, and you end up with more chemical waste, more transportation and higher carbon emissions.",
+          meaning: "하지만 처리가 늘어날수록 에너지와 화학 첨가물이 더 필요하고, 결국 화학 폐기물과 운송, 탄소 배출이 더 늘어납니다.\n· end up with ~ = 결국 ~하게 되다. A means B, and you end up with C — 원인과 결과를 이어 붙이는 문장 구조입니다.",
+          tags: ["에너지", "리튬", "환경"], level: "B2"
+        },
+        {
+          id: "pack-energy-28",
+          videoId: "PmMFRhlKjuI", start: 686, end: 695.3,
+          sentence: "The advantage of geothermal is that just one resource, the brine, generates two profits at once: from energy and lithium.",
+          meaning: "지열의 장점은 단 하나의 자원인 염수가 에너지와 리튬, 두 가지 수익을 동시에 낸다는 것입니다.\n· at once = 동시에. one resource, the brine — 콤마로 동격 부연을 넣는 구조. 장점을 한 문장으로 정리할 때 씁니다.",
+          tags: ["에너지", "지열", "경제성"], level: "B2"
         }
       ]
     },
@@ -2177,8 +2250,8 @@ kbd {
       emoji: "🎙️",
       name: "셀럽 인터뷰 영어",
       level: "B1 → B2",
-      sub: "Vogue 73 Questions · Taylor·Margot·Zendaya 먼저, 22문장",
-      desc: "Taylor Swift·Margot Robbie·Zendaya의 인터뷰를 먼저, 이어서 Zac Efron·Robert Downey Jr.의 농담과 리액션까지 — 실제 인터뷰 말투 22문장.",
+      sub: "Vogue Life in Looks · Taylor·Margot·Zendaya·Emma Stone·Anne Hathaway 29문장",
+      desc: "Taylor Swift·Margot Robbie·Zendaya·Emma Stone·Anne Hathaway의 인터뷰를 먼저, 이어서 Zac Efron·Robert Downey Jr.의 농담과 리액션까지 — 실제 인터뷰 말투 29문장.",
       cards: [
         {
           id: "pack-female-celeb-1",
@@ -2265,6 +2338,55 @@ kbd {
           tags: ["여성 셀럽", "인터뷰", "자기소개"], level: "B1"
         },
         {
+          id: "pack-celeb-23",
+          videoId: "wZFblGM42Mw", start: 154, end: 160.3,
+          sentence: "This was the first time I think I'd ever been considered like a real actress, a dramatic actress.",
+          meaning: "그때가 제가 처음으로 진짜 배우, 드라마 배우로 인정받았다고 느낀 순간이었어요.\n· be considered (like) ~ = ~로 여겨지다. I think가 문장 중간에 끼어드는 구어 어순에 주목하세요.",
+          tags: ["셀럽", "인터뷰", "연기"], level: "B1"
+        },
+        {
+          id: "pack-celeb-24",
+          videoId: "wZFblGM42Mw", start: 380, end: 384.3,
+          sentence: "There's a physical component to filmmaking that I think people often misunderstand.",
+          meaning: "영화 제작에는 육체적인 부분이 있는데, 사람들이 그걸 자주 오해하는 것 같아요.\n· a physical component to ~ = ~의 육체적 요소. misunderstand = 오해하다. 'A to B that ~' 구조로 주장을 붙입니다.",
+          tags: ["셀럽", "인터뷰", "영화"], level: "B2"
+        },
+        {
+          id: "pack-celeb-25",
+          videoId: "wZFblGM42Mw", start: 392, end: 396.3,
+          sentence: "But you do need to have steeliness. You do need to be willing to go that extra mile.",
+          meaning: "하지만 단단한 정신은 필요해요. 한 걸음 더 나아갈 의지도 있어야 하고요.\n· steeliness = 강철 같은 단단함. do need = 정말 필요하다(강조). go the extra mile = 남보다 더 애쓰다.",
+          tags: ["셀럽", "인터뷰", "태도"], level: "B2"
+        },
+        {
+          id: "pack-celeb-26",
+          videoId: "_DfmauOCSJ4", start: 610, end: 614.3,
+          sentence: "It's very emotional on a lot of levels and very surreal on a lot of levels.",
+          meaning: "여러 면에서 정말 감정적이고, 여러 면에서 정말 비현실적이에요.\n· on a lot of levels = 여러 측면에서. 같은 구조를 두 번 반복해 감정의 크기를 강조합니다.",
+          tags: ["셀럽", "인터뷰", "감정"], level: "B1"
+        },
+        {
+          id: "pack-celeb-27",
+          videoId: "_DfmauOCSJ4", start: 813, end: 820.3,
+          sentence: "There's so many people working on these clothes and it takes so much care in craftsmanship.",
+          meaning: "이 옷들에는 정말 많은 사람이 작업하고, 장인 정신으로 엄청난 정성을 들여요.\n· craftsmanship = 장인 정신·솜씨. 구어에서는 There are 대신 There's so many로도 자주 말합니다.",
+          tags: ["셀럽", "인터뷰", "패션"], level: "B2"
+        },
+        {
+          id: "pack-celeb-28",
+          videoId: "_DfmauOCSJ4", start: 562, end: 568.3,
+          sentence: "It was a joy to get to sing in a movie and not have this immense pressure of needing to sound perfect.",
+          meaning: "영화에서 노래할 수 있었던 게 정말 기뻤고, 완벽하게 들려야 한다는 엄청난 압박도 없었어요.\n· a joy to ~ = ~하는 것은 기쁨. immense pressure = 엄청난 압박. get to ~ = ~할 기회를 얻다.",
+          tags: ["셀럽", "인터뷰", "일"], level: "B2"
+        },
+        {
+          id: "pack-celeb-29",
+          videoId: "_DfmauOCSJ4", start: 902, end: 905.3,
+          sentence: "It was like the greatest, greatest dream of my life to get to go be there.",
+          meaning: "그 자리에 가는 건 제 인생에서 가장, 가장 큰 꿈이었어요.\n· to get to go be there = 가서 그 자리에 있을 기회를 얻다. greatest를 두 번 반복해 감정을 강조하는 구어 표현입니다.",
+          tags: ["셀럽", "인터뷰", "감정"], level: "B1"
+        },
+        {
           id: "pack-celeb-1",
           videoId: "Y2GVVC_cD_E", start: 242, end: 247,
           sentence: "Best habit is I always, always come through and get the job done.",
@@ -2341,8 +2463,8 @@ kbd {
       emoji: "🗣️",
       name: "일상·스몰토크 영어",
       level: "B1 → B2",
-      sub: "Harvard Business Review · 스몰토크 6문장",
-      desc: "가벼운 대화에서 바로 쓰는 말투 — 시작, 맞장구, 자연스럽게 빠져나오기까지.",
+      sub: "Harvard Business Review · Easy English · 스몰토크 15문장",
+      desc: "가벼운 대화에서 바로 쓰는 말투 — 시작, 맞장구, 칭찬, 자연스럽게 빠져나오기까지. HBR 인터뷰와 영국인 스트리트 인터뷰에서 뽑은 15문장.",
       cards: [
         {
           id: "pack-talk-1",
@@ -2385,6 +2507,69 @@ kbd {
           sentence: "I need to get going because there's some friends over there I need to meet.",
           meaning: "저쪽에 만나야 할 친구들이 있어서 이만 가봐야 해요.\n· I need to get going = 이만 가봐야겠다. 대화를 자연스럽게 끝낼 때 쓰는 표현입니다.",
           tags: ["일상", "스몰토크", "마무리"], level: "B1"
+        },
+        {
+          id: "pack-talk-7",
+          videoId: "rPgykzyHg6I", start: 71, end: 76.3,
+          sentence: "The weather is probably a really safe thing to talk about in the UK.",
+          meaning: "영국에서는 날씨가 아마 가장 안전하게 꺼낼 수 있는 주제일 거예요.\n· a safe thing to talk about = 꺼내기 안전한 주제. 처음 만난 사람과 어색하지 않게 시작할 때 쓰는 무난한 오프너입니다.",
+          tags: ["일상", "스몰토크", "날씨"], level: "B1"
+        },
+        {
+          id: "pack-talk-8",
+          videoId: "rPgykzyHg6I", start: 95, end: 100.3,
+          sentence: "Let's say that, I don't know you and we're standing at a bus stop. We're like; oh hi, how's it going?",
+          meaning: "예를 들어, 제가 당신을 모르는 채로 버스 정류장에 같이 서 있다고 해 봐요. 그러면 '아, 안녕하세요, 잘 지내세요?' 이렇게 시작하죠.\n· Let's say (that) ~ = ~라고 가정해 보자. We're like ~ = 우리는 ~이렇게 말하죠(구어체). 상황을 상상시켜 설명할 때 유용합니다.",
+          tags: ["일상", "스몰토크", "가정"], level: "B2"
+        },
+        {
+          id: "pack-talk-9",
+          videoId: "rPgykzyHg6I", start: 344, end: 347.3,
+          sentence: "If I was to approach someone, I would ask them, how their day was.",
+          meaning: "제가 누군가에게 다가간다면, 오늘 하루 어땠는지 물어볼 거예요.\n· If I was to ~, I would ... = 만약 ~한다면 …할 텐데(가정법). approach someone = 누군가에게 다가가다. 간접의문문이라 how their day was 어순입니다.",
+          tags: ["일상", "스몰토크", "질문"], level: "B1"
+        },
+        {
+          id: "pack-talk-10",
+          videoId: "rPgykzyHg6I", start: 378, end: 384.3,
+          sentence: "And if you're from another country, I'd ask them, where they're from.",
+          meaning: "그리고 상대가 다른 나라에서 왔다면, 어디서 왔는지 물어볼 거예요.\n· I'd = I would. where they're from = 그들이 어디 출신인지(간접의문문). 상대 배경을 자연스럽게 여는 질문입니다.",
+          tags: ["일상", "스몰토크", "질문"], level: "B1"
+        },
+        {
+          id: "pack-talk-11",
+          videoId: "rPgykzyHg6I", start: 474, end: 481.3,
+          sentence: "But yeah, I'd say generally something that someone has clearly personalised about themselves and they've made a conscious effort for.",
+          meaning: "그래도 보통은, 상대가 분명히 자기 취향으로 꾸며 놓고 일부러 신경 쓴 부분을 말하는 것 같아요.\n· personalised = 자신에 맞게 꾸민. make a conscious effort = 의식적으로 노력하다. 칭찬은 상대가 '선택한 것'에 하라는 조언입니다.",
+          tags: ["일상", "스몰토크", "칭찬"], level: "B2"
+        },
+        {
+          id: "pack-talk-12",
+          videoId: "IRG-YubP1rw", start: 71, end: 80.3,
+          sentence: "Rachel Greenwald, a matchmaker and an academic, has this wonderful saying. Your goal is to be interested, not interesting.",
+          meaning: "중매인 겸 학자인 레이철 그린월드는 이런 멋진 말을 했어요. 목표는 '흥미로운 사람'이 아니라 '흥미를 보이는 사람'이 되는 거라고요.\n· be interested, not interesting — 형용사 하나 차이로 핵심을 강조하는 대구입니다. 대화가 어색할 때 떠올려 볼 만한 문장.",
+          tags: ["일상", "스몰토크", "태도"], level: "B2"
+        },
+        {
+          id: "pack-talk-13",
+          videoId: "IRG-YubP1rw", start: 127, end: 135.3,
+          sentence: "But really, what reflects best on your competence is an appropriate response. And appropriateness can take a little bit of time.",
+          meaning: "하지만 정말로 당신의 능력을 가장 잘 보여 주는 것은 적절한 대답이에요. 그리고 적절함에는 약간의 시간이 걸릴 수 있습니다.\n· reflect on = ~에 비치다·보여 주다. take time = 시간이 걸리다. 바로 답하지 않고 잠깐 멈추는 것이 오히려 유능해 보인다는 맥락입니다.",
+          tags: ["일상", "스몰토크", "태도"], level: "B2"
+        },
+        {
+          id: "pack-talk-14",
+          videoId: "IRG-YubP1rw", start: 189, end: 198.3,
+          sentence: "Most of us listen just enough to get the gist of what somebody's saying, and then we immediately start judging, rehearsing, and responding.",
+          meaning: "우리 대부분은 상대 말의 요점만 파악할 만큼만 듣고, 곧바로 판단하고, 할 말을 미리 연습하고, 대답하기 시작해요.\n· get the gist = 요점을 파악하다. judging, rehearsing, responding — 세 동작을 리듬감 있게 나열해 자기 진단을 하듯 말합니다.",
+          tags: ["일상", "스몰토크", "경청"], level: "B2"
+        },
+        {
+          id: "pack-talk-15",
+          videoId: "IRG-YubP1rw", start: 485, end: 491.3,
+          sentence: "These are simple, reflexive ways to get started, but they actually don't take you very far.",
+          meaning: "이런 말들은 시작하기엔 간단하고 습관적인 방식이지만, 사실 대화를 그렇게 멀리 데려가 주진 못해요.\n· reflexive = 반사적인·습관적인. take someone far = (대화를) 멀리 이끌다. 'How are you?' 같은 인사가 왜 금방 끝나는지 설명하는 문장입니다.",
+          tags: ["일상", "스몰토크", "시작"], level: "B2"
         }
       ]
     },
@@ -2823,8 +3008,13 @@ kbd {
     refreshReviewStart();
   }
 
+  function editModalOpen() {
+    return editOpen;
+  }
+
   function onPopState() {
     if (Date.now() - historyNav.silentAt < 600) return;   // 방금 우리가 정리한 항목
+    if (editModalOpen()) { el("editModal").hidden = true; editingId = null; editOpen = false; return; }
     if (packViewOpen()) { closePackView(); return; }
     if (shadow && shadow.open) { closePracticeView(); return; }
     if (rv.active && currentTab === "review") { closeReviewView(); return; }
@@ -3211,6 +3401,23 @@ kbd {
     this.setSegment(a, b);
     this.loopCount = 0;
     this.wantPlay = true;
+    // 같은 영상 안에서 다른 문장으로 넘어갈 때는 iframe을 다시 붙이지 않는다.
+    // loadVideoById는 영상을 새로 불러와 프리롤 광고를 다시 물어오므로,
+    // 이미 준비된 플레이어를 그 자리에서 seek해서 즉시 재생한다.
+    var sameVideo = this.ready && this.player && !this.isAdPlaying() &&
+                    this.videoId === videoId && this.loadedId === videoId;
+    if (sameVideo) {
+      this.pendingSeek = false;
+      this.gapActive = false;
+      this.transitioning = false;
+      clearTimeout(this.gapTimer);
+      clearTimeout(this.transTimer);
+      this.needRate = true;
+      try { this.player.seekTo(this.start, true); } catch (e) {}
+      try { this.player.playVideo(); } catch (e) {}
+      this.startMonitor();
+      return;
+    }
     this.ensure(videoId, this.start, true);
     this.playRange();
   };
@@ -4074,6 +4281,7 @@ kbd {
      edit modal
      ========================================================= */
   var editingId = null;
+  var editOpen = false;      // 모달이 열려 있는지(history state·뒤로가기 판단에 사용)
 
   function openEdit(card) {
     editingId = card.id;
@@ -4083,13 +4291,25 @@ kbd {
     el("editSentence").value = card.sentence;
     el("editMeaning").value = card.meaning || "";
     el("editTags").value = card.tags.join(", ");
+    var alreadyOpen = editOpen;
     el("editModal").hidden = false;
+    editOpen = true;
+    // 안드로이드 뒤로가기로 모달만 닫히도록 history state를 쌓아 둔다
+    if (!alreadyOpen) historyPushView("edit-modal");
     setTimeout(function () { el("editSentence").focus(); }, 40);
   }
 
   function closeEdit() {
+    var onModalState = false;
+    try {
+      var st = window.history ? window.history.state : null;
+      onModalState = !!(st && st.__sa === 1 && st.view === "edit-modal");
+    } catch (e) { onModalState = false; }
     el("editModal").hidden = true;
     editingId = null;
+    editOpen = false;
+    // 우리가 쌓은 모달 state만 조용히 되돌린다(팩·연습 화면은 그대로 둔다)
+    if (onModalState) historyDropSilent();
   }
 
   function saveEdit() {
