@@ -3327,6 +3327,7 @@ kbd {
   function openPack(packId) {
     var pack = packById(packId);
     if (!pack) return;
+    var alreadyOpen = (packState.active === pack && !el("packStage").hidden);
     packState.active = pack;
     packState.idx = 0;
     for (var i = 0; i < pack.cards.length; i++) {
@@ -3336,7 +3337,7 @@ kbd {
     el("packStage").hidden = false;
     el("packTitle").textContent = pack.name;
     showPackSentence(true);
-    historyPushView("pack", { packId: pack.id });
+    if (!alreadyOpen) historyPushView("pack", { packId: pack.id });
   }
 
   function closePack() {
@@ -3759,6 +3760,7 @@ kbd {
   }
 
   function practiceCard(card) {
+    var wasOpen = shadow.open;
     switchTab("shadow");
     el("urlInput").value = "https://www.youtube.com/watch?v=" + card.videoId;
     shadow.videoId = card.videoId;
@@ -3772,7 +3774,7 @@ kbd {
     syncSegmentUI();
     p.playCard(card.videoId, card.start, card.end);
     updateSegCardInfo();
-    historyPushView("practice", { cardId: card.id });
+    if (wasOpen !== true) historyPushView("practice", { cardId: card.id });
     el("sentenceInput").value = card.sentence;
     el("meaningInput").value = card.meaning || "";
     el("tagInput").value = card.tags.join(", ");
