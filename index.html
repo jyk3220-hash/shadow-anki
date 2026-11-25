@@ -636,6 +636,59 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.5; }
 .review-start .btn.ghost { margin-top: 8px; min-width: 190px; }
 .rs-hint { font-size: 12.5px; color: var(--muted-2); margin: 10px auto 0; max-width: 380px; }
 
+/* ---------------- 학습 기록 (일별 문장 수) ---------------- */
+.study-log {
+  padding: 15px 15px 12px;
+  margin-bottom: 14px;
+  background:
+    radial-gradient(420px 180px at 10% 0%, rgba(124, 140, 255, 0.15), transparent 72%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.012));
+}
+.sl-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.sl-title { font-size: 10.5px; font-weight: 800; letter-spacing: 0.09em; color: var(--muted-2); }
+.sl-today { margin-top: 4px; font-size: 13px; font-weight: 700; color: var(--muted); }
+.sl-today b { font-size: 18px; font-weight: 850; letter-spacing: -0.02em; color: var(--text); }
+.sl-today b.on { color: #8bf0c4; }
+.sl-range {
+  display: inline-flex; flex: 0 0 auto; padding: 3px; gap: 2px;
+  border: 1px solid var(--line); border-radius: 999px; background: rgba(255, 255, 255, 0.03);
+}
+.sl-tab {
+  border: 0; background: transparent; color: var(--muted-2);
+  font-size: 11.5px; font-weight: 800; padding: 5px 11px; border-radius: 999px;
+}
+.sl-tab.on { background: rgba(124, 140, 255, 0.24); color: #e2e6ff; }
+.sl-chart {
+  display: flex; align-items: flex-end; gap: 4px;
+  margin-top: 14px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.sl-chart::-webkit-scrollbar { display: none; }
+.sl-col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.sl-chart[data-range="14"] .sl-col { flex: 0 0 31px; }
+.sl-num {
+  font-size: 9.5px; font-weight: 800; color: var(--muted-2);
+  white-space: nowrap; letter-spacing: -0.03em; font-variant-numeric: tabular-nums;
+}
+.sl-col.today .sl-num { color: #dfe4ff; }
+.sl-barwrap { width: 100%; height: 56px; display: flex; align-items: flex-end; justify-content: center; }
+.sl-bar {
+  width: 100%; max-width: 24px; border-radius: 5px 5px 2px 2px;
+  background: linear-gradient(180deg, var(--accent), rgba(124, 140, 255, 0.32));
+}
+.sl-col.zero .sl-bar { background: rgba(255, 255, 255, 0.13); }
+.sl-col.today .sl-bar {
+  background: linear-gradient(180deg, #a9f5d2, var(--good));
+  box-shadow: 0 6px 16px -10px rgba(61, 220, 151, 0.95);
+}
+.sl-col.today.zero .sl-bar { background: rgba(124, 140, 255, 0.32); box-shadow: none; }
+.sl-date {
+  font-size: 9.5px; color: var(--muted-2); white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.sl-col.today .sl-date { color: var(--text); font-weight: 800; }
+.sl-foot { margin-top: 9px; font-size: 11px; color: #5f6d85; line-height: 1.5; }
+
 .review-topline {
   display: flex;
   justify-content: space-between;
@@ -1435,6 +1488,21 @@ kbd {
   <section class="tabpane" id="tab-review" role="tabpanel" aria-label="복습">
     <div class="review-wrap">
 
+      <div class="card study-log" id="studyLogCard" aria-label="일별 학습 문장 수">
+        <div class="sl-head">
+          <div>
+            <div class="sl-title">학습 기록</div>
+            <div class="sl-today">오늘 <b id="slToday">0</b>문장 학습 · 연속 <b id="slStreak">0</b>일</div>
+          </div>
+          <div class="sl-range" role="group" aria-label="기간 선택">
+            <button type="button" class="sl-tab on" data-range="7">7일</button>
+            <button type="button" class="sl-tab" data-range="14">14일</button>
+          </div>
+        </div>
+        <div class="sl-chart" id="slChart" data-range="7" role="img" aria-label="최근 일별 학습 문장 수"></div>
+        <div class="sl-foot" id="slFoot">문장을 하나 평가하거나 저장하면 그날 1문장으로 세요. 같은 문장은 하루에 한 번만 셉니다.</div>
+      </div>
+
       <div class="card review-start" id="reviewStartPanel">
         <div class="rs-num" id="rsDue">0</div>
         <div class="rs-label">오늘 복습할 카드</div>
@@ -1750,7 +1818,8 @@ kbd {
   var state = {
     cards: [],
     seeded: false,
-    settings: { speed: 1, gap: 1.5, loop: true }
+    settings: { speed: 1, gap: 1.5, loop: true },
+    dailyLog: {}
   };
 
   function saveStore() {
@@ -1759,6 +1828,7 @@ kbd {
         cards: state.cards,
         settings: state.settings,
         seeded: state.seeded,
+        dailyLog: state.dailyLog,
         savedAt: Date.now()
       }));
       return true;
@@ -1822,6 +1892,153 @@ kbd {
       if (typeof data.settings.loop === "boolean") state.settings.loop = data.settings.loop;
     }
     state.seeded = !!data.seeded;
+    state.dailyLog = sanitizeDailyLog(data.dailyLog);
+  }
+
+  /* =========================================================
+     학습 기록 (dailyLog) — 하루에 학습한 '문장 수'
+     ========================================================= */
+  var DAY_KEY_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+  function dayKey(ts) {
+    var n = Number(ts);
+    var d = new Date(isFinite(n) && n > 0 ? n : Date.now());
+    return d.getFullYear() + "-" +
+      String(d.getMonth() + 1).padStart(2, "0") + "-" +
+      String(d.getDate()).padStart(2, "0");
+  }
+
+  // 하루 단위로만 더하고 뺀다(정오 기준이라 서머타임·자정 경계에서도 날짜가 밀리지 않음)
+  function dayKeyOffset(days, ts) {
+    var n = Number(ts);
+    var d = new Date(isFinite(n) && n > 0 ? n : Date.now());
+    d.setHours(12, 0, 0, 0);
+    d.setDate(d.getDate() + (Number(days) || 0));
+    return dayKey(d.getTime());
+  }
+
+  // 카드 한 장(문장 하나)을 그날의 학습 기록에 넣는다. 같은 날 같은 문장은 한 번만.
+  function logStudied(cardId, ts) {
+    var id = String(cardId || "");
+    if (!id) return false;
+    var k = dayKey(ts);
+    var list = state.dailyLog[k];
+    if (!list) { list = []; state.dailyLog[k] = list; }
+    if (list.indexOf(id) >= 0) return false;
+    list.push(id);
+    return true;
+  }
+
+  function dayCount(key) {
+    var list = state.dailyLog[key];
+    return list && list.length ? list.length : 0;
+  }
+
+  // 오늘 했으면 오늘까지, 아직이면 어제까지의 연속 일수
+  function studyStreak(ts) {
+    var today = dayKey(ts);
+    var n = 0;
+    var start = dayCount(today) > 0 ? 0 : -1;
+    for (var i = start; i > -400; i--) {
+      if (dayCount(dayKeyOffset(i, ts)) <= 0) break;
+      n++;
+    }
+    return n;
+  }
+
+  function studyRecent(days, ts) {
+    var n = Math.max(1, Math.min(31, Math.round(Number(days) || 7)));
+    var out = [];
+    for (var i = n - 1; i >= 0; i--) {
+      var k = dayKeyOffset(-i, ts);
+      out.push({ key: k, count: dayCount(k), today: i === 0 });
+    }
+    return out;
+  }
+
+  // 저장·불러오기 모두 같은 방식으로 검증한다(잘못된 키·중복·문자열 아닌 값은 버림)
+  function sanitizeDailyLog(raw) {
+    var out = {};
+    if (!raw || typeof raw !== "object" || Array.isArray(raw)) return out;
+    for (var k in raw) {
+      if (!Object.prototype.hasOwnProperty.call(raw, k)) continue;
+      if (!DAY_KEY_RE.test(k)) continue;
+      var list = raw[k];
+      if (!Array.isArray(list)) continue;
+      var seen = {};
+      var keep = [];
+      for (var i = 0; i < list.length && keep.length < 500; i++) {
+        var id = (typeof list[i] === "string" || typeof list[i] === "number") ? String(list[i]) : "";
+        if (!id || seen[id]) continue;
+        seen[id] = 1;
+        keep.push(id);
+      }
+      out[k] = keep;
+    }
+    return out;
+  }
+
+  function mergeDailyLog(raw) {
+    var incoming = sanitizeDailyLog(raw);
+    var days = 0, added = 0;
+    for (var k in incoming) {
+      if (!Object.prototype.hasOwnProperty.call(incoming, k)) continue;
+      var list = state.dailyLog[k];
+      if (!list) { list = []; state.dailyLog[k] = list; }
+      var hit = 0;
+      for (var i = 0; i < incoming[k].length; i++) {
+        if (list.indexOf(incoming[k][i]) < 0) { list.push(incoming[k][i]); hit++; }
+      }
+      days++;
+      added += hit;
+    }
+    return { days: days, added: added };
+  }
+
+  var studyRange = 7;
+
+  function shortDate(key) {
+    var p = key.split("-");
+    return Number(p[1]) + "/" + Number(p[2]);
+  }
+
+  function renderStudyLog(ts) {
+    var chart = el("slChart");
+    if (!chart) return;
+    var now = Number(ts) || Date.now();
+    var todayKey = dayKey(now);
+    var todayN = dayCount(todayKey);
+    var streak = studyStreak(now);
+    el("slToday").textContent = String(todayN);
+    el("slStreak").textContent = String(streak);
+    el("slToday").classList.toggle("on", todayN > 0);
+    el("slStreak").classList.toggle("on", streak > 0);
+
+    var rows = studyRecent(studyRange, now);
+    var max = 1;
+    for (var i = 0; i < rows.length; i++) {
+      if (rows[i].count > max) max = rows[i].count;
+    }
+    var html = [];
+    for (var j = 0; j < rows.length; j++) {
+      var r = rows[j];
+      var h = r.count > 0 ? Math.max(12, Math.round((r.count / max) * 52)) : 3;
+      html.push('<div class="sl-col' + (r.today ? " today" : "") + (r.count ? "" : " zero") +
+        '" title="' + r.key + " · " + r.count + '문장">' +
+        '<span class="sl-num">' + r.count + '문장</span>' +
+        '<span class="sl-barwrap"><span class="sl-bar" style="height:' + h + 'px"></span></span>' +
+        '<span class="sl-date">' + (r.today ? "오늘" : shortDate(r.key)) + "</span>" +
+        "</div>");
+    }
+    chart.innerHTML = html.join("");
+    chart.setAttribute("data-range", String(studyRange));
+    chart.setAttribute("aria-label", "최근 " + studyRange + "일 일별 학습 문장 수: " +
+      rows.map(function (x) { return (x.today ? "오늘" : shortDate(x.key)) + " " + x.count + "문장"; }).join(", "));
+    qsa(".sl-tab").forEach(function (b) {
+      var on = Number(b.getAttribute("data-range")) === studyRange;
+      b.classList.toggle("on", on);
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
   }
 
   var SAMPLE_CARDS = [
@@ -2867,6 +3084,7 @@ kbd {
       ? "지금은 복습할 카드가 없어요. 추천 팩 탭에서 새 문장을 골라보세요."
       : "망각곡선(SM-2)이 오늘 다시 보라고 알려준 카드예요. 영상 구간이 자동으로 반복 재생됩니다.";
     el("reviewStartBtn").disabled = n === 0;
+    renderStudyLog();
   }
 
   /* =========================================================
@@ -3982,6 +4200,7 @@ kbd {
       state.cards.unshift(card);
     }
     var label = applyPackGrade(card, grade, isNew, now);
+    logStudied(card.id, now);
     state.seeded = true;
     saveStore();
     updateDueBadge();
@@ -4348,7 +4567,8 @@ kbd {
       version: 1,
       exportedAt: new Date().toISOString(),
       settings: state.settings,
-      cards: state.cards
+      cards: state.cards,
+      dailyLog: state.dailyLog
     };
     var blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
     var url = URL.createObjectURL(blob);
@@ -4363,7 +4583,9 @@ kbd {
     a.click();
     document.body.removeChild(a);
     setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
-    toast("카드 " + state.cards.length + "장을 " + name + "으로 내보냈어요.");
+    var days = Object.keys(state.dailyLog).length;
+    toast("카드 " + state.cards.length + "장" +
+      (days ? " · 학습 기록 " + days + "일" : "") + "을 " + name + "으로 내보냈어요.");
   }
 
   function importJSON(file) {
@@ -4372,9 +4594,11 @@ kbd {
       var data = null;
       try { data = JSON.parse(String(reader.result)); } catch (e) { data = null; }
       if (!data) return toast("JSON 파일을 읽지 못했어요.");
-      var arr = Array.isArray(data) ? data : (data.cards || []);
-      if (!Array.isArray(arr)) return toast("카드 목록을 찾지 못했어요.");
-      if (!arr.length) return toast("이 파일에는 카드가 없어요.");
+      var arr = Array.isArray(data) ? data : (Array.isArray(data.cards) ? data.cards : []);
+      var incomingLog = (!Array.isArray(data) && data.dailyLog) ? data.dailyLog : null;
+      var hasLog = !!(incomingLog && typeof incomingLog === "object" && !Array.isArray(incomingLog) &&
+        Object.keys(incomingLog).length);
+      if (!arr.length && !hasLog) return toast("이 파일에는 카드가 없어요.");
 
       var added = 0, updated = 0, skipped = 0;
       for (var i = 0; i < arr.length; i++) {
@@ -4397,10 +4621,14 @@ kbd {
           added++;
         }
       }
+      // 학습 기록은 합쳐 넣는다(같은 날 같은 문장은 한 번만). 지금 기록이 지워지지 않는다.
+      var logRes = mergeDailyLog(incomingLog);
       state.seeded = true;
       saveStore();
       renderLibrary();
+      renderStudyLog();
       toast("가져오기 완료 · 새 카드 " + added + "장, 갱신 " + updated + "장" +
+        (logRes.added ? ", 학습 기록 " + logRes.added + "문장" : "") +
         (skipped ? ", 건너뜀 " + skipped + "장" : ""));
     };
     reader.onerror = function () { toast("파일을 읽지 못했어요."); };
@@ -4575,6 +4803,7 @@ kbd {
       gradeCardData(c, g, Date.now());
     }
     rv.done++;
+    logStudied(c.id, Date.now());
     saveStore();
     updateDueBadge();
     rv.idx++;
@@ -4837,6 +5066,7 @@ kbd {
       else if (act === "master") {
         card.mastered = true;
         card.due = startOfDay(Date.now()) + 3650 * DAY;
+        logStudied(card.id);
         saveStore();
         renderLibrary();
         updateDueBadge();
@@ -4852,6 +5082,14 @@ kbd {
     });
 
     el("exportBtn").addEventListener("click", exportJSON);
+    el("studyLogCard").addEventListener("click", function (e) {
+      var b = e.target.closest("[data-range]");
+      if (!b) return;
+      var r = Number(b.getAttribute("data-range"));
+      if (r !== 7 && r !== 14) return;
+      studyRange = r;
+      renderStudyLog();
+    });
     el("importBtn").addEventListener("click", function () { el("importFile").click(); });
     el("importFile").addEventListener("change", function () {
       var f = el("importFile").files && el("importFile").files[0];
@@ -4964,6 +5202,7 @@ kbd {
       mastered: false
     };
     state.cards.unshift(card);
+    logStudied(card.id);
     state.seeded = true;
     saveStore();
     renderLibrary();
