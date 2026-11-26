@@ -4402,7 +4402,8 @@ kbd {
         ? '<div class="empty"><b>조건에 맞는 카드가 없어요</b>검색어나 태그를 바꿔보세요.</div>'
         : '<div class="empty"><b>아직 카드가 없어요</b>' +
           '추천 팩에서 문장을 고르면 한 번에 저장되고, 여기에 쌓입니다.' +
-          '<button class="btn primary" data-gopacks="1" style="margin-top:14px">추천 팩 보기</button></div>';
+          '<div style="margin-top:14px"><button class="btn primary" data-gopacks="1">추천 팩 보기</button></div>' +
+          '</div>';
     } else {
       list.innerHTML = cards.map(cardRowHTML).join("");
     }
