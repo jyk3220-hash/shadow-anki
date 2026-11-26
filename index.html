@@ -1508,6 +1508,7 @@ kbd {
         <div class="rs-label">오늘 복습할 카드</div>
         <p class="rs-hint" id="rsHint">망각곡선(SM-2)이 오늘 다시 보라고 알려준 카드예요. 영상 구간이 자동으로 반복 재생됩니다.</p>
         <button class="btn primary lg" id="reviewStartBtn">복습 시작</button>
+        <button class="btn primary lg" id="reviewGoPacks" hidden>추천 팩에서 문장 고르기</button>
         <button class="btn ghost" id="reviewGoLib">라이브러리 보기</button>
       </div>
 
@@ -1618,7 +1619,6 @@ kbd {
         <option value="created">최근 추가순</option>
         <option value="alpha">문장 가나다순</option>
       </select>
-      <button class="btn sm danger" id="deleteSamplesBtn">샘플 삭제</button>
     </div>
 
     <div class="tagbar" id="tagBar"></div>
@@ -1817,7 +1817,6 @@ kbd {
   var STORE_KEY = "shadowAnki.v1";
   var state = {
     cards: [],
-    seeded: false,
     settings: { speed: 1, gap: 1.5, loop: true },
     dailyLog: {}
   };
@@ -1827,7 +1826,6 @@ kbd {
       localStorage.setItem(STORE_KEY, JSON.stringify({
         cards: state.cards,
         settings: state.settings,
-        seeded: state.seeded,
         dailyLog: state.dailyLog,
         savedAt: Date.now()
       }));
@@ -1871,6 +1869,11 @@ kbd {
     };
   }
 
+  // 예전 버전이 처음 실행될 때 자동으로 넣던 기본 샘플 카드 3장의 id.
+  // 이제는 새로 넣지 않고, 이미 저장된 기기에 남아 있는 이 3장만 불러올 때 조용히 걷어낸다.
+  // (내가 만든 카드·추천 팩 카드·학습 기록은 건드리지 않는다)
+  var LEGACY_SAMPLE_IDS = ["sample-iG9CE55wbtY", "sample-iCvmsMzlF7o", "sample-XO2ott7VxrU"];
+
   function loadStore() {
     var raw = null;
     try { raw = localStorage.getItem(STORE_KEY); } catch (e) { raw = null; }
@@ -1878,11 +1881,14 @@ kbd {
     var data = null;
     try { data = JSON.parse(raw); } catch (e) { data = null; }
     if (!data) return;
+    var purged = false;
     if (Array.isArray(data.cards)) {
       var out = [];
       for (var i = 0; i < data.cards.length; i++) {
         var c = normalizeCard(data.cards[i]);
-        if (c) out.push(c);
+        if (!c) continue;
+        if (c.sample && LEGACY_SAMPLE_IDS.indexOf(c.id) >= 0) { purged = true; continue; }
+        out.push(c);
       }
       state.cards = out;
     }
@@ -1891,8 +1897,9 @@ kbd {
       if (isFinite(Number(data.settings.gap))) state.settings.gap = Number(data.settings.gap);
       if (typeof data.settings.loop === "boolean") state.settings.loop = data.settings.loop;
     }
-    state.seeded = !!data.seeded;
     state.dailyLog = sanitizeDailyLog(data.dailyLog);
+    // 카드 목록을 걷어낸 뒤에 저장한다(설정·학습 기록을 다시 읽은 다음이라 덮어쓰지 않음)
+    if (purged) saveStore();
   }
 
   /* =========================================================
@@ -2041,66 +2048,8 @@ kbd {
     });
   }
 
-  var SAMPLE_CARDS = [
-    {
-      videoId: "iG9CE55wbtY",
-      start: 17.5,
-      end: 26.5,
-      sentence: "Good morning. How are you? It's been great, hasn't it?",
-      meaning: "좋은 아침입니다. 잘 지내시죠? 정말 좋았어요, 그렇지 않나요?\n· Ken Robinson 〈Do schools kill creativity?〉 TED 오프닝\n· 샘플 구간은 대략적이에요. ±.5 버튼으로 맞춘 뒤 [수정]으로 저장하세요.",
-      title: "Do schools kill creativity? | Sir Ken Robinson | TED",
-      tags: ["영어", "TED", "샘플"],
-      sample: true
-    },
-    {
-      videoId: "iCvmsMzlF7o",
-      start: 14,
-      end: 24,
-      sentence: "I'll start with this: a couple of years ago, an event planner called me.",
-      meaning: "이렇게 시작할게요. 몇 년 전에 한 이벤트 기획자가 저에게 전화를 했어요.\n· Brené Brown 〈The Power of Vulnerability〉 TED\n· 샘플 구간은 대략적이에요.",
-      title: "The Power of Vulnerability | Brené Brown | TED",
-      tags: ["영어", "TED", "샘플"],
-      sample: true
-    },
-    {
-      videoId: "XO2ott7VxrU",
-      start: 12,
-      end: 19,
-      sentence: "Was sind Ihre Hobbys?",
-      meaning: "취미가 무엇인가요? (정중한 Sie 표현)\n· 독일어 A1 샘플 · 구간은 대략적이니 직접 맞춰보세요.",
-      title: "How to Ask About Hobbies in German! Session 13 | EDUFLAIR",
-      tags: ["독일어", "A1", "샘플"],
-      sample: true
-    }
-  ];
-
-  function seedSamples() {
-    var now = Date.now();
-    for (var i = 0; i < SAMPLE_CARDS.length; i++) {
-      var s = SAMPLE_CARDS[i];
-      var c = normalizeCard({
-        id: "sample-" + s.videoId,
-        videoId: s.videoId,
-        start: s.start,
-        end: s.end,
-        sentence: s.sentence,
-        meaning: s.meaning,
-        title: s.title,
-        tags: s.tags,
-        reps: 0,
-        interval: 0,
-        ef: 2.5,
-        lapses: 0,
-        due: now - 1000,
-        createdAt: now - 1000,
-        lastReviewed: 0,
-        sample: true
-      });
-      if (c) state.cards.push(c);
-    }
-    state.seeded = true;
-    saveStore();
-  }
+  /* 기본 샘플 카드는 넣지 않는다 — 처음 설치한 화면은 카드 0장에서 시작하고,
+     문장은 [추천 팩]에서 한 번에 저장한다. */
 
   /* =========================================================
      curated packs (미리 만들어진 문장 팩)
@@ -3084,6 +3033,9 @@ kbd {
       ? "지금은 복습할 카드가 없어요. 추천 팩 탭에서 새 문장을 골라보세요."
       : "망각곡선(SM-2)이 오늘 다시 보라고 알려준 카드예요. 영상 구간이 자동으로 반복 재생됩니다.";
     el("reviewStartBtn").disabled = n === 0;
+    el("reviewStartBtn").hidden = n === 0;
+    el("reviewGoPacks").hidden = n > 0;
+    el("reviewGoLib").hidden = state.cards.length === 0;
     renderStudyLog();
   }
 
@@ -3141,6 +3093,8 @@ kbd {
     el("reviewStartPanel").hidden = rv.active;
     el("rsDue").textContent = String(n);
     el("reviewStartBtn").disabled = n === 0;
+    el("reviewStartBtn").hidden = n === 0;
+    el("reviewGoPacks").hidden = n > 0;
   }
 
   /* =========================================================
@@ -4201,7 +4155,6 @@ kbd {
     }
     var label = applyPackGrade(card, grade, isNew, now);
     logStudied(card.id, now);
-    state.seeded = true;
     saveStore();
     updateDueBadge();
     return { card: card, label: label };
@@ -4445,17 +4398,15 @@ kbd {
     });
 
     if (!cards.length) {
-      list.innerHTML = '<div class="empty"><b>' +
-        (state.cards.length ? "조건에 맞는 카드가 없어요" : "아직 카드가 없어요") +
-        "</b>" + (state.cards.length
-          ? "검색어나 태그를 바꿔보세요."
-          : "추천 팩 탭에서 문장을 고르면 여기에 쌓입니다.") + "</div>";
+      list.innerHTML = state.cards.length
+        ? '<div class="empty"><b>조건에 맞는 카드가 없어요</b>검색어나 태그를 바꿔보세요.</div>'
+        : '<div class="empty"><b>아직 카드가 없어요</b>' +
+          '추천 팩에서 문장을 고르면 한 번에 저장되고, 여기에 쌓입니다.' +
+          '<button class="btn primary" data-gopacks="1" style="margin-top:14px">추천 팩 보기</button></div>';
     } else {
       list.innerHTML = cards.map(cardRowHTML).join("");
     }
 
-    var sampleCount = state.cards.filter(function (c) { return c.sample; }).length;
-    el("deleteSamplesBtn").disabled = sampleCount === 0;
     updateDueBadge();
   }
 
@@ -4623,7 +4574,6 @@ kbd {
       }
       // 학습 기록은 합쳐 넣는다(같은 날 같은 문장은 한 번만). 지금 기록이 지워지지 않는다.
       var logRes = mergeDailyLog(incomingLog);
-      state.seeded = true;
       saveStore();
       renderLibrary();
       renderStudyLog();
@@ -5052,6 +5002,7 @@ kbd {
       renderLibrary();
     });
     el("libList").addEventListener("click", function (e) {
+      if (e.target.closest("[data-gopacks]")) { switchTab("packs"); return; }
       var btn = e.target.closest("[data-act]");
       if (!btn) return;
       var row = btn.closest(".cardrow");
@@ -5096,16 +5047,6 @@ kbd {
       if (f) importJSON(f);
       el("importFile").value = "";
     });
-    el("deleteSamplesBtn").addEventListener("click", function () {
-      var n = state.cards.filter(function (c) { return c.sample; }).length;
-      if (!n) return toast("삭제할 샘플이 없어요.");
-      if (!window.confirm("샘플 카드 " + n + "장을 삭제할까요? 내가 만든 카드는 그대로 남습니다.")) return;
-      state.cards = state.cards.filter(function (c) { return !c.sample; });
-      saveStore();
-      renderLibrary();
-      toast("샘플 카드를 삭제했어요.");
-    });
-
     // edit modal
     qsa("[data-close]", el("editModal")).forEach(function (b) {
       b.addEventListener("click", closeEdit);
@@ -5120,6 +5061,7 @@ kbd {
 
     // review
     el("reviewStartBtn").addEventListener("click", function () { startReview(); });
+    el("reviewGoPacks").addEventListener("click", function () { switchTab("packs"); });
     el("reviewGoLib").addEventListener("click", function () { switchTab("library"); });
     el("revealBtn").addEventListener("click", revealAnswer);
     el("replayBtn").addEventListener("click", function () {
@@ -5203,7 +5145,6 @@ kbd {
     };
     state.cards.unshift(card);
     logStudied(card.id);
-    state.seeded = true;
     saveStore();
     renderLibrary();
 
@@ -5224,9 +5165,8 @@ kbd {
       if (window.location.protocol === "file:") el("fileBanner").hidden = false;
     } catch (e) {}
 
+    // 처음 연 화면은 카드 0장에서 시작한다(기본 샘플 카드 없음).
     loadStore();
-    if (!state.seeded && state.cards.length === 0) seedSamples();
-
     applySettings();
     bind();
     renderPacks();
