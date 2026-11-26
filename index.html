@@ -9,6 +9,15 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='26' fill='%236d7dff'/><circle cx='50' cy='50' r='24' fill='none' stroke='%23fff' stroke-width='7'/><path d='M50 26a24 24 0 0 1 0 48z' fill='%23fff'/></svg>">
 <meta name="description" content="유튜브 구간 쉐도잉 + Anki SM-2 망각곡선 복습을 한 파일에 담은 웹앱">
 <title>Shadow Anki · 유튜브 구간 쉐도잉 복습</title>
+<!-- 유튜브 플레이어 준비 시간을 줄이기 위한 사전 연결(스크립트/썸네일/임베드 도메인) -->
+<link rel="preconnect" href="https://www.youtube.com">
+<link rel="preconnect" href="https://www.youtube-nocookie.com">
+<link rel="preconnect" href="https://i.ytimg.com">
+<link rel="preconnect" href="https://s.ytimg.com">
+<link rel="dns-prefetch" href="https://www.youtube.com">
+<link rel="dns-prefetch" href="https://www.youtube-nocookie.com">
+<link rel="dns-prefetch" href="https://i.ytimg.com">
+<link rel="dns-prefetch" href="https://s.ytimg.com">
 <style>
 /* ============================================================
    Shadow Anki — single file app
@@ -3241,6 +3250,30 @@ kbd {
     return ytApiPromise;
   }
 
+  // 첫 화면이 그려진 뒤 조용히 IFrame API를 미리 받아 둔다.
+  // 팩/복습으로 들어가는 순간 플레이어가 바로 뜨고, 오프라인이거나 실패해도 아무 것도 막지 않는다.
+  function preloadYT() {
+    function go() {
+      try {
+        var c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        if (c && c.saveData) return;                 // 데이터 절약 모드에서는 미리 받지 않는다
+      } catch (e) {}
+      try {
+        var p = loadYT();
+        if (p && typeof p.catch === "function") p.catch(function () {});
+      } catch (e) {}
+    }
+    try {
+      if (typeof window.requestIdleCallback === "function") {
+        window.requestIdleCallback(go, { timeout: 2500 });
+      } else {
+        setTimeout(go, 1200);
+      }
+    } catch (e) {
+      setTimeout(go, 1200);
+    }
+  }
+
   function SegmentPlayer(el, cbs) {
     this.el = el;
     this.cbs = cbs || {};
@@ -5176,6 +5209,9 @@ kbd {
     refreshReviewStart();
     syncPlayButton();
     syncSegmentUI();
+
+    // 유튜브 IFrame API 선로딩(백그라운드, 실패는 조용히 무시)
+    preloadYT();
   }
 
   if (document.readyState === "loading") {
