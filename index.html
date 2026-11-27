@@ -795,12 +795,12 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.5; }
 
 .ratings {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
   margin-top: 14px;
 }
-/* 단어 평가는 3단계(다시·알겠음·외움) — 단어장과 복습 공통 */
-.vw-ratings { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+/* 단어 평가는 2단계(모름·앎) — 단어장과 복습 공통 */
+.vw-ratings { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .review-tools {
   display: flex;
   align-items: center;
@@ -1139,8 +1139,7 @@ kbd {
 }
 .sentence-card .s-meaning { font-size: 13px; color: var(--muted); white-space: pre-line; line-height: 1.75; }
 
-.oneshot { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
-@media (min-width: 560px) { .oneshot { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.oneshot { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
 .oneshot .rate { padding: 12px 8px; }
 .oneshot .rate b { font-size: 14px; }
 .oneshot .rate small { display: block; margin-top: 3px; }
@@ -1285,7 +1284,7 @@ kbd {
   .card { padding: 14px; }
   .time-row { grid-template-columns: 20px minmax(0, 1fr) auto; }
   .time-row .fine { grid-column: 2 / -1; justify-content: flex-end; }
-  .ratings { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ratings { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .rate { padding: 11px 6px; }
   .stats { grid-template-columns: repeat(2, 1fr); }
   .sentence-card .s-line { font-size: 18px; }
@@ -1326,7 +1325,7 @@ kbd {
   #packStage .sentence-card .s-meaning { font-size: 12px; line-height: 1.55; }
   #packStage #packTags { margin-top: 6px !important; gap: 5px; }
   #packStage #packTags .chip { font-size: 10.5px; padding: 3px 8px; }
-  #packStage .oneshot { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; margin-top: 8px; }
+  #packStage .oneshot { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; margin-top: 8px; }
   #packStage .oneshot .rate { padding: 7px 2px 6px; border-radius: 11px; }
   #packStage .oneshot .rate b { font-size: 12px; }
   #packStage .oneshot .rate small { font-size: 9.5px; margin-top: 1px; }
@@ -1334,11 +1333,11 @@ kbd {
   #packStage .save-badge { margin-top: 7px; padding: 6px 9px; font-size: 11.5px; }
   #packStage #packHint { font-size: 10.5px; margin-top: 6px; }
 
-  /* 복습: 플레이어는 화면 폭에 꽉 차게(16:9), 평가 버튼은 4열 */
+  /* 복습: 플레이어는 화면 폭에 꽉 차게(16:9), 평가 버튼은 3열 */
   #reviewStage .review-card { padding: 9px; }
   #reviewStage .player-box { max-width: 100%; margin: 0; }
   #reviewStage .answer-card { padding: 11px; margin-top: 10px; }
-  #reviewStage .ratings { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; margin-top: 9px; }
+  #reviewStage .ratings { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; margin-top: 9px; }
   #reviewStage .rate { padding: 7px 2px 6px; }
   #reviewStage .rate b { font-size: 12px; }
   #reviewStage .rate small { font-size: 9.5px; }
@@ -1453,7 +1452,7 @@ kbd {
 .backlog-nudge .bl-btn { flex: 0 0 auto; border: 1px solid rgba(255, 180, 84, 0.55); background: rgba(255, 180, 84, 0.18); color: #ffe9cd; border-radius: 999px; padding: 6px 10px; font-size: 11.5px; font-weight: 800; white-space: nowrap; }
 .rv-allclear { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0 0 10px; padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(255, 206, 120, 0.5); background: linear-gradient(135deg, rgba(255, 196, 92, 0.18), rgba(255, 140, 92, 0.1)); color: #ffe6b8; font-size: 13.5px; font-weight: 800; letter-spacing: -0.01em; }
 .rv-allclear[hidden] { display: none; }
-/* ---- 오답 힌트 메모 (어려움으로 넘긴 카드에 한 줄) ---- */
+/* ---- 오답 힌트 메모 (모름으로 넘긴 카드에 한 줄) ---- */
 .hint-pill { display: flex; align-items: center; gap: 6px; margin-top: 10px; padding: 7px 11px; border-radius: 11px; border: 1px solid rgba(255, 180, 84, 0.34); background: rgba(255, 180, 84, 0.09); color: #ffe2bb; font-size: 12.5px; font-weight: 650; line-height: 1.45; text-align: left; }
 .hint-pill .hp-ico { flex: 0 0 auto; font-size: 13px; }
 .hint-pill .hp-k { flex: 0 0 auto; font-size: 10px; font-weight: 800; letter-spacing: 0.02em; color: #ffcf94; border: 1px solid rgba(255, 180, 84, 0.4); border-radius: 999px; padding: 1px 6px; }
@@ -1513,7 +1512,7 @@ kbd {
 .gr-nav { margin-top: 10px; }
 .gr-nav [data-gnav="1"], .vw-nav [data-rwflip] { flex: 1 1 auto; min-width: 0; }
 @media (max-width: 560px) {
-  .rv-word-ratings { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 5px; }
+  .rv-word-ratings { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 5px; }
   .rv-word-ratings .rate { padding: 8px 2px 7px; }
   .rv-word-ratings .rate b { font-size: 12px; }
   .rv-word-ratings .rate small { font-size: 9px; }
@@ -1569,7 +1568,7 @@ kbd {
   .btn.sm { min-height: 42px; }
   .gr-opt { min-height: 50px; font-size: 15px; padding: 13px 12px; }
   .ratings { gap: 8px; }
-  .vw-ratings { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .vw-ratings { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .vw-say { gap: 8px; }
   .vw-saybtn { flex: 1 1 auto; min-height: 46px; justify-content: center; font-size: 13.5px; padding: 10px 14px; }
 }
@@ -1625,7 +1624,7 @@ kbd {
     <div id="packHome">
       <div class="pack-hero">
         <h2>링크 없이, 누르면 바로 시작하는 쉐도잉 팩</h2>
-        <p>실제 유튜브 영상에서 문장 구간(A–B)까지 미리 맞춰 뒀어요. 문장을 듣고 <b>어려움 / 보통 / 쉬움 / 외움</b> 중 하나만 누르면 바로 내 복습 일정에 저장되고 다음 문장으로 넘어갑니다.</p>
+        <p>실제 유튜브 영상에서 문장 구간(A–B)까지 미리 맞춰 뒀어요. 문장을 듣고 <b>❌ 모름 / ⭕ 앎 / 🏆 외움</b> 중 하나만 누르면 바로 내 복습 일정에 저장되고 다음 문장으로 넘어갑니다.</p>
       </div>
       <div class="pack-grid" id="packGrid"></div>
       <div class="hint" style="margin-top:14px">
@@ -1669,10 +1668,9 @@ kbd {
           <div class="save-badge" id="packBadge"></div>
 
           <div class="oneshot" id="packRatings">
-            <button class="rate" data-grade="hard"><span class="key">1</span><b>어려움</b><small class="pv">10분</small></button>
-            <button class="rate" data-grade="good"><span class="key">2</span><b>보통</b><small class="pv">1일</small></button>
-            <button class="rate" data-grade="easy"><span class="key">3</span><b>쉬움</b><small class="pv">4일</small></button>
-            <button class="rate" data-grade="mastered"><span class="key">4</span><b>외움</b><small class="pv">완료</small></button>
+            <button class="rate" data-grade="hard"><span class="key">1</span><b>❌ 모름</b><small class="pv">10분</small></button>
+            <button class="rate" data-grade="good"><span class="key">2</span><b>⭕ 앎</b><small class="pv">1일</small></button>
+            <button class="rate" data-grade="mastered"><span class="key">3</span><b>🏆 외움</b><small class="pv">완료</small></button>
           </div>
           <div class="hint" id="packHint" style="margin-top:8px">버튼을 누르면 저장되고 다음 문장으로 넘어가요 · 문장을 좌우로 밀어도 이동</div>
         </div>
@@ -1936,21 +1934,18 @@ kbd {
 
           <div class="ratings" id="ratings">
             <button class="rate" data-grade="hard" disabled>
-              <span class="key">1</span><b>어려움</b><small class="pv"></small>
+              <span class="key">1</span><b>❌ 모름</b><small class="pv"></small>
             </button>
             <button class="rate" data-grade="good" disabled>
-              <span class="key">2</span><b>보통</b><small class="pv"></small>
-            </button>
-            <button class="rate" data-grade="easy" disabled>
-              <span class="key">3</span><b>쉬움</b><small class="pv"></small>
+              <span class="key">2</span><b>⭕ 앎</b><small class="pv"></small>
             </button>
             <button class="rate" data-grade="mastered" disabled>
-              <span class="key">4</span><b>외움</b><small class="pv"></small>
+              <span class="key">3</span><b>🏆 외움</b><small class="pv"></small>
             </button>
           </div>
 
           <div class="kbd-hint">
-            <b>Space</b> 정답 · <b>R</b> 다시 듣기 · <b>1–4</b> 어려움/보통/쉬움/외움
+            <b>Space</b> 정답 · <b>R</b> 다시 듣기 · <b>1–3</b> 모름/앎/외움
           </div>
         </div>
       </div>
@@ -2070,11 +2065,10 @@ kbd {
         <button class="btn sm ghost" id="vwNextBtn" aria-label="다음 단어">→</button>
       </div>
       <div class="ratings vw-ratings" id="vwRatings">
-        <button class="rate" data-wgrade="hard"><span class="key">1</span><b>어려움</b><small class="pv"></small></button>
-        <button class="rate" data-wgrade="good"><span class="key">2</span><b>알겠음</b><small class="pv"></small></button>
-        <button class="rate" data-wgrade="mastered"><span class="key">3</span><b>외움</b><small class="pv">완료</small></button>
+        <button class="rate" data-wgrade="hard"><span class="key">1</span><b>❌ 모름</b><small class="pv"></small></button>
+        <button class="rate" data-wgrade="good"><span class="key">2</span><b>⭕ 앎</b><small class="pv"></small></button>
       </div>
-      <div class="kbd-hint"><b>Space</b> 뒤집기 · <b>1–3</b> 어려움/알겠음/외움 · 발음은 카드 위 버튼</div>
+      <div class="kbd-hint"><b>Space</b> 뒤집기 · <b>1–2</b> 모름/앎 · 발음은 카드 위 버튼</div>
     </div>
 
     <div class="card vw-add">
@@ -2372,7 +2366,7 @@ kbd {
     grammarLog: {},      // 문법 학습 기록(문장·단어 기록과 따로 센다)
     grammarSeeded: false,// 문법 문제를 한 번 넣었는지
     reviewDay: null,     // 오늘 영역별(단어·문법·문장) 복습 횟수 — 복습 20개 목표 판정
-    hints: {},           // '어려움'으로 넘긴 카드에 적어 둔 한 줄 힌트(id → {text, at})
+    hints: {},           // '모름'으로 넘긴 카드에 적어 둔 한 줄 힌트(id → {text, at})
     lastBackupAt: 0      // 마지막으로 백업 파일을 내려받은 시각(라이브러리의 백업 알림)
   };
 
@@ -6992,7 +6986,7 @@ kbd {
     var box = el("packRatings");
     if (!box) return;
     var card = existing || { reps: 0, interval: 0, ef: 2.5, lapses: 0, due: 0, mastered: false };
-    var names = { hard: "어려움", good: "보통", easy: "쉬움" };
+    var names = { hard: "모름", good: "앎" };
     qsa(".rate", box).forEach(function (b) {
       var g = b.getAttribute("data-grade");
       var small = b.querySelector(".pv");
@@ -7716,11 +7710,10 @@ kbd {
         return;
       }
       var res = computeNext(card, g);
-      var hint = { hard: "버벅", good: "자연", easy: "완벽" };
-      small.textContent = hint[g] ? hint[g] + " · " + res.label : res.label;
+      small.textContent = res.label;
       b.title = g === "hard"
-        ? "어려움: 짧게 다시, ease 내려감"
-        : "다음 복습 " + res.label + " 후";
+        ? "모름: 10분 뒤 다시, ease 내려감"
+        : "앎: 다음 복습 " + res.label + " 후";
     });
   }
 
@@ -8214,8 +8207,8 @@ kbd {
         if (rv.player) rv.player.playRange();
         return;
       }
-      if (rv.revealed && /^[1-4]$/.test(e.key)) {
-        var map = { "1": "hard", "2": "good", "3": "easy", "4": "mastered" };
+      if (rv.revealed && /^[1-3]$/.test(e.key)) {
+        var map = { "1": "hard", "2": "good", "3": "mastered" };
         grade(map[e.key]);
       }
     });
@@ -9486,10 +9479,10 @@ kbd {
     vw.idx = 0;
     renderVocab(false);
     if (grade === "mastered") toast("외움 완료 · " + w.word);
-    else toast(label + " 뒤 다시 봐요 · " + w.word);
+    else toast(label + " 다시 봐요 · " + w.word);
     if (vw.queue.length <= 1) toast("이 묶음 단어를 끝까지 봤어요 🎉");
     undoOffer(undoSnapNow);
-    if (grade === "again") hintOfferAfter(w.id);
+    if (grade === "hard" || grade === "again") hintOfferAfter(w.id);
     vwScrollCardIntoView();
   }
 
@@ -9646,8 +9639,8 @@ kbd {
         vwSetFace(!vw.flipped, true);
         return;
       }
-      if (/^[1-3]$/.test(e.key)) {
-        var map = { "1": "hard", "2": "good", "3": "mastered" };
+      if (/^[1-2]$/.test(e.key)) {
+        var map = { "1": "hard", "2": "good" };
         vwGrade(map[e.key]);
       }
     });
@@ -9664,7 +9657,7 @@ kbd {
   /* =========================================================
      문법 (12유닛 · 60문제) + 복습 하위 3영역(단어·문법·문장)
      - 복습은 하루 한 판 20개까지: 20개를 채우면 그 영역은 '오늘 목표 달성'
-     - 정답을 누르면 바로 SM-2(정답=보통, 오답=10분)를 잡고, 아래에서 바꿀 수 있다
+     - 정답을 누르면 바로 SM-2(정답=앎, 오답=10분)를 잡고, 아래에서 바꿀 수 있다
      - 보기 4개는 문제가 바뀔 때마다 자리를 섞는다
      ========================================================= */
   /* =========================================================
@@ -10654,7 +10647,7 @@ kbd {
 
     h += '<div class="gr-explain"' + (this.answered ? "" : " hidden") + ">";
     h += '<div class="gr-result ' + (this.correct ? "ok" : "no") + '">' +
-      (this.correct ? "정답이에요 ✅ · '보통'으로 잡았어요" : "아쉬워요 · 정답은 '" + esc(q.options[q.answer]) + "' · 10분 뒤 다시로 잡았어요") + "</div>";
+      (this.correct ? "정답이에요 ✅ · '앎'으로 잡았어요" : "아쉬워요 · 정답은 '" + esc(q.options[q.answer]) + "' · 10분 뒤 '모름'으로 잡았어요") + "</div>";
     h += '<div class="gr-why">' + esc(q.ko) + "</div>";
     h += '<div class="gr-full">' + esc(q.full) + "</div>";
     if (q.kr) h += '<div class="gr-kr">' + esc(q.kr) + "</div>";
@@ -10662,8 +10655,8 @@ kbd {
       '<button type="button" class="vw-saybtn" data-gsay="en-US">🇺🇸 미국식</button>' +
       '<button type="button" class="vw-saybtn" data-gsay="en-GB">🇬🇧 영국식</button></div>';
     h += '<div class="gr-over" role="group" aria-label="평가 바꾸기">' +
-      '<button type="button" class="gr-ovbtn' + (this.overridden && this.lastOverride === "hard" ? " on" : "") + '" data-gov="hard">찍었음·어려움</button>' +
-      '<button type="button" class="gr-ovbtn' + (this.overridden && this.lastOverride === "mastered" ? " on" : "") + '" data-gov="mastered">완벽·외움</button>' +
+      '<button type="button" class="gr-ovbtn' + (this.overridden && this.lastOverride === "hard" ? " on" : "") + '" data-gov="hard">❌ 모름</button>' +
+      '<button type="button" class="gr-ovbtn' + (this.overridden && this.lastOverride === "good" ? " on" : "") + '" data-gov="good">⭕ 앎</button>' +
       "</div>";
     h += "</div>";
 
@@ -10709,7 +10702,7 @@ kbd {
     this.picked = shown;
     this.answered = true;
     this.correct = real === q.answer;
-    // 정답이면 '보통', 틀리면 '어려움(10분)'으로 바로 잡는다 — 아래 버튼으로 바꿀 수 있다
+    // 정답이면 '앎', 틀리면 '모름(10분)'으로 바로 잡는다 — 아래 2버튼으로 바꿀 수 있다
     applyPackGrade(q, this.correct ? "good" : "again", false, now);
     q.missed = !this.correct;
     logGrammarStudied(q.id, now);
@@ -10724,16 +10717,16 @@ kbd {
   GRSession.prototype.override = function (g) {
     var q = this.current();
     if (!q || !this.answered || this.overridden) return;
-    var grade = g === "mastered" ? "mastered" : "hard";
+    var grade = g === "good" ? "good" : "hard";
     hideHintOffer();
     var undoSnapNow = undoCaptureFor(this.kind === "review" ? "review-grammar" : "grammar", q.id, this);
     applyPackGrade(q, grade, false, Date.now());
-    if (grade === "mastered") q.missed = false;
+    q.missed = grade === "hard";
     this.overridden = true;
     this.lastOverride = grade;
     saveStore();
     this.render(false);
-    toast(grade === "mastered" ? "완벽·외움으로 바꿨어요" : "찍었음·어려움으로 바꿨어요");
+    toast(grade === "good" ? "'앎'으로 바꿨어요" : "'모름'으로 바꿨어요");
     undoOffer(undoSnapNow);
     if (grade === "hard") hintOfferAfter(q.id);
   };
@@ -10886,9 +10879,8 @@ kbd {
       '<button type="button" class="btn primary sm" data-rwflip>뒤집기</button>' +
       '<button type="button" class="btn sm ghost" data-rwnav="1" aria-label="다음 단어">→</button></div>';
     h += '<div class="ratings vw-ratings rv-word-ratings">';
-    h += '<button type="button" class="rate" data-rwgrade="again"><span class="key">1</span><b>다시</b><small class="pv">' + grPv(cur, "again") + "</small></button>";
-    h += '<button type="button" class="rate" data-rwgrade="good"><span class="key">2</span><b>알겠음</b><small class="pv">' + grPv(cur, "good") + "</small></button>";
-    h += '<button type="button" class="rate" data-rwgrade="mastered"><span class="key">3</span><b>외움</b><small class="pv">완료</small></button>';
+    h += '<button type="button" class="rate" data-rwgrade="hard"><span class="key">1</span><b>❌ 모름</b><small class="pv">' + grPv(cur, "hard") + "</small></button>";
+    h += '<button type="button" class="rate" data-rwgrade="good"><span class="key">2</span><b>⭕ 앎</b><small class="pv">' + grPv(cur, "good") + "</small></button>";
     h += "</div>";
     h += "</div>";
     box.innerHTML = h;
@@ -10898,7 +10890,7 @@ kbd {
   function rwGrade(g) {
     var w = rwCurrent();
     if (!w) return;
-    var grade = g === "mastered" || g === "easy" || g === "again" ? g : "good";
+    var grade = (g === "hard" || g === "again") ? "hard" : (g === "mastered" ? "mastered" : "good");
     var now = Date.now();
     hideHintOffer();
     var undoSnapNow = undoCaptureFor("review-words", w.id);
@@ -10917,9 +10909,9 @@ kbd {
     }
     renderReviewWords(false);
     try { updateWordBadge(); } catch (e) {}
-    toast(grade === "mastered" ? "외움 완료 · " + w.word : (grade === "again" ? "다시 볼 단어 · " : label + " 뒤 다시 봐요 · ") + w.word);
+    toast(grade === "mastered" ? "외움 완료 · " + w.word : label + " 다시 봐요 · " + w.word);
     undoOffer(undoSnapNow);
-    if (grade === "again") hintOfferAfter(w.id);
+    if (grade === "hard") hintOfferAfter(w.id);
   }
 
   // 문장 복습 완료 카드: '20개 더' + '이어서 다른 영역' 버튼
@@ -11594,7 +11586,7 @@ kbd {
           renderReviewWords(false);
           return;
         }
-        if (/^[1-3]$/.test(e.key)) rwGrade({ 1: "again", 2: "good", 3: "mastered" }[e.key]);
+        if (/^[1-2]$/.test(e.key)) rwGrade({ 1: "hard", 2: "good" }[e.key]);
       }
     });
   }
