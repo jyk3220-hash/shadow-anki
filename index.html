@@ -4847,7 +4847,12 @@ kbd {
     el("packStage").hidden = true;
     el("packHome").hidden = false;
     renderPacks();
-    if (currentTab === "packs") window.scrollTo({ top: 0, behavior: "smooth" });
+    if (currentTab === "packs") {
+      // 팩에 들어오기 전 목록에서 보던 자리로 되돌린다(브라우저 복원에 맡기지 않고 직접 맞춘다)
+      var backY = typeof packState.listY === "number" ? packState.listY : 0;
+      try { window.scrollTo(0, backY); } catch (e) { try { window.scrollTo({ top: backY }); } catch (e2) {} }
+    }
+    packState.listY = null;
   }
 
   function stopPractice() {          // 화면만 멈추기(탭은 그대로)
@@ -5704,7 +5709,7 @@ kbd {
   /* =========================================================
      pack controller (추천 팩 · 원클릭 저장)
      ========================================================= */
-  var packState = { active: null, idx: 0, player: null, lock: false };
+  var packState = { active: null, idx: 0, player: null, lock: false, listY: null };
 
   function packCardId(pack, idx) {
     var item = pack && pack.cards ? pack.cards[idx] : null;
@@ -5846,6 +5851,7 @@ kbd {
     var pack = packById(packId);
     if (!pack) return;
     var alreadyOpen = (packState.active === pack && !el("packStage").hidden);
+    if (!alreadyOpen) packState.listY = (window.pageYOffset || window.scrollY || 0);
     packState.active = pack;
     packState.idx = 0;
     for (var i = 0; i < pack.cards.length; i++) {
@@ -5857,6 +5863,20 @@ kbd {
     showPackSentence(true);
     updatePackReviewBtn();
     if (!alreadyOpen) historyPushView("pack", { packId: pack.id });
+    scrollPackToTop();
+  }
+
+  // 팩에 들어갈 때는 언제나 맨 위(영상)부터 보이게 한다.
+  // 팩 목록을 아래로 내려서 들어오면 이전 스크롤 위치가 남아 문장 카드만 보이던 문제 수정.
+  function scrollPackToTop() {
+    try { window.scrollTo(0, 0); } catch (e) {}
+    // 폰 주소창/레이아웃이 늦게 자리 잡는 경우까지 한 번 더 맞춘다
+    setTimeout(function () {
+      if (!packState.active) return;
+      if (el("packStage").hidden) return;
+      var y = window.pageYOffset || window.scrollY || 0;
+      if (y > 2) { try { window.scrollTo(0, 0); } catch (e) {} }
+    }, 90);
   }
 
   function closePack() {
@@ -5986,15 +6006,19 @@ kbd {
     return true;
   }
 
-  // 플레이어가 화면에 다 보이지 않을 때만 부드럽게 올려 준다(상단 고정 헤더 높이만큼 비켜서)
+  // 플레이어가 화면에 다 보이지 않을 때만 팩 화면 맨 위로 올려 준다(상단 고정 헤더에 가리지 않게)
   function scrollPackPlayerIntoView() {
     var box = el("playerPackBox");
     if (!box || typeof box.getBoundingClientRect !== "function") return;
     var vh = window.innerHeight || 0;
     var r = box.getBoundingClientRect();
-    if (r.top >= 8 && (!vh || r.bottom <= vh - 8)) return;
-    var y = r.top + (window.pageYOffset || window.scrollY || 0) - 72;
-    if (y < 0) y = 0;
+    var head = stickyTopHeight();
+    if (r.top >= head + 4 && (!vh || r.bottom <= vh - 8)) return;   // 이미 다 보이면 그대로
+    var stage = el("packStage");
+    var base = (stage && typeof stage.getBoundingClientRect === "function" && !stage.hidden)
+      ? stage.getBoundingClientRect().top : r.top;
+    var y = base + (window.pageYOffset || window.scrollY || 0) - head - 6;
+    if (!isFinite(y) || y < 0) y = 0;
     try { window.scrollTo({ top: y, behavior: "smooth" }); }
     catch (e) { try { window.scrollTo(0, y); } catch (e2) {} }
   }
@@ -6853,6 +6877,10 @@ kbd {
      ========================================================= */
   function bind() {
     // 안드로이드 하드웨어 뒤로가기 (팩·연습·복습 안에서 페이지가 닫히지 않게)
+    // 스크롤 위치는 앱이 직접 관리한다(뒤로가기 때 브라우저가 임의로 복원해 화면이 어긋나던 문제 방지)
+    try {
+      if (window.history && "scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
+    } catch (e) {}
     window.addEventListener("popstate", onPopState);
 
     // tabs
