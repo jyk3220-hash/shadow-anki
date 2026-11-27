@@ -675,6 +675,9 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.5; }
 .sl-chart::-webkit-scrollbar { display: none; }
 .sl-col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 5px; }
 .sl-chart[data-range="14"] .sl-col { flex: 0 0 31px; }
+/* 14일: 오늘(맨 오른쪽) 기준으로 붙여서 라벨이 잘리지 않게 */
+.sl-chart[data-range="14"] { scroll-snap-type: x proximity; scroll-padding-right: 2px; }
+.sl-chart[data-range="14"] .sl-col { scroll-snap-align: end; }
 .sl-num {
   font-size: 9.5px; font-weight: 800; color: var(--muted-2);
   white-space: nowrap; letter-spacing: -0.03em; font-variant-numeric: tabular-nums;
@@ -1068,6 +1071,21 @@ kbd {
 .pack-head .pack-title { font-weight: 800; font-size: 15px; letter-spacing: -0.02em; }
 .pack-head .pack-count { margin-left: auto; font-family: var(--mono); font-size: 12px; color: var(--muted); }
 
+/* 플레이어 아래 조작부: 재생·이전·다음·속도를 한 줄에 */
+.pack-ctl { display: flex; align-items: center; gap: 7px; margin-top: 10px; flex-wrap: nowrap; }
+.pack-ctl .seg-btns { margin-left: auto; flex: 0 0 auto; }
+.pack-ctl .btn { flex: 0 0 auto; }
+/* 플레이어 위에 겹쳐 보이는 구간 정보 */
+.player-box .seg-note {
+  position: absolute; left: 8px; top: 8px; z-index: 4;
+  padding: 3px 7px; border-radius: 8px;
+  background: rgba(0, 0, 0, 0.62); border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #cfd7ff; font-family: var(--mono); font-size: 10.5px; letter-spacing: -0.01em;
+  pointer-events: none; white-space: nowrap;
+}
+/* 좁은 화면에서는 버튼 글자를 줄인다(← 이전 → 다음 → ← →) */
+@media (max-width: 700px) { .btn-x { display: none; } }
+
 .sentence-card .s-line {
   font-size: 20px;
   line-height: 1.5;
@@ -1232,6 +1250,69 @@ kbd {
   .modal { padding: 16px; }
 }
 
+/* ---------------- 리뷰 중 학습 기록 카드 접기 ---------------- */
+#studyLogCard.collapsed { padding: 9px 12px; margin-bottom: 10px; }
+#studyLogCard.collapsed .sl-chart,
+#studyLogCard.collapsed .sl-foot,
+#studyLogCard.collapsed .sl-range { display: none; }
+#studyLogCard.collapsed .sl-head { align-items: center; }
+#studyLogCard.collapsed .sl-title { font-size: 9.5px; }
+#studyLogCard.collapsed .sl-today { margin-top: 1px; font-size: 12px; }
+#studyLogCard.collapsed .sl-today b { font-size: 15px; }
+
+/* ---------------- 모바일 한 화면 맞춤 (팩·복습) ---------------- */
+@media (max-width: 560px) {
+  /* 팩: 플레이어 · 문장 · 평가 버튼이 스크롤 없이 보이게 */
+  #packStage .pack-head { margin-bottom: 8px; gap: 8px; }
+  #packStage .pack-head .btn { padding: 6px 9px; font-size: 12px; }
+  #packStage .pack-head .pack-title { font-size: 13px; }
+  #packStage .pack-head .pack-count { font-size: 11.5px; }
+  #packStage .shadow-grid { gap: 10px; }
+  #packStage .card { padding: 10px 11px; }
+  #packStage #playerPackBox { margin: 0 auto; }
+  #packStage .pack-ctl { margin-top: 8px; gap: 6px; }
+  #packStage .pack-ctl .btn { padding: 6px 9px; font-size: 12px; min-height: 32px; border-radius: 10px; }
+  #packStage .pack-ctl .seg-btns { padding: 2px; gap: 1px; }
+  #packStage .pack-ctl .seg-btns button { padding: 6px 5px; font-size: 11px; }
+  #packStage .sentence-card .card-title { margin-bottom: 6px; font-size: 11px; }
+  #packStage .sentence-card .s-line { font-size: 17px; line-height: 1.42; margin: 0 0 5px; }
+  #packStage .sentence-card .s-meaning { font-size: 12px; line-height: 1.55; }
+  #packStage #packTags { margin-top: 6px !important; gap: 5px; }
+  #packStage #packTags .chip { font-size: 10.5px; padding: 3px 8px; }
+  #packStage .oneshot { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; margin-top: 8px; }
+  #packStage .oneshot .rate { padding: 7px 2px 6px; border-radius: 11px; }
+  #packStage .oneshot .rate b { font-size: 12px; }
+  #packStage .oneshot .rate small { font-size: 9.5px; margin-top: 1px; }
+  #packStage .oneshot .rate .key { display: none; }
+  #packStage .save-badge { margin-top: 7px; padding: 6px 9px; font-size: 11.5px; }
+  #packStage #packHint { font-size: 10.5px; margin-top: 6px; }
+
+  /* 복습: 플레이어를 줄이고 평가 버튼을 4열로 */
+  #reviewStage .review-card { padding: 10px; }
+  #reviewStage .player-box { max-width: 300px; margin: 0 auto; }
+  #reviewStage .answer-card { padding: 11px; margin-top: 10px; }
+  #reviewStage .ratings { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; margin-top: 9px; }
+  #reviewStage .rate { padding: 7px 2px 6px; }
+  #reviewStage .rate b { font-size: 12px; }
+  #reviewStage .rate small { font-size: 9.5px; }
+  #reviewStage .rate .key { display: none; }
+  #reviewStage .sentence { font-size: 18px; }
+  #reviewStage .peek-hint { margin: 9px 0 8px; font-size: 12px; }
+  #reviewStage .review-tools { margin-top: 8px; }
+  #reviewStage .review-seg { font-size: 10.5px; }
+}
+
+/* 세로가 짧은 기기(360x640 등)는 조금 더 압축 */
+@media (max-width: 560px) and (max-height: 720px) {
+  #packStage .pack-head { margin-bottom: 6px; }
+  #packStage #playerPackBox { max-width: 240px; }
+  #packStage .sentence-card .s-line { font-size: 16px; }
+  #packStage .sentence-card .s-meaning { font-size: 11.5px; line-height: 1.5; }
+  #packStage #packHint { display: none; }
+  #reviewStage .player-box { max-width: 248px; }
+  #reviewStage .peek-hint { display: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001s !important; transition-duration: 0.001s !important; }
 }
@@ -1294,18 +1375,18 @@ kbd {
         <div class="card">
           <div class="player-box" id="playerPackBox">
             <div id="player-pack"></div>
+            <span class="seg-note" id="packSegInfo">0:00 – 0:00</span>
           </div>
-          <div class="row wrap" style="margin-top:10px;gap:8px">
-            <button class="btn primary sm" id="packPlayBtn">▶ 구간 반복</button>
-            <button class="btn sm" id="packPrevBtn">← 이전</button>
-            <button class="btn sm" id="packNextBtn">다음 →</button>
-            <span class="seg-note" id="packSegInfo" style="font-family:var(--mono);font-size:11.5px;color:var(--muted-2)">0:00 – 0:00</span>
-          </div>
-          <div class="seg-btns" id="packSpeedRow" style="margin-top:12px">
-            <button data-speed="0.7">0.7x</button>
-            <button data-speed="0.85">0.85x</button>
-            <button data-speed="1" class="active">1.0x</button>
-            <button data-speed="1.15">1.15x</button>
+          <div class="pack-ctl">
+            <button class="btn primary sm" id="packPlayBtn" title="구간 반복 재생">▶ 구간 반복</button>
+            <button class="btn sm" id="packPrevBtn" title="이전 문장"><span aria-hidden="true">←</span><span class="btn-x"> 이전</span></button>
+            <button class="btn sm" id="packNextBtn" title="다음 문장"><span class="btn-x">다음 </span><span aria-hidden="true">→</span></button>
+            <div class="seg-btns" id="packSpeedRow">
+              <button data-speed="0.7">0.7x</button>
+              <button data-speed="0.85">0.85x</button>
+              <button data-speed="1" class="active">1.0x</button>
+              <button data-speed="1.15">1.15x</button>
+            </div>
           </div>
         </div>
 
@@ -1318,9 +1399,9 @@ kbd {
           <div class="save-badge" id="packBadge"></div>
 
           <div class="oneshot" id="packRatings">
-            <button class="rate" data-grade="hard"><span class="key">1</span><b>어려움</b><small class="pv">10분 뒤</small></button>
-            <button class="rate" data-grade="good"><span class="key">2</span><b>보통</b><small class="pv">1일 뒤</small></button>
-            <button class="rate" data-grade="easy"><span class="key">3</span><b>쉬움</b><small class="pv">4일 뒤</small></button>
+            <button class="rate" data-grade="hard"><span class="key">1</span><b>어려움</b><small class="pv">10분</small></button>
+            <button class="rate" data-grade="good"><span class="key">2</span><b>보통</b><small class="pv">1일</small></button>
+            <button class="rate" data-grade="easy"><span class="key">3</span><b>쉬움</b><small class="pv">4일</small></button>
             <button class="rate" data-grade="mastered"><span class="key">4</span><b>외움</b><small class="pv">완료</small></button>
           </div>
           <div class="hint" id="packHint" style="margin-top:8px">버튼을 누르면 이 문장이 내 덱에 저장되고 다음 문장으로 넘어갑니다.</div>
@@ -2049,6 +2130,15 @@ kbd {
     }
     chart.innerHTML = html.join("");
     chart.setAttribute("data-range", String(studyRange));
+    // 14일은 폭이 넘치므로 '오늘'(맨 오른쪽)이 바로 보이게 끝으로 맞춘다
+    try {
+      chart.scrollLeft = studyRange === 14 ? chart.scrollWidth : 0;
+    } catch (e) {}
+    if (studyRange === 14 && chart.scrollLeft === 0) {
+      setTimeout(function () {
+        try { chart.scrollLeft = chart.scrollWidth; } catch (e) {}
+      }, 0);
+    }
     chart.setAttribute("aria-label", "최근 " + studyRange + "일 일별 학습 문장 수: " +
       rows.map(function (x) { return (x.today ? "오늘" : shortDate(x.key)) + " " + x.count + "문장"; }).join(", "));
     qsa(".sl-tab").forEach(function (b) {
@@ -4464,6 +4554,15 @@ kbd {
   /* =========================================================
      SM-2
      ========================================================= */
+  // 하루 단위 간격은 자정 경계에 맞추되, 밤에 학습해도 최소 12시간은 띄운다.
+  // (23:57에 누른 '1일'이 3분 뒤 00:00에 다시 "오늘 복습"으로 뜨던 문제)
+  function dueAfter(now, interval) {
+    var d = startOfDay(now) + interval * DAY;
+    var minGap = Math.min(interval * DAY, 12 * 3600000);
+    if (d < now + minGap) d = now + minGap;
+    return d;
+  }
+
   function computeNext(card, grade, now) {
     now = now || Date.now();
     var ef = card.ef || 2.5;
@@ -4483,10 +4582,24 @@ kbd {
       };
     }
 
+    // 아직 외우지 못한 카드(새 카드·10분 재학습 중)의 '어려움'은
+    // 팩과 복습 모두 10분 뒤 다시 — 두 화면의 같은 버튼이 같은 결과를 내도록 통일
+    if (grade === "hard" && (reps === 0 || interval < 1)) {
+      ef = Math.round(Math.max(1.3, ef - 0.4) * 100) / 100;
+      return {
+        reps: 0,
+        interval: 0,
+        ef: ef,
+        lapses: lapses,
+        due: now + 10 * 60000,
+        label: "10분"
+      };
+    }
+
     var q = grade === "hard" ? 3 : grade === "good" ? 4 : 5;
 
     if (reps === 0 || interval < 1) {
-      interval = grade === "hard" ? 1 : grade === "good" ? 1 : 4;
+      interval = grade === "good" ? 1 : 4;
       reps = 1;
     } else if (reps === 1) {
       if (grade === "hard") interval = Math.max(2, Math.round(interval * 1.2));
@@ -4511,7 +4624,7 @@ kbd {
       interval: interval,
       ef: ef,
       lapses: lapses,
-      due: startOfDay(now) + interval * DAY,
+      due: dueAfter(now, interval),
       label: fmtInterval(interval)
     };
   }
@@ -4700,6 +4813,7 @@ kbd {
     el("reviewStage").hidden = true;
     el("reviewDone").hidden = true;
     el("reviewStartPanel").hidden = false;
+    setStudyLogCollapsed(false);
     refreshReviewStart();
   }
 
@@ -5498,7 +5612,11 @@ kbd {
     var btn = el("packPlayBtn");
     if (!btn) return;
     var playing = !!(packState.player && packState.player.wantPlay);
-    var label = playing ? "⏸ 일시정지" : "▶ 구간 반복";
+    // 좁은 화면에서는 글자를 줄여 재생·이전·다음·속도가 한 줄에 들어가게 한다
+    var narrow = false;
+    try { narrow = !!(window.matchMedia && window.matchMedia("(max-width: 700px)").matches); } catch (e) {}
+    var label = playing ? (narrow ? "⏸ 정지" : "⏸ 일시정지")
+                        : (narrow ? "▶ 반복" : "▶ 구간 반복");
     if (btn.textContent !== label) btn.textContent = label;
   }
 
@@ -5593,6 +5711,7 @@ kbd {
         badge.textContent = "저장됨 · " + dueText(existing);
       }
     }
+    updatePackPreviews(existing);
 
     el("packSegInfo").textContent = fmtTime(item.start) + " – " + fmtTime(item.end) +
       " · " + (item.end - item.start).toFixed(1) + "초";
@@ -5689,7 +5808,6 @@ kbd {
 
   function applyPackGrade(card, grade, isNew, now) {
     now = now || Date.now();
-    var label;
     if (grade === "mastered") {
       card.mastered = true;
       card.reps = Math.max(1, card.reps || 0);
@@ -5698,38 +5816,37 @@ kbd {
       card.due = startOfDay(now) + 3650 * DAY;
       return "외움 완료";
     }
+    // 새 카드든 이미 저장된 카드든 복습 탭과 같은 SM-2 계산을 쓴다(미리보기 = 실제 저장)
     card.mastered = false;
-    if (isNew) {
-      if (grade === "hard") {
-        card.reps = 0;
-        card.interval = 0;
-        card.ef = 2.1;
-        card.due = now + 10 * 60000;
-        label = "10분 뒤";
-      } else if (grade === "easy") {
-        card.reps = 1;
-        card.interval = 4;
-        card.ef = 2.6;
-        card.due = startOfDay(now) + 4 * DAY;
-        label = "4일 뒤";
-      } else {
-        card.reps = 1;
-        card.interval = 1;
-        card.ef = 2.5;
-        card.due = startOfDay(now) + DAY;
-        label = "1일 뒤";
-      }
-    } else {
-      var res = computeNext(card, grade, now);
-      card.reps = res.reps;
-      card.interval = res.interval;
-      card.ef = res.ef;
-      card.lapses = res.lapses;
-      card.due = res.due;
-      label = res.label + " 뒤";
-    }
+    var res = computeNext(card, grade, now);
+    card.reps = res.reps;
+    card.interval = res.interval;
+    card.ef = res.ef;
+    card.lapses = res.lapses;
+    card.due = res.due;
     card.lastReviewed = now;
-    return label;
+    return res.label + " 뒤";
+  }
+
+  // 팩 화면 평가 버튼의 미리보기 — 이 카드에 지금 누르면 실제로 저장될 간격
+  function updatePackPreviews(existing) {
+    var box = el("packRatings");
+    if (!box) return;
+    var card = existing || { reps: 0, interval: 0, ef: 2.5, lapses: 0, due: 0, mastered: false };
+    var names = { hard: "어려움", good: "보통", easy: "쉬움" };
+    qsa(".rate", box).forEach(function (b) {
+      var g = b.getAttribute("data-grade");
+      var small = b.querySelector(".pv");
+      if (!small) return;
+      if (g === "mastered") {
+        small.textContent = "완료";
+        b.title = "외움: 오늘 복습 목록에서 빠지고 라이브러리에 남습니다";
+        return;
+      }
+      var res = computeNext(card, g);
+      small.textContent = res.label;
+      b.title = names[g] + ": 다음 복습 " + res.label + " 후";
+    });
   }
 
   function savePackCard(pack, idx, grade) {
@@ -6206,8 +6323,50 @@ kbd {
     done: 0,
     mastered: 0,
     revealed: false,
-    current: null
+    current: null,
+    rq: null
   };
+
+  // 복습 중에는 학습 기록 카드를 한 줄로 접어 복습 카드가 위로 올라오게 한다
+  function setStudyLogCollapsed(on) {
+    var box = el("studyLogCard");
+    if (!box || !box.classList) return;
+    box.classList.toggle("collapsed", !!on);
+  }
+
+  function stickyTopHeight() {
+    var h = 0;
+    try {
+      var bar = document.querySelector(".topbar");
+      if (bar) h = bar.getBoundingClientRect().height || 0;
+    } catch (e) { h = 0; }
+    return h;
+  }
+
+  // 복습 무대를 고정 헤더 바로 아래로 올린다(카드를 바꿀 때마다 같은 자리에서 시작)
+  function scrollReviewTop() {
+    var stage = el("reviewStage");
+    if (!stage || stage.hidden || typeof stage.getBoundingClientRect !== "function") return;
+    var y = stage.getBoundingClientRect().top + (window.pageYOffset || 0) - stickyTopHeight() - 8;
+    if (!isFinite(y) || y < 0) y = 0;
+    try { window.scrollTo({ top: y, behavior: "smooth" }); }
+    catch (e) { try { window.scrollTo(0, y); } catch (e2) {} }
+  }
+
+  // 정답을 본 뒤 평가 버튼이 화면 밖이면 필요한 만큼만 내려 준다
+  function ensureRatingsVisible() {
+    var box = el("ratings");
+    if (!box || typeof box.getBoundingClientRect !== "function") return;
+    var vh = window.innerHeight || 0;
+    if (!vh) return;
+    var r = box.getBoundingClientRect();
+    if (!r.height) return;
+    var over = r.bottom - (vh - 10);
+    if (over <= 0) return;
+    var y = (window.pageYOffset || 0) + over;
+    try { window.scrollTo({ top: y, behavior: "smooth" }); }
+    catch (e) { try { window.scrollTo(0, y); } catch (e2) {} }
+  }
 
   function safeDuration(p) {
     try { return p.player.getDuration() || 0; } catch (e) { return 0; }
@@ -6291,10 +6450,13 @@ kbd {
     rv.done = 0;
     rv.mastered = 0;
     rv.revealed = false;
+    rv.rq = {};
     el("reviewStartPanel").hidden = true;
     el("reviewDone").hidden = true;
     el("reviewStage").hidden = false;
+    setStudyLogCollapsed(true);
     showCard();
+    scrollReviewTop();
     historyPushView("review");
   }
 
@@ -6333,6 +6495,7 @@ kbd {
 
     reviewProgress();
     updateSpeedUI();
+    scrollReviewTop();
   }
 
   function revealAnswer() {
@@ -6347,6 +6510,7 @@ kbd {
     s.classList.remove("reveal-anim");
     void s.offsetWidth;
     s.classList.add("reveal-anim");
+    ensureRatingsVisible();
   }
 
   function grade(g) {
@@ -6360,7 +6524,16 @@ kbd {
       c.due = startOfDay(Date.now()) + 3650 * DAY;
       rv.mastered++;
     } else {
-      gradeCardData(c, g, Date.now());
+      var res = gradeCardData(c, g, Date.now());
+      // 10분 뒤 다시 봐야 하는 카드는 이번 복습 세션 끝에 한 번 더 보여 준다
+      // (마지막 카드면 10분 뒤 '오늘 복습'에 다시 뜨니 바로 반복하지 않는다)
+      if (res && res.label === "10분" && rv.idx < rv.queue.length - 1) {
+        rv.rq = rv.rq || {};
+        if (!rv.rq[c.id]) {
+          rv.rq[c.id] = true;
+          rv.queue.push(c);
+        }
+      }
     }
     rv.done++;
     logStudied(c.id, Date.now());
@@ -6377,6 +6550,7 @@ kbd {
     el("reviewStage").hidden = true;
     el("reviewStartPanel").hidden = true;
     el("reviewDone").hidden = false;
+    setStudyLogCollapsed(false);
 
     var nextDue = null;
     for (var i = 0; i < state.cards.length; i++) {
