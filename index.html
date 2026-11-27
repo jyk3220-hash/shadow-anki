@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#080a10">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -240,7 +240,13 @@ a { color: var(--accent); }
 
 /* ---------------- panes ---------------- */
 .tabpane { display: none; }
-.tabpane.active { display: block; animation: fadeUp 0.28s ease both; }
+/* 탭 패널은 opacity만 페이드한다 — transform 애니메이션은 fixed 자식의 기준점이 되어
+   모바일 하단 고정 바가 화면 아래로 밀려나므로 쓰지 않는다 */
+.tabpane.active { display: block; animation: paneFade 0.28s ease both; }
+@keyframes paneFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: none; }
@@ -326,7 +332,7 @@ a { color: var(--accent); }
   gap: 8px;
   text-align: center;
   padding: 22px;
-  background: rgba(8, 10, 16, 0.94);
+  background: rgba(8, 10, 16, 0.985);
   font-size: 13px;
   color: #ffc9cf;
   line-height: 1.6;
@@ -1575,6 +1581,122 @@ kbd {
   .rv-subbtn b { min-width: 18px; height: 17px; }
 }
 
+/* ============================================================
+   Step 3 — 모바일 큰 글씨 · 하단 고정 평가 바 · 겹침 방지
+   (max-width: 600px 기본값. 전환 버튼 없이 누구에게나 큰 화면)
+   ============================================================ */
+@media (max-width: 600px) {
+  /* --- 1) 상단 5탭: 16px 굵게 · 48px 이상 ---
+     좁아도 글씨를 자르지 않고, 넘치는 만큼만 탭 바 안에서 가로 스크롤 */
+  .tabs {
+    width: 100%; margin-left: 0; margin-top: 2px; gap: 3px;
+    padding: 4px; border-radius: 18px;
+    overflow-x: auto; overflow-y: hidden;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    justify-content: flex-start;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    flex: 1 1 auto; min-width: max-content; min-height: 48px;
+    padding: 10px 7px; font-size: 16.5px; font-weight: 800;
+    gap: 5px; justify-content: center; letter-spacing: -0.025em;
+  }
+  .tab .badge { min-width: 20px; height: 20px; font-size: 11.5px; }
+
+  /* --- 2) 큰 글씨: 원문 25px · 한국어 20px · 보조 15px 이상 --- */
+  .sentence-card .s-line, #packStage .sentence-card .s-line,
+  #reviewSentence, #reviewStage .sentence,
+  .gr-sentence, .gr-full {
+    font-size: 25px; font-weight: 800; line-height: 1.4; letter-spacing: -0.025em;
+  }
+  .sentence-card .s-meaning, #packStage .sentence-card .s-meaning,
+  .meaning, .vw-meaning, .gr-why, .gr-kr {
+    font-size: 20px; line-height: 1.55; font-weight: 700; color: #dfe6f5;
+  }
+  .vw-word, #rwMount .vw-word { font-size: clamp(28px, 8.6vw, 34px); }
+  .vw-ex { font-size: 20px; line-height: 1.55; }
+  .vw-exko { font-size: 17px; color: #b9c5d8; }
+
+  .hint, .vw-hint, .peek-hint, .gr-note, .rv-note, .plm-note,
+  .vw-meta, .vw-progress, .row-meaning, .footer, .vw-item .tt span {
+    font-size: 15px; line-height: 1.55;
+  }
+  .vw-hint, .peek-hint, .gr-note, .rv-note { color: #9fadc4; }
+
+  /* --- 3) 주요 버튼: 18px 굵게 · 높이 54px 이상 --- */
+  .btn, .btn.sm, .btn.lg { min-height: 54px; font-size: 18px; font-weight: 800; }
+  .btn.sm { padding: 8px 12px; }
+  .btn.icon { width: 54px; height: 54px; }
+  .rate { min-height: 62px; padding: 14px 8px 12px; border-radius: 16px; }
+  .rate b, .oneshot .rate b, #packStage .oneshot .rate b { font-size: 18px; }
+  .rate small, .oneshot .rate small, #packStage .oneshot .rate small { font-size: 15px; }
+  .vw-saybtn { min-height: 54px; padding: 12px 16px; font-size: 18px; font-weight: 800; border-radius: 14px; }
+  .vw-listen { margin-top: 10px; }
+  .gr-opt { min-height: 56px; font-size: 18px; padding: 13px 14px; }
+  .gr-opt .k { width: 28px; height: 28px; font-size: 14px; }
+  .gr-over .gr-ovbtn { min-height: 54px; font-size: 17px; }
+  .vw-deck { font-size: 15px; font-weight: 800; padding: 10px 14px; min-height: 44px; }
+  .rv-subbtn { font-size: 15px; min-height: 44px; }
+  .rv-langbtn { font-size: 15px; padding: 9px 11px; }
+  .seg-btns button { min-height: 44px; font-size: 15px; }
+  .gr-unit { padding: 9px 3px; }
+  .gr-unit .s { font-size: 13.5px; }
+  .gr-unit .c { font-size: 11.5px; }
+  /* 재생 불가 안내도 모바일에서는 읽기 쉽게 */
+  .player-error { font-size: 16px; }
+  .player-error b { font-size: 19px; }
+
+  /* 팩·복습 화면의 예전 '한 화면 압축' 값을 큰 글씨 기준으로 다시 잡는다 */
+  #packStage .pack-head .btn { padding: 8px 12px; font-size: 18px; }
+  #packStage .pack-head .pack-title { font-size: 17px; }
+  #packStage .pack-head .pack-count { font-size: 15px; }
+  #packStage .pack-head #packReviewOnlyBtn { padding: 8px 12px; font-size: 16px; }
+  #packStage .pack-ctl { flex-wrap: wrap; row-gap: 8px; }
+  #packStage .pack-ctl .btn { padding: 10px 12px; font-size: 18px; min-height: 54px; border-radius: 14px; }
+  #packStage .pack-ctl .seg-btns { padding: 3px; gap: 2px; min-height: 54px; }
+  #packStage .pack-ctl .seg-btns button { padding: 8px 8px; font-size: 15px; }
+  #packStage .sentence-card .card-title { font-size: 15px; }
+  #packStage .oneshot { gap: 8px; }
+  #packStage .oneshot .rate { padding: 12px 6px; }
+  #packStage .sentence-card .s-line { margin: 0 0 10px; }
+  #packStage #packTags .chip { font-size: 15px; padding: 5px 10px; }
+  #packStage .save-badge { font-size: 15px; }
+  #packStage #packHint { font-size: 15px; margin-top: 8px; }
+  #reviewStage .rate { padding: 12px 6px; }
+  #reviewStage .rate b { font-size: 18px; }
+  #reviewStage .rate small { font-size: 15px; }
+  #reviewStage .peek-hint { font-size: 16px; }
+  #reviewStage .review-seg { font-size: 14px; }
+
+  /* --- 4) 하단 고정 평가 바 ---
+     화면마다 하나만 보이므로(탭 패널이 하나만 열림) 같은 자리를 쓴다 */
+  #packRatings, #vwRatings, #ratings,
+  #rwMount .rv-word-ratings, #grMount .gr-nav {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 110;
+    display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr);
+    gap: 8px; margin: 0;
+    padding: 10px 10px calc(10px + env(safe-area-inset-bottom, 0px));
+    background: rgba(9, 12, 19, 0.97);
+    border-top: 1px solid var(--line-strong);
+    box-shadow: 0 -16px 34px -20px #000;
+    -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  }
+  /* 바에 가리지 않게 본문·카드 아래에 여백을 둔다 (가장 높은 바 = 단어장 103px) */
+  body { padding-bottom: calc(122px + env(safe-area-inset-bottom, 0px)); }
+  .sentence-card, .vw-card, .gr-card, .answer-card, .review-card { padding-bottom: 122px; }
+  /* 되돌리기 토스트는 하단 바 위, 일반 안내 토스트는 그보다 더 위 */
+  .undo-toast { bottom: calc(118px + env(safe-area-inset-bottom, 0px)); }
+  .undo-toast .undo-btn { min-height: 56px; padding: 14px 20px; font-size: 16px; }
+  .toast { bottom: calc(194px + env(safe-area-inset-bottom, 0px)); font-size: 15px; }
+}
+
+/* 세로가 짧은 폰(360x640 등): 브랜드 줄을 접어 탭과 카드에 높이를 내어 준다 */
+@media (max-width: 600px) and (max-height: 720px) {
+  .brand { display: none; }
+  .topbar-in { padding: 6px 10px; }
+  .wrap { padding-top: 10px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001s !important; transition-duration: 0.001s !important; }
 }
@@ -1590,6 +1712,15 @@ kbd {
     <code>python3 -m http.server</code>로 열거나 GitHub Pages·Netlify Drop에 올려서 쓰세요.
   </div>
   <button class="x" id="fileBannerClose" aria-label="닫기">×</button>
+</div>
+
+<!-- 카카오톡 인앱 브라우저 안내 — 기본 hidden, User-Agent에 KAKAOTALK이 있을 때만 JS가 보여준다 -->
+<div class="banner" id="kakaoBanner" hidden>
+  <div>
+    <b>카카오톡 안에서 열려 있어요.</b>
+    원활한 소리 재생과 백업을 위해 외부 브라우저(Safari/Chrome)로 열어주세요.
+  </div>
+  <button class="x" id="kakaoBannerClose" aria-label="닫기">×</button>
 </div>
 
 <header class="topbar">
@@ -1836,7 +1967,8 @@ kbd {
               <button class="tagchip" data-tag="일상">일상</button>
             </div>
           </div>
-          <button class="btn primary wide" id="saveCardBtn">＋ 카드로 저장 <span class="small">(오늘 바로 복습)</span></button>
+          <button class="btn primary wide" id="saveCardBtn" disabled aria-disabled="true" title="재생 가능한 영상이 확인되면 저장할 수 있어요">＋ 카드로 저장 <span class="small">(오늘 바로 복습)</span></button>
+          <div class="hint" id="saveGuardNote">재생 가능한 유튜브 영상을 불러오면 저장 버튼이 켜져요.</div>
         </div>
       </div>
     </div>
@@ -2077,6 +2209,7 @@ kbd {
         <button class="btn primary sm wide" id="vwFlipBtn">뒤집기</button>
         <button class="btn sm ghost" id="vwNextBtn" aria-label="다음 단어">→</button>
       </div>
+      <button type="button" class="btn ghost wide vw-listen" id="vwListenBtn">🔊 소리 다시 듣기</button>
       <div class="ratings vw-ratings" id="vwRatings">
         <button class="rate" data-wgrade="hard"><span class="key">1</span><b>❌ 모름</b><small class="pv"></small></button>
         <button class="rate" data-wgrade="good"><span class="key">2</span><b>⭕ 앎</b><small class="pv"></small></button>
@@ -6247,6 +6380,70 @@ kbd {
     if (this.cbs.error) this.cbs.error(code);
   };
 
+  /* =========================================================
+     유튜브 재생 오류 안내 — 검은 화면 대신 한글 메시지
+     101/150/153: 영상을 올린 사람이 외부 사이트 재생을 막은 경우
+     ========================================================= */
+  function playerBoxOf(node) {
+    var n = node;
+    while (n && n !== document.body) {
+      if (n.classList && n.classList.contains("player-box")) return n;
+      n = n.parentNode;
+    }
+    return null;
+  }
+
+  function playerErrorText(code) {
+    if (code === 101 || code === 150 || code === 153) {
+      return {
+        title: "외부 재생이 제한된 유튜브 영상입니다",
+        body: "이 영상은 올린 사람이 다른 사이트에서의 재생을 막아 두었어요(오류 " + code + ").",
+        sub: "다른 영상을 골라 주세요. 카드·복습 기능은 그대로 쓸 수 있어요."
+      };
+    }
+    if (code === 100 || code === 2) {
+      return {
+        title: "영상이 없거나 주소가 잘못됐어요",
+        body: "삭제·비공개 영상이거나 링크가 틀렸어요(오류 " + code + ").",
+        sub: "유튜브 링크를 다시 확인해 주세요."
+      };
+    }
+    if (code === "api") {
+      return {
+        title: "유튜브 플레이어를 불러오지 못했어요",
+        body: "인터넷 연결을 확인한 뒤 다시 시도해 주세요.",
+        sub: "카드·복습 기능은 그대로 쓸 수 있어요."
+      };
+    }
+    return {
+      title: "이 브라우저에서는 이 영상을 재생할 수 없어요",
+      body: "오류 코드 " + code + " · 잠시 후 다시 시도해 주세요.",
+      sub: "다른 영상을 골라도 좋아요."
+    };
+  }
+
+  function clearPlayerError(mountEl) {
+    var box = playerBoxOf(mountEl);
+    if (!box) return;
+    var old = box.querySelector(".player-error");
+    if (old && old.parentNode) old.parentNode.removeChild(old);
+  }
+
+  function showPlayerError(mountEl, code) {
+    var box = playerBoxOf(mountEl);
+    if (!box) return null;
+    var old = box.querySelector(".player-error");
+    if (old && old.parentNode) old.parentNode.removeChild(old);
+    var t = playerErrorText(code);
+    var div = document.createElement("div");
+    div.className = "player-error";
+    div.setAttribute("role", "status");
+    div.innerHTML = "<div><b>" + esc(t.title) + "</b><br>" + esc(t.body) +
+      "<br><span style='opacity:.75;font-size:13px'>" + esc(t.sub) + "</span></div>";
+    box.appendChild(div);
+    return div;
+  }
+
   SegmentPlayer.prototype.applySpeed = function () {
     if (!this.player || !this.ready || !this.player.setPlaybackRate) return;
     try {
@@ -6404,6 +6601,7 @@ kbd {
   var shadow = {
     player: null,
     videoId: null,
+    videoError: null,
     title: "",
     loadedOnce: false,
     open: false          // 카드 연습 화면(라이브러리에서 들어온 상태)
@@ -6425,10 +6623,22 @@ kbd {
     return shadow.player;
   }
 
+  // 재생 가능한 영상이 확인됐을 때만 '＋ 카드로 저장'을 켠다
+  function setEditorCanSave(ok) {
+    var b = el("saveCardBtn");
+    if (!b) return;
+    b.disabled = !ok;
+    b.setAttribute("aria-disabled", ok ? "false" : "true");
+    b.title = ok ? "" : "재생 가능한 영상이 확인되면 저장할 수 있어요";
+    var note = el("saveGuardNote");
+    if (note) note.hidden = !!ok;
+  }
+
   function onShadowReady(p) {
     p.gap = state.settings.gap;
     p.loop = state.settings.loop;
     p.applySpeed();
+    if (!shadow.videoError) setEditorCanSave(true);
     var title = "";
     try {
       var data = p.player.getVideoData ? p.player.getVideoData() : null;
@@ -6455,27 +6665,32 @@ kbd {
       shadow.title = vd.title;
       if (el("videoTitle").textContent !== vd.title) el("videoTitle").textContent = vd.title;
     }
+    // 영상이 실제로 큐/재생되면 정상 영상 — 저장 버튼을 켜고 오류 안내를 지운다
+    if (!shadow.videoError) {
+      setEditorCanSave(true);
+      clearPlayerError(el("player-shadow"));
+    }
   }
 
   function onShadowError(code) {
-    var box = el("playerShadowBox");
-    var old = box.querySelector(".player-error");
-    if (old) old.parentNode.removeChild(old);
-
-    var msg = null;
-    if (code === 2) msg = "영상 주소가 올바르지 않아요. 링크를 다시 확인해 주세요.";
-    else if (code === 5) msg = "이 브라우저에서 영상을 재생할 수 없어요. 잠시 후 다시 시도해 주세요.";
-    else if (code === 100) msg = "영상이 없거나 비공개예요.";
-    else if (code === 101 || code === 150) msg = "이 영상은 다른 사이트에서의 재생(임베드)을 막아두었어요. 다른 영상을 써보세요.";
-    else if (code === 153) msg = "재생 환경이 제한돼 있어요. 파일을 서버(http)로 열거나 다른 영상을 써보세요.";
-    else if (code === "api") msg = "유튜브 플레이어를 불러오지 못했어요. 인터넷 연결을 확인해 주세요.";
-
-    if (!msg) return;
-    var div = document.createElement("div");
-    div.className = "player-error";
-    div.innerHTML = "<div><b>영상을 재생할 수 없어요</b><br>" + esc(msg) +
-      "<br><span style='opacity:.7;font-size:12px'>구간·카드·복습 기능은 그대로 쓸 수 있어요.</span></div>";
-    box.appendChild(div);
+    shadow.videoError = code || "unknown";
+    setEditorCanSave(false);
+    var p = shadow.player;
+    var limited = (code === 101 || code === 150 || code === 153);
+    if (limited) {
+      // 입구 차단: 외부 재생이 막힌 영상은 즉시 버리고 카드로 저장할 수 없게 둔다
+      try { if (p && p.pause) p.pause(); } catch (e) {}
+      try { if (p && p.player && p.player.destroy) p.player.destroy(); } catch (e) {}
+      if (p) { p.player = null; p.ready = false; p.loadedId = null; p.videoId = null; p.creating = false; }
+      try { el("player-shadow").innerHTML = ""; } catch (e) {}
+      shadow.videoId = null;
+      shadow.title = "";
+      if (el("videoTitle")) el("videoTitle").textContent = "이 영상은 앱에 담을 수 없어요";
+      if (el("videoLen")) el("videoLen").textContent = "—";
+      if (el("segCardInfo")) el("segCardInfo").textContent = "재생 가능한 영상을 불러오면 현재 구간이 표시됩니다.";
+    }
+    showPlayerError(el("player-shadow"), code);
+    if (limited) toast("외부 재생이 제한된 유튜브 영상입니다 · 다른 영상을 골라주세요.");
   }
 
   function onShadowTick(t, dur) {
@@ -6606,6 +6821,9 @@ kbd {
     el("videoTitle").textContent = "불러오는 중…";
     el("videoLen").textContent = "—";
     shadow.videoId = id;
+    shadow.videoError = null;      // 새 영상: 재생이 확인될 때까지 저장 버튼은 잠근다
+    setEditorCanSave(false);
+    clearPlayerError(el("player-shadow"));
     shadow.lang = "";          // 직접 불러온 영상은 지금 플레이어의 자막 언어를 그대로 쓴다
     el("urlInput").blur();
 
@@ -6720,9 +6938,8 @@ kbd {
         tick: onPackTick,
         state: function () { syncPackPlayBtn(); },
         error: function (code) {
-          if (code === 101 || code === 150) toast("이 영상은 임베드 재생이 막혀 있어요. 다른 문장을 골라보세요.");
-          else if (code === 100 || code === 2) toast("영상이 없거나 주소가 잘못됐어요.");
-          else if (code === "api") toast("유튜브 플레이어를 불러오지 못했어요. 인터넷 연결을 확인해 주세요.");
+          // 검은 화면 대신 한글 안내(101/150/153 = 외부 재생 제한)
+          showPlayerError(el("player-pack"), code);
         }
       });
       packState.player.loop = true;
@@ -6864,6 +7081,7 @@ kbd {
     renderPackMini();
 
     var p = getPackPlayer();
+    clearPlayerError(el("player-pack"));   // 다음 문장으로 넘어가면 이전 오류 안내를 지운다
     p.loop = true;
     p.gap = state.settings.gap;
     p.speed = state.settings.speed;
@@ -7314,7 +7532,10 @@ kbd {
     switchTab("shadow");
     el("urlInput").value = "https://www.youtube.com/watch?v=" + card.videoId;
     shadow.videoId = card.videoId;
+    shadow.videoError = null;
     shadow.open = true;
+    setEditorCanSave(false);
+    clearPlayerError(el("player-shadow"));
     var p = getShadowPlayer();
     p.setSegment(card.start, card.end);
     p.loop = true;
@@ -7670,11 +7891,7 @@ kbd {
         },
         tick: onReviewTick,
         error: function (code) {
-          if (code === 101 || code === 150 || code === 153) {
-            toast("이 영상은 임베드 재생이 막혀 있어요. 수정에서 다른 영상으로 바꿔보세요.");
-          } else if (code === 100 || code === 2) {
-            toast("영상이 없거나 주소가 잘못됐어요. 수정에서 확인해 주세요.");
-          }
+          showPlayerError(el("player-review"), code);
         },
         rate: function () {}
       });
@@ -7780,6 +7997,7 @@ kbd {
       " · " + (c.end - c.start).toFixed(1) + "초";
 
     var p = getReviewPlayer();
+    clearPlayerError(el("player-review"));
     p.loop = true;
     p.gap = state.settings.gap;
     p.speed = state.settings.speed;
@@ -8217,6 +8435,9 @@ kbd {
     // file banner
     el("fileBannerClose").addEventListener("click", function () {
       el("fileBanner").hidden = true;
+    });
+    if (el("kakaoBannerClose")) el("kakaoBannerClose").addEventListener("click", function () {
+      el("kakaoBanner").hidden = true;
     });
 
     // keyboard
@@ -9432,8 +9653,47 @@ kbd {
   }
 
   // ---- 발음 (speechSynthesis) ----
+  // 모바일은 음성 목록이 늦게 채워진다 — onvoiceschanged로 다시 받아 두고,
+  // 목록이 비어 있는 첫 순간에는 잠깐 기다렸다가 읽어서 첫 발음이 씹히지 않게 한다.
+  var voiceCache = [], voiceWaiters = [], voicesWired = false;
+
   function vwVoices() {
-    try { return window.speechSynthesis ? (window.speechSynthesis.getVoices() || []) : []; } catch (e) { return []; }
+    try {
+      var synth = window.speechSynthesis;
+      if (!synth) return voiceCache || [];
+      var list = synth.getVoices() || [];
+      if (list.length) voiceCache = list;
+    } catch (e) {}
+    return voiceCache || [];
+  }
+
+  function vwVoicesReady() {
+    vwVoices();
+    var list = voiceCache || [];
+    if (!list.length) return;
+    var q = voiceWaiters;
+    voiceWaiters = [];
+    for (var i = 0; i < q.length; i++) { try { q[i](); } catch (e) {} }
+  }
+
+  function vwWhenVoices(fn) {
+    if (vwVoices().length) { fn(); return; }
+    var done = false;
+    var run = function () { if (done) return; done = true; fn(); };
+    voiceWaiters.push(run);
+    setTimeout(run, 1200);   // 음성 목록이 영영 안 와도 기본 음성으로는 읽는다
+  }
+
+  function vwInitVoices() {
+    if (!window.speechSynthesis) return;
+    if (!voicesWired) {
+      voicesWired = true;
+      try { window.speechSynthesis.onvoiceschanged = vwVoicesReady; } catch (e) {}
+      try { window.speechSynthesis.addEventListener("voiceschanged", vwVoicesReady); } catch (e) {}
+    }
+    vwVoicesReady();
+    var delays = [80, 250, 700, 1500];
+    for (var i = 0; i < delays.length; i++) setTimeout(vwVoicesReady, delays[i]);
   }
 
   function vwPickVoice(tag) {
@@ -9446,9 +9706,25 @@ kbd {
       if (lg === want) exact.push(list[i]);
       else if (lg.split("-")[0] === base) near.push(list[i]);
     }
-    if (exact.length) return { voice: exact[0], exact: true };
-    if (near.length) return { voice: near[0], exact: false };
+    // 같은 언어가 여럿이면 기기에 들어 있는(오프라인) 음성을 먼저 고른다 — 기본 음성이 흔들리지 않게
+    var prefer = function (arr) {
+      for (var j = 0; j < arr.length; j++) { if (arr[j] && arr[j].localService) return arr[j]; }
+      return arr[0];
+    };
+    if (exact.length) return { voice: prefer(exact), exact: true };
+    if (near.length) return { voice: prefer(near), exact: false };
     return { voice: null, exact: false };
+  }
+
+  // 카드가 넘어갈 때 한 번만 자동으로 읽는다(페이지를 열자마자 읽지는 않는다)
+  var lastAutoSpeakAt = 0;
+  function autoSpeak(text, tag) {
+    var s = String(text || "").trim();
+    if (!s) return;
+    var now = Date.now();
+    if (now - lastAutoSpeakAt < 400) return;
+    lastAutoSpeakAt = now;
+    vwSpeak(s, tag || "en-US", null);
   }
 
   function vwSpeak(text, tag, btn) {
@@ -9458,6 +9734,14 @@ kbd {
       toast("이 브라우저는 발음 듣기(음성 합성)를 지원하지 않아요.");
       return;
     }
+    vwVoicesReady();
+    // 아직 음성 목록이 비어 있으면(모바일 첫 터치) 목록이 도착한 뒤 한 번만 읽는다
+    if (!vwVoices().length) { vwWhenVoices(function () { vwSpeakNow(s, tag, btn); }); return; }
+    vwSpeakNow(s, tag, btn);
+  }
+
+  function vwSpeakNow(s, tag, btn) {
+    if (!s) return;
     var p = vwPickVoice(tag);
     var label = tag === "en-US" ? "미국식" : tag === "en-GB" ? "영국식" : "독일어";
     if (!p.voice && tag.indexOf("de") === 0) {
@@ -9509,12 +9793,19 @@ kbd {
     vwBuildQueue();
     vw.idx = 0;
     renderVocab(false);
+    vwAutoSpeak();            // 평가로 다음 단어가 떠도 발음을 한 번 먼저
     if (grade === "mastered") toast("외움 완료 · " + w.word);
     else toast(label + " 다시 봐요 · " + w.word);
     if (vw.queue.length <= 1) toast("이 묶음 단어를 끝까지 봤어요 🎉");
     undoOffer(undoSnapNow);
     if (grade === "hard" || grade === "again") hintOfferAfter(w.id);
     vwScrollCardIntoView();
+  }
+
+  function vwAutoSpeak() {
+    var w = vwCurrent();
+    if (!w) return;
+    autoSpeak(w.word, w.lang === "de" ? "de-DE" : "en-US");
   }
 
   function vwScrollCardIntoView() {
@@ -9628,6 +9919,13 @@ kbd {
       vw.idx = vw.idx >= vw.queue.length - 1 ? 0 : vw.idx + 1;
       vwSetFace(false, false);
       renderVocab(false);
+      vwAutoSpeak();          // 카드가 넘어가면 발음을 한 번 먼저 들려준다
+    });
+    // 넓은 "소리 다시 듣기" — 작은 아이콘 대신 크게 한 번에
+    if (el("vwListenBtn")) el("vwListenBtn").addEventListener("click", function () {
+      var cur = vwCurrent();
+      if (!cur) return;
+      vwSpeak(cur.word, cur.lang === "de" ? "de-DE" : "en-US", el("vwListenBtn"));
     });
     el("vwRatings").addEventListener("click", function (e) {
       var b = e.target.closest("[data-wgrade]");
@@ -9676,13 +9974,8 @@ kbd {
       }
     });
 
-    // 음성 목록은 브라우저마다 늦게 채워진다 — 미리 한 번 깨워 둔다
-    try {
-      if (window.speechSynthesis) {
-        vwVoices();
-        window.speechSynthesis.addEventListener("voiceschanged", function () { vwVoices(); });
-      }
-    } catch (e) {}
+    // 음성 목록은 브라우저마다 늦게 채워진다 — onvoiceschanged까지 걸어 미리 깨워 둔다
+    try { vwInitVoices(); } catch (e) {}
   }
 
   /* =========================================================
@@ -10682,6 +10975,7 @@ kbd {
     h += '<div class="gr-why">' + esc(q.ko) + "</div>";
     h += '<div class="gr-full">' + esc(q.full) + "</div>";
     if (q.kr) h += '<div class="gr-kr">' + esc(q.kr) + "</div>";
+    h += '<button type="button" class="btn ghost wide gr-listen" data-gsay="en-US">🔊 소리 다시 듣기</button>';
     h += '<div class="vw-say gr-say">' +
       '<button type="button" class="vw-saybtn" data-gsay="en-US">🇺🇸 미국식</button>' +
       '<button type="button" class="vw-saybtn" data-gsay="en-GB">🇬🇧 영국식</button></div>';
@@ -10778,12 +11072,14 @@ kbd {
       this.prepare();
       this.render(false);
       grScrollIntoView();
+      grAutoSpeak(this);
       return;
     }
     this.idx = (this.idx + 1) % this.queue.length;
     this.prepare();
     this.render(false);
     grScrollIntoView();
+    grAutoSpeak(this);
   };
 
   GRSession.prototype.step = function (n) {
@@ -10793,7 +11089,16 @@ kbd {
     this.prepare();
     this.render(false);
     grScrollIntoView();
+    if (n > 0) grAutoSpeak(this);
   };
+
+  // 문제가 넘어가면 원문 문장을 한 번 먼저 읽어 준다(터치 안에서만 호출됨)
+  function grAutoSpeak(sess) {
+    if (!sess) return;
+    var q = sess.current();
+    if (!q) return;
+    autoSpeak(q.full || q.prompt, "en-US");
+  }
 
   // 문법 탭 문제 세션 · 복습 탭 문법 세션
   var grs = new GRSession("grMount", {
@@ -10909,6 +11214,7 @@ kbd {
     h += '<div class="vw-nav"><button type="button" class="btn sm ghost" data-rwnav="-1" aria-label="이전 단어">←</button>' +
       '<button type="button" class="btn primary sm" data-rwflip>뒤집기</button>' +
       '<button type="button" class="btn sm ghost" data-rwnav="1" aria-label="다음 단어">→</button></div>';
+    h += '<button type="button" class="btn ghost wide vw-listen" data-rwsay="word">🔊 소리 다시 듣기</button>';
     h += '<div class="ratings vw-ratings rv-word-ratings">';
     h += '<button type="button" class="rate" data-rwgrade="hard"><span class="key">1</span><b>❌ 모름</b><small class="pv">' + grPv(cur, "hard") + "</small></button>";
     h += '<button type="button" class="rate" data-rwgrade="good"><span class="key">2</span><b>⭕ 앎</b><small class="pv">' + grPv(cur, "good") + "</small></button>";
@@ -10916,6 +11222,12 @@ kbd {
     h += "</div>";
     box.innerHTML = h;
     updateReviewSubCounts();
+  }
+
+  function rwAutoSpeak() {
+    var w = rwCurrent();
+    if (!w) return;
+    autoSpeak(w.word, w.lang === "de" ? "de-DE" : "en-US");
   }
 
   function rwGrade(g) {
@@ -10939,6 +11251,7 @@ kbd {
       rws.idx = rws.queue.length - 1;
     }
     renderReviewWords(false);
+    rwAutoSpeak();            // 다음 단어가 떠면 발음을 한 번 먼저
     try { updateWordBadge(); } catch (e) {}
     toast(grade === "mastered" ? "외움 완료 · " + w.word : label + " 다시 봐요 · " + w.word);
     undoOffer(undoSnapNow);
@@ -11547,6 +11860,7 @@ kbd {
           var len = rws.queue.length;
           rws.idx = ((rws.idx + step) % len + len) % len;
           renderReviewWords(false);
+          if (step > 0) rwAutoSpeak();
           return;
         }
         var grade = e.target.closest("[data-rwgrade]");
@@ -11652,6 +11966,12 @@ kbd {
     try {
       if (window.location.protocol === "file:") el("fileBanner").hidden = false;
     } catch (e) {}
+    // 카카오톡 인앱 브라우저는 소리·백업이 막힌다 — 외부 브라우저로 열도록 안내(기본 hidden)
+    try {
+      if (/KAKAOTALK/i.test(navigator.userAgent || "")) el("kakaoBanner").hidden = false;
+    } catch (e) {}
+    // 음성 목록을 미리 깨워 둔다 — 모바일 첫 발음이 씹히지 않게
+    try { vwInitVoices(); } catch (e) {}
 
     // 처음 연 화면은 카드 0장에서 시작한다(기본 샘플 카드 없음).
     loadStore();
