@@ -1429,6 +1429,119 @@ kbd {
   .vw-saybtn { padding: 7px 10px; font-size: 12px; }
 }
 
+/* ---------------- 복습 하위 전환 (문장 · 단어 · 문법) ---------------- */
+.rv-sub { display: flex; gap: 6px; padding: 5px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255, 255, 255, 0.035); margin-bottom: 12px; }
+.rv-subbtn { flex: 1 1 0; min-width: 0; border: 0; background: transparent; color: var(--muted); border-radius: 999px; padding: 8px 10px; font-size: 13px; font-weight: 700; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: color 0.16s ease, background 0.16s ease; }
+.rv-subbtn:hover { color: var(--text); }
+.rv-subbtn b { font-size: 11.5px; font-weight: 800; min-width: 20px; height: 18px; padding: 0 6px; border-radius: 999px; display: inline-grid; place-items: center; background: rgba(255, 255, 255, 0.12); color: var(--text); }
+.rv-subbtn.on { color: #fff; background: linear-gradient(135deg, rgba(124, 140, 255, 0.95), rgba(169, 112, 255, 0.9)); box-shadow: 0 8px 20px -12px rgba(124, 140, 255, 1); }
+.rv-subbtn.on b { background: rgba(0, 0, 0, 0.28); }
+.rv-note { font-size: 12.5px; color: var(--muted-2); font-weight: 600; margin: 0 2px 10px; line-height: 1.5; }
+.rv-top { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+.rv-top .rv-sub { flex: 1 1 200px; margin-bottom: 0; }
+.rv-lang { display: flex; gap: 3px; padding: 4px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255, 255, 255, 0.035); flex: 0 0 auto; }
+.rv-langbtn { border: 0; background: transparent; color: var(--muted); border-radius: 999px; padding: 6px 9px; font-size: 11.5px; font-weight: 750; white-space: nowrap; }
+.rv-langbtn.on { color: #fff; background: linear-gradient(135deg, rgba(124, 140, 255, 0.9), rgba(169, 112, 255, 0.85)); }
+.rv-done-sum { margin-top: 10px; font-size: 12.5px; font-weight: 700; color: var(--text); line-height: 1.6; }
+.backlog-nudge { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(255, 180, 84, 0.4); background: rgba(255, 180, 84, 0.1); color: #ffe0b6; font-size: 12px; font-weight: 650; line-height: 1.45; }
+.backlog-nudge[hidden] { display: none; }
+.backlog-nudge .bl-ico { font-size: 15px; flex: 0 0 auto; }
+.backlog-nudge .bl-t { flex: 1 1 auto; min-width: 0; }
+.backlog-nudge .bl-t b { color: #fff; font-weight: 800; }
+.backlog-nudge .bl-btn { flex: 0 0 auto; border: 1px solid rgba(255, 180, 84, 0.55); background: rgba(255, 180, 84, 0.18); color: #ffe9cd; border-radius: 999px; padding: 6px 10px; font-size: 11.5px; font-weight: 800; white-space: nowrap; }
+.rv-allclear { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0 0 10px; padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(255, 206, 120, 0.5); background: linear-gradient(135deg, rgba(255, 196, 92, 0.18), rgba(255, 140, 92, 0.1)); color: #ffe6b8; font-size: 13.5px; font-weight: 800; letter-spacing: -0.01em; }
+.rv-allclear[hidden] { display: none; }
+.rv-subbtn.done b { background: rgba(61, 220, 151, 0.24); color: #b9ffe0; }
+.rv-subbtn.on.done b { background: rgba(0, 0, 0, 0.3); color: #b9ffe0; }
+.rv-done-card { text-align: center; padding: 20px 16px; }
+.rv-done-emoji { font-size: 30px; line-height: 1; }
+.rv-done-title { margin-top: 8px; font-size: 17px; font-weight: 800; letter-spacing: -0.02em; }
+.rv-done-sub { margin-top: 6px; font-size: 12.5px; color: var(--muted-2); line-height: 1.55; }
+.rv-goal { margin-top: 8px; font-size: 12.5px; font-weight: 800; color: #8bf0c4; }
+.rv-done-card .btn { margin-top: 10px; }
+.gr-over { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.gr-ovbtn { flex: 1 1 auto; border: 1px solid var(--line-strong); background: rgba(255, 255, 255, 0.055); color: var(--text); border-radius: 999px; padding: 9px 10px; font-size: 12.5px; font-weight: 750; }
+.gr-ovbtn.on { border-color: rgba(124, 140, 255, 0.85); background: rgba(124, 140, 255, 0.22); }
+
+/* ---------------- 문법 (12유닛 · 60문제) ---------------- */
+.gr-mount { margin-bottom: 14px; }
+.gr-progress { margin-bottom: 10px; }
+.gr-bar { height: 6px; border-radius: 999px; background: rgba(255, 255, 255, 0.08); overflow: hidden; margin: 6px 0 0; }
+.gr-bar span { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, rgba(124, 140, 255, 0.95), rgba(169, 112, 255, 0.95)); transition: width 0.2s ease; }
+.gr-qmeta { font-size: 11.5px; color: var(--muted-2); font-weight: 700; margin-bottom: 8px; }
+.gr-sentence { font-size: clamp(17px, 4.6vw, 20px); font-weight: 750; line-height: 1.5; letter-spacing: -0.01em; padding: 14px; border: 1px solid var(--line); border-radius: 14px; background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.012)); overflow-wrap: anywhere; }
+.gr-blank { display: inline-block; min-width: 58px; border-bottom: 2px dashed rgba(124, 140, 255, 0.85); color: var(--accent); font-weight: 800; text-align: center; }
+.gr-blank.done { border-bottom: 2px solid rgba(61, 220, 151, 0.8); color: #8bf0c4; }
+.gr-options { display: grid; gap: 8px; margin-top: 12px; }
+.gr-opt { display: flex; align-items: center; gap: 10px; text-align: left; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.03); color: var(--text); border-radius: 12px; padding: 11px 12px; font-size: 14.5px; font-weight: 650; line-height: 1.35; }
+.gr-opt:active { transform: scale(0.995); }
+.gr-opt .k { flex: 0 0 auto; width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; font-size: 11px; font-weight: 800; background: rgba(255, 255, 255, 0.1); color: var(--muted); }
+.gr-opt .t { min-width: 0; overflow-wrap: anywhere; }
+.gr-opt.ok { border-color: rgba(61, 220, 151, 0.7); background: rgba(61, 220, 151, 0.14); }
+.gr-opt.ok .k { background: rgba(61, 220, 151, 0.3); color: #d9fff0; }
+.gr-opt.no { border-color: rgba(255, 112, 112, 0.7); background: rgba(255, 112, 112, 0.13); }
+.gr-opt.no .k { background: rgba(255, 112, 112, 0.28); color: #ffe0da; }
+.gr-opt.dim { opacity: 0.55; }
+.gr-explain { margin-top: 12px; padding: 12px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.03); }
+.gr-result { font-size: 13px; font-weight: 800; margin-bottom: 6px; }
+.gr-result.ok { color: #8bf0c4; }
+.gr-result.no { color: #ffb4a3; }
+.gr-why { font-size: 13px; line-height: 1.62; color: var(--text); }
+.gr-full { margin-top: 8px; font-size: 14.5px; font-weight: 700; line-height: 1.5; }
+.gr-kr { margin-top: 4px; font-size: 12.5px; color: var(--muted-2); line-height: 1.5; }
+.gr-say { margin-top: 10px; justify-content: flex-start; }
+.gr-ratings { margin-top: 12px; }
+.gr-nav { margin-top: 10px; }
+.gr-nav [data-gnav="1"], .vw-nav [data-rwflip] { flex: 1 1 auto; min-width: 0; }
+@media (max-width: 560px) {
+  .rv-word-ratings { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 5px; }
+  .rv-word-ratings .rate { padding: 8px 2px 7px; }
+  .rv-word-ratings .rate b { font-size: 12px; }
+  .rv-word-ratings .rate small { font-size: 9px; }
+  .rv-word-ratings .rate .key { display: none; }
+}
+.gr-note { margin-top: 8px; font-size: 11.5px; color: var(--muted-2); text-align: center; line-height: 1.5; }
+.gr-empty { padding: 22px 8px; text-align: center; color: var(--muted-2); font-size: 13px; line-height: 1.6; }
+.gr-modes { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.gr-units { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; margin-bottom: 10px; }
+.gr-unit { border: 1px solid var(--line); background: rgba(255, 255, 255, 0.03); color: var(--muted); border-radius: 11px; padding: 5px 3px 6px; font-weight: 700; line-height: 1.18; display: flex; flex-direction: column; align-items: center; gap: 0; min-width: 0; }
+.gr-unit .n { font-size: 8.5px; font-weight: 800; color: var(--muted-2); letter-spacing: 0.02em; }
+.gr-unit .s { font-size: 11px; font-weight: 750; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gr-unit .c { font-size: 9px; font-weight: 700; color: var(--muted-2); }
+.gr-unit.on { color: #fff; background: linear-gradient(135deg, rgba(124, 140, 255, 0.95), rgba(169, 112, 255, 0.9)); border-color: transparent; box-shadow: 0 8px 20px -14px rgba(124, 140, 255, 1); }
+.gr-unit.on .n, .gr-unit.on .c { color: rgba(255, 255, 255, 0.82); }
+@media (min-width: 700px) { .gr-units { grid-template-columns: repeat(7, minmax(0, 1fr)); } }
+.gr-mini { height: 4px; border-radius: 999px; background: rgba(255, 255, 255, 0.08); overflow: hidden; margin-top: 7px; }
+.gr-mini span { display: block; height: 100%; background: linear-gradient(90deg, rgba(124, 140, 255, 0.9), rgba(169, 112, 255, 0.9)); }
+.gr-urow { cursor: pointer; }
+.gr-uq { display: flex; align-items: flex-start; gap: 10px; padding: 10px 11px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255, 255, 255, 0.025); }
+.gr-uq-n { flex: 0 0 auto; width: 20px; height: 20px; border-radius: 6px; display: grid; place-items: center; font-size: 11px; font-weight: 800; background: rgba(255, 255, 255, 0.1); color: var(--muted); }
+.gr-uq-t { flex: 1 1 auto; min-width: 0; font-size: 13.5px; line-height: 1.5; overflow-wrap: anywhere; }
+.gr-uq-a { display: block; margin-top: 3px; font-size: 11.5px; color: #8bf0c4; font-weight: 700; }
+.gr-ulist, .gr-unitview-list { display: grid; gap: 7px; }
+.gr-unitview-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+.gr-unitview-title { font-size: 15px; font-weight: 800; letter-spacing: -0.01em; }
+.gr-unitview-sub { font-size: 12.5px; color: var(--muted-2); font-weight: 600; }
+.gr-unitview-stat { font-size: 12px; color: var(--muted); font-weight: 700; margin: 6px 0 10px; }
+.gr-unitview-card .btn.wide { margin-top: 12px; }
+
+/* ---------------- 5탭 한 줄 (좁은 화면) ---------------- */
+@media (max-width: 600px) {
+  .tabs { width: 100%; margin-left: 0; gap: 2px; padding: 4px 3px; justify-content: space-between; }
+  .tab { flex: 0 1 auto; min-width: 0; padding: 7px 5px; font-size: 12px; gap: 4px; }
+  .tab .badge { min-width: 17px; height: 17px; padding: 0 4px; font-size: 9.5px; }
+  .gr-opt { padding: 10px 11px; font-size: 14px; }
+  .rv-subbtn { padding: 7px 8px; font-size: 12.5px; }
+  .vw-sub { font-size: 11.5px; }
+  .gr-modes { margin-bottom: 10px; }
+}
+@media (max-width: 380px) {
+  .tab { padding: 7px 3px; font-size: 11.5px; gap: 3px; }
+  .tab .badge { min-width: 16px; height: 16px; font-size: 9px; }
+  .rv-subbtn { padding: 7px 5px; font-size: 12px; gap: 4px; }
+  .rv-subbtn b { min-width: 18px; height: 17px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001s !important; transition-duration: 0.001s !important; }
 }
@@ -1457,11 +1570,12 @@ kbd {
     </div>
     <nav class="tabs" role="tablist" aria-label="화면 전환">
       <button class="tab active" data-tab="packs" role="tab" aria-selected="true">추천 팩</button>
+      <button class="tab" data-tab="words" role="tab" aria-selected="false">단어장</button>
+      <button class="tab" data-tab="grammar" role="tab" aria-selected="false">문법</button>
       <button class="tab" data-tab="review" role="tab" aria-selected="false">
         복습 <span class="badge zero" id="dueBadge">0</span>
       </button>
       <button class="tab" data-tab="library" role="tab" aria-selected="false">라이브러리 <span class="bak-dot" id="backupDot" hidden title="백업이 필요해오" aria-label="백업 필요"></span></button>
-      <button class="tab" data-tab="words" role="tab" aria-selected="false">단어장 <span class="badge zero" id="wordDueBadge">0</span></button>
     </nav>
   </div>
 </header>
@@ -1697,6 +1811,23 @@ kbd {
   <section class="tabpane" id="tab-review" role="tabpanel" aria-label="복습">
     <div class="review-wrap">
 
+      <div class="rv-allclear" id="rvAllClear" hidden>오늘의 복습 올클리어 🏆</div>
+
+      <div class="rv-top">
+        <div class="rv-sub" id="rvSubBar" role="tablist" aria-label="복습 종류">
+          <button type="button" class="rv-subbtn on" data-rvsub="words" role="tab" aria-selected="true">단어 <b id="rvSubWords">0</b></button>
+          <button type="button" class="rv-subbtn" data-rvsub="grammar" role="tab" aria-selected="false">문법 <b id="rvSubGr">0</b></button>
+          <button type="button" class="rv-subbtn" data-rvsub="sentences" role="tab" aria-selected="false">문장 <b id="rvSubSent">0</b></button>
+        </div>
+        <div class="rv-lang" id="rvLangBar" role="group" aria-label="언어">
+          <button type="button" class="rv-langbtn on" data-rvlang="all" aria-pressed="true">전체</button>
+          <button type="button" class="rv-langbtn" data-rvlang="en" aria-pressed="false">영어</button>
+          <button type="button" class="rv-langbtn" data-rvlang="de" aria-pressed="false">독일어</button>
+        </div>
+      </div>
+
+      <div id="rvPaneSentences" hidden>
+
       <div class="card study-log" id="studyLogCard" aria-label="일별 학습 문장 수">
         <div class="sl-head">
           <div>
@@ -1793,8 +1924,23 @@ kbd {
           <div><b id="doneMastered">0</b><span>외움</span></div>
           <div><b id="doneNext">-</b><span>다음 복습</span></div>
         </div>
-        <button class="btn primary" id="doneMoreBtn">남은 카드 더 보기</button>
+        <div class="rv-done-sum" id="doneSummary"></div>
+        <div class="rv-goal" id="doneAllClear" hidden>오늘의 복습 올클리어 🏆</div>
+        <button class="btn primary" id="doneChainBtn" hidden>이어서 단어 20개 바로 하기 →</button>
+        <button class="btn ghost" id="doneMoreBtn">남은 카드 더 보기</button>
         <button class="btn ghost" id="doneLibBtn">라이브러리</button>
+      </div>
+
+      </div><!-- /rvPaneSentences -->
+
+      <div id="rvPaneWords">
+        <div class="rv-note" id="rvwNote">오늘 복습할 단어를 불러오는 중…</div>
+        <div class="gr-mount" id="rwMount"></div>
+      </div>
+
+      <div id="rvPaneGrammar" hidden>
+        <div class="rv-note" id="rvgNote">오늘 복습할 문법 문제를 불러오는 중…</div>
+        <div class="gr-mount" id="rvgMount"></div>
       </div>
 
     </div>
@@ -1851,6 +1997,12 @@ kbd {
         <span class="vw-pill">전체 <b id="vwTotal">0</b>개</span>
         <span class="vw-pill">오늘 <b id="vwToday">0</b>개 · 연속 <b id="vwStreak">0</b>일</span>
       </div>
+    </div>
+
+    <div class="backlog-nudge" id="vwNudge" hidden>
+        <span class="bl-ico">⏰</span>
+        <span class="bl-t">복습 대기 카드가 <b class="bl-n">0</b>개 있어요! 복습 탭부터 비우면 기억 효율이 훨씬 좋아요.</span>
+        <button type="button" class="bl-btn" data-goreview="1">복습 탭</button>
     </div>
 
     <div class="vw-decks" id="vwDecks" role="group" aria-label="단어 묶음"></div>
@@ -1921,6 +2073,60 @@ kbd {
       </div>
       <div class="vw-list" id="vwList"></div>
       <div class="hint" style="margin-top:10px">단어를 누르면 그 단어로 이동하고, 🔊는 기본 발음을 들려줘요. 카드의 🇺🇸/🇬🇧 버튼으로 미국식·영국식을 골라 들을 수 있습니다.</div>
+    </div>
+  </section>
+
+  <!-- ================= 문법 ================= -->
+  <section class="tabpane" id="tab-grammar" role="tabpanel" aria-label="문법">
+    <div id="grMain">
+      <div class="vw-head">
+        <div>
+          <div class="vw-title">문법</div>
+          <div class="vw-sub">12유닛 · 60문제 · 정답을 누르면 바로 해설과 발음이 나옵니다.</div>
+        </div>
+        <div class="vw-stats">
+          <span class="vw-pill" id="grTodayPill">오늘 <b id="grToday">0</b>문제 · 연속 <b id="grStreak">0</b>일</span>
+          <span class="vw-pill due">오늘 풀 문제 <b id="grDue">0</b></span>
+          <span class="vw-pill">전체 <b id="grTotal">0</b></span>
+        </div>
+      </div>
+
+      <div class="backlog-nudge" id="grNudge" hidden>
+        <span class="bl-ico">⏰</span>
+        <span class="bl-t">복습 대기 카드가 <b class="bl-n">0</b>개 있어요! 복습 탭부터 비우면 기억 효율이 훨씬 좋아요.</span>
+        <button type="button" class="bl-btn" data-goreview="1">복습 탭</button>
+      </div>
+
+      <div class="gr-units" id="grUnits" role="group" aria-label="유닛 선택"></div>
+
+      <div class="gr-modes" role="group" aria-label="문제 고르기">
+        <button type="button" class="vw-deck on" id="grModeToday" data-grmode="today" aria-pressed="true">오늘 풀 문제 <b id="grModeTodayN">0</b></button>
+        <button type="button" class="vw-deck" id="grModeWrong" data-grmode="wrong" aria-pressed="false">틀린 문제 다시 풀기 <b id="grModeWrongN">0</b></button>
+      </div>
+
+      <div class="gr-mount" id="grMount"></div>
+
+      <div class="card vw-list-card">
+        <div class="vw-listhead">
+          <b style="font-size:13px">유닛별 진도</b>
+          <span class="plm-meta" id="grListMeta">—</span>
+        </div>
+        <div class="gr-ulist" id="grUnitList"></div>
+        <div class="hint" style="margin-top:10px">유닛을 누르면 5문제와 정답을 한눈에 보고, 그 유닛만 골라 풀 수 있어요.</div>
+      </div>
+    </div>
+
+    <div id="grUnitView" hidden>
+      <div class="gr-unitview-top">
+        <button class="btn sm ghost" id="grUnitBack">← 유닛 목록</button>
+        <span class="gr-unitview-title" id="grUnitTitle">—</span>
+      </div>
+      <div class="card gr-unitview-card">
+        <div class="gr-unitview-sub" id="grUnitSub"></div>
+        <div class="gr-unitview-stat" id="grUnitStat"></div>
+        <div class="gr-unitview-list" id="grUnitQs"></div>
+        <button class="btn primary wide" id="grUnitStart">이 유닛 5문제 풀기</button>
+      </div>
     </div>
   </section>
 </main>
@@ -2118,6 +2324,10 @@ kbd {
     wordLog: {},         // 단어 학습 기록(문장 기록 dailyLog와 따로 센다)
     wordsSeeded: false,  // 기본 단어 묶음을 한 번 넣었는지
     wordsSeedVersion: 0, // 기본 단어 묶음의 세대(2 = 2026-11 추가분까지)
+    grammar: [],         // 문법 12유닛·60문제의 SM-2 상태
+    grammarLog: {},      // 문법 학습 기록(문장·단어 기록과 따로 센다)
+    grammarSeeded: false,// 문법 문제를 한 번 넣었는지
+    reviewDay: null,     // 오늘 영역별(단어·문법·문장) 복습 횟수 — 복습 20개 목표 판정
     lastBackupAt: 0      // 마지막으로 백업 파일을 내려받은 시각(라이브러리의 백업 알림)
   };
 
@@ -2131,6 +2341,10 @@ kbd {
         wordLog: state.wordLog,
         wordsSeeded: !!state.wordsSeeded,
         wordsSeedVersion: state.wordsSeedVersion || 0,
+        grammar: state.grammar,
+        grammarLog: state.grammarLog,
+        grammarSeeded: !!state.grammarSeeded,
+        reviewDay: state.reviewDay || null,
         lastBackupAt: state.lastBackupAt || 0,
         savedAt: Date.now()
       }));
@@ -2213,6 +2427,24 @@ kbd {
       state.words = wout;
     }
     state.wordLog = sanitizeDailyLog(data.wordLog);
+    if (Array.isArray(data.grammar)) {
+      var gout = [];
+      for (var gq = 0; gq < data.grammar.length; gq++) {
+        var nq = normalizeQuestion(data.grammar[gq]);
+        if (nq) gout.push(nq);
+      }
+      state.grammar = gout;
+    }
+    state.grammarLog = sanitizeDailyLog(data.grammarLog);
+    state.grammarSeeded = !!data.grammarSeeded || state.grammar.length > 0;
+    if (data.reviewDay && typeof data.reviewDay === "object" && !Array.isArray(data.reviewDay)) {
+      state.reviewDay = {
+        day: String(data.reviewDay.day || ""),
+        words: Math.max(0, Math.floor(Number(data.reviewDay.words) || 0)),
+        grammar: Math.max(0, Math.floor(Number(data.reviewDay.grammar) || 0)),
+        sentences: Math.max(0, Math.floor(Number(data.reviewDay.sentences) || 0))
+      };
+    }
     state.wordsSeeded = !!data.wordsSeeded || state.words.length > 0;
     state.wordsSeedVersion = Math.max(0, Math.floor(Number(data.wordsSeedVersion) || (data.wordsSeeded ? 1 : 0)));
     if (isFinite(Number(data.lastBackupAt)) && Number(data.lastBackupAt) > 0) {
@@ -5208,6 +5440,19 @@ kbd {
     return d;
   }
 
+  // 3일 이상 간격은 ±10% 흔들어 같은 날 복습이 몰리지 않게 한다(10분·1일은 그대로).
+  // 카드 id·간격·복습 시점으로 계산해 미리보기와 실제 저장값이 같아진다.
+  function fuzzInterval(card, interval) {
+    var n = Math.round(Number(interval) || 0);
+    if (!(n >= 3)) return n;
+    var key = String((card && card.id) || "card") + "|" + n + "|" +
+      Math.floor(Number((card && card.due) || 0) / DAY) + "|" + Math.floor(Number((card && card.reps) || 0));
+    var seed = 7;
+    for (var i = 0; i < key.length; i++) seed = (seed * 131 + key.charCodeAt(i)) % 1000003;
+    var f = 0.9 + (seed % 201) / 1000;      // 0.900 ~ 1.100
+    return Math.max(3, Math.round(n * f));
+  }
+
   function computeNext(card, grade, now) {
     now = now || Date.now();
     var ef = card.ef || 2.5;
@@ -5252,13 +5497,18 @@ kbd {
       else interval = 10;
       reps = 2;
     } else {
+      // 오래 미뤄 둔 카드를 이제야 봤다면 그만큼 간격을 조금 더 준다(보통·쉬움일 때만)
+      var overdueDays = Math.max(0, Math.floor((now - Number(card.due || now)) / DAY));
+      var overdueBonus = (grade === "hard") ? 0 : Math.floor(overdueDays * 0.5);
+      var base = interval + overdueBonus;
       if (grade === "hard") interval = Math.max(interval + 1, Math.round(interval * 1.2));
-      else if (grade === "good") interval = Math.round(interval * ef);
-      else interval = Math.round(interval * ef * 1.3);
+      else if (grade === "good") interval = Math.round(base * ef);
+      else interval = Math.round(base * ef * 1.3);
       reps = reps + 1;
     }
 
     interval = clamp(interval, 1, 3650);
+    interval = fuzzInterval(card, interval);
 
     // SM-2 ease factor update
     ef = ef + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02));
@@ -5297,8 +5547,10 @@ kbd {
   function updateDueBadge() {
     var n = dueCount();
     var b = el("dueBadge");
-    b.textContent = n > 99 ? "99+" : String(n);
-    b.classList.toggle("zero", n === 0);
+    var rn = n;
+    try { rn = rvRemainingTotal(); } catch (e) { rn = n; }
+    b.textContent = rn > 99 ? "99+" : String(rn);
+    b.classList.toggle("zero", rn === 0);
     el("rsDue").textContent = String(n);
     el("statTotal").textContent = String(state.cards.length);
     el("statDue").textContent = String(n);
@@ -5321,6 +5573,7 @@ kbd {
     try { updatePackReviewBtn(); } catch (e) {}
     try { updateBackupStatus(); } catch (e) {}
     try { updateWordBadge(); } catch (e) {}
+    try { updateReviewSubCounts(); } catch (e) {}
   }
 
   /* =========================================================
@@ -5333,6 +5586,10 @@ kbd {
     // 탭을 옮길 때 열려 있던 하위 화면은 닫고 쌓아둔 히스토리도 정리한다
     if (name !== "packs" && packViewOpen()) {
       closePackView();
+      historyDropSilent();
+    }
+    if (name !== "grammar" && typeof grUnitViewOpen === "function" && grUnitViewOpen()) {
+      closeGrUnitView();
       historyDropSilent();
     }
     if (name !== "shadow" && shadow && shadow.open) {
@@ -5351,6 +5608,7 @@ kbd {
     });
     if (name === "library") renderLibrary();
     if (name === "words") renderVocab();
+    if (name === "grammar") { seedGrammar(); renderGrammarTab(); }
     if (name === "packs") {
       renderPacks();
       if (packState.active) showPackSentence(true);
@@ -5366,6 +5624,7 @@ kbd {
         rv.player.playRange();
       }
       refreshReviewStart();
+      try { rvSetSub(rvSub); } catch (e) {}
     }
     if (name !== "shadow" && shadow.player) shadow.player.pause();
     if (name !== "review" && rv.player) rv.player.pause();
@@ -5375,11 +5634,13 @@ kbd {
 
   function refreshReviewStart() {
     var n = dueCount();
+    var shown = n;
+    try { if (typeof rvDueOf === "function") shown = rvDueOf("sentences"); } catch (e) { shown = n; }
     el("reviewStartPanel").hidden = rv.active;
-    el("rsDue").textContent = String(n);
-    el("reviewStartBtn").disabled = n === 0;
-    el("reviewStartBtn").hidden = n === 0;
-    el("reviewGoPacks").hidden = n > 0;
+    el("rsDue").textContent = String(shown);
+    el("reviewStartBtn").disabled = shown === 0;
+    el("reviewStartBtn").hidden = shown === 0;
+    el("reviewGoPacks").hidden = shown > 0;
   }
 
   /* =========================================================
@@ -5481,6 +5742,7 @@ kbd {
     if (packViewOpen()) { closePackView(); return; }
     if (shadow && shadow.open) { closePracticeView(); return; }
     if (rv.active && currentTab === "review") { closeReviewView(); return; }
+    if (typeof grUnitViewOpen === "function" && grUnitViewOpen()) { closeGrUnitView(); return; }
   }
 
   /* =========================================================
@@ -7120,7 +7382,11 @@ kbd {
       dailyLog: state.dailyLog,
       words: state.words,
       wordLog: state.wordLog,
-      wordsSeeded: !!state.wordsSeeded
+      wordsSeeded: !!state.wordsSeeded,
+      grammar: state.grammar,
+      grammarLog: state.grammarLog,
+      grammarSeeded: !!state.grammarSeeded,
+      reviewDay: state.reviewDay || null
     };
     var blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
     var url = URL.createObjectURL(blob);
@@ -7154,7 +7420,8 @@ kbd {
       var hasLog = !!(incomingLog && typeof incomingLog === "object" && !Array.isArray(incomingLog) &&
         Object.keys(incomingLog).length);
       var hasWords = (!Array.isArray(data) && Array.isArray(data.words) && data.words.length > 0);
-      if (!arr.length && !hasLog && !hasWords) return toast("이 파일에는 카드가 없어요.");
+      var hasGrammar = (!Array.isArray(data) && Array.isArray(data.grammar) && data.grammar.length > 0);
+      if (!arr.length && !hasLog && !hasWords && !hasGrammar) return toast("이 파일에는 카드가 없어요.");
 
       var added = 0, updated = 0, skipped = 0;
       for (var i = 0; i < arr.length; i++) {
@@ -7196,13 +7463,51 @@ kbd {
         }
       }
       var wlog = (!Array.isArray(data) && data.wordLog) ? mergeWordLog(data.wordLog) : { added: 0 };
+
+      // 문법 문제도 같은 방식으로 합친다(같은 id는 SM-2 진도만 갱신, 새 문제는 추가).
+      var incomingGrammar = (!Array.isArray(data) && Array.isArray(data.grammar)) ? data.grammar : [];
+      var gAdded = 0, gUpdated = 0;
+      for (var gg = 0; gg < incomingGrammar.length; gg++) {
+        var gq2 = normalizeQuestion(incomingGrammar[gg]);
+        if (!gq2) continue;
+        var curQ = findQuestion(gq2.id);
+        if (curQ) {
+          curQ.prompt = gq2.prompt; curQ.options = gq2.options; curQ.answer = gq2.answer;
+          curQ.full = gq2.full; curQ.ko = gq2.ko; curQ.kr = gq2.kr; curQ.unit = gq2.unit;
+          curQ.reps = gq2.reps; curQ.interval = gq2.interval; curQ.ef = gq2.ef;
+          curQ.lapses = gq2.lapses; curQ.due = gq2.due; curQ.mastered = gq2.mastered;
+          curQ.missed = gq2.missed; curQ.lastReviewed = gq2.lastReviewed;
+          gUpdated++;
+        } else {
+          state.grammar.push(gq2); gAdded++;
+        }
+      }
+      if (incomingGrammar.length) state.grammarSeeded = true;
+      var glog = (!Array.isArray(data) && data.grammarLog) ? mergeGrammarLog(data.grammarLog) : { added: 0 };
+
+      // 오늘 복습 횟수는 같은 날이면 큰 값을 남긴다(다른 기기 백업을 합칠 때)
+      if (data && data.reviewDay && typeof data.reviewDay === "object" && data.reviewDay.day) {
+        var rd = reviewDayState();
+        if (String(data.reviewDay.day) === rd.day) {
+          rd.words = Math.max(rd.words, Math.floor(Number(data.reviewDay.words) || 0));
+          rd.grammar = Math.max(rd.grammar, Math.floor(Number(data.reviewDay.grammar) || 0));
+          rd.sentences = Math.max(rd.sentences, Math.floor(Number(data.reviewDay.sentences) || 0));
+        }
+      }
+
       saveStore();
       renderLibrary();
       renderStudyLog();
       try { renderVocab(); } catch (e) {}
+      try { renderGrammarTab(true); } catch (e) {}
+      try { if (rvSub === "grammar") grr.render(true); } catch (e) {}
+      try { if (rvSub === "words") rws.render(true); } catch (e) {}
+      try { updateReviewSubCounts(); } catch (e) {}
       toast("가져오기 완료 · 새 카드 " + added + "장, 갱신 " + updated + "장" +
         (logRes.added ? ", 학습 기록 " + logRes.added + "문장" : "") +
         ((wAdded || wUpdated) ? ", 단어 " + wAdded + "개 추가·" + wUpdated + "개 갱신" : "") +
+        ((gAdded || gUpdated) ? ", 문법 " + gAdded + "문제 추가·" + gUpdated + "문제 갱신" : "") +
+        (glog.added ? ", 문법 기록 " + glog.added + "문제" : "") +
         (skipped ? ", 건너뜀 " + skipped + "장" : ""));
     };
     reader.onerror = function () { toast("파일을 읽지 못했어요."); };
@@ -7318,7 +7623,8 @@ kbd {
         return;
       }
       var res = computeNext(card, g);
-      small.textContent = res.label;
+      var hint = { hard: "버벅", good: "자연", easy: "완벽" };
+      small.textContent = hint[g] ? hint[g] + " · " + res.label : res.label;
       b.title = g === "hard"
         ? "어려움: 짧게 다시, ease 내려감"
         : "다음 복습 " + res.label + " 후";
@@ -7334,9 +7640,14 @@ kbd {
   }
 
   function startReview(only) {
+    if (typeof rvSetSub === "function" && rvSub !== "sentences") { try { rvSetSub("sentences"); } catch (e) {} }
     var now = Date.now();
-    var queue = only ? only.slice() : state.cards.filter(function (c) { return !c.mastered && c.due <= now; });
-    queue.sort(function (a, b) { return a.due - b.due; });
+    var queue = only ? only.slice() : state.cards.filter(function (c) {
+      return !c.mastered && c.due <= now && (typeof rvLangOk !== "function" || rvLangOk(cardLang(c)));
+    });
+    queue.sort(typeof rvSmartSort === "function" ? rvSmartSort : function (a, b) { return a.due - b.due; });
+    // 오늘 한 판은 20장까지 — 남은 카드는 완료 화면의 '20개 더 복습하기'로 이어서 본다
+    if (!only && queue.length > RV_CAP) queue = queue.slice(0, RV_CAP);
     if (!queue.length) {
       toast("지금 복습할 카드가 없어요.");
       return;
@@ -7433,6 +7744,7 @@ kbd {
       }
     }
     rv.done++;
+    noteReviewDone("sentences");
     logStudied(c.id, Date.now());
     saveStore();
     updateDueBadge();
@@ -7468,6 +7780,7 @@ kbd {
     el("doneCards").textContent = String(rv.done);
     el("doneMastered").textContent = String(rv.mastered);
     el("doneNext").textContent = nextLabel;
+    try { rvUpdateDoneCTA(); } catch (e) {}
     renderLibrary();
   }
 
@@ -9237,6 +9550,1685 @@ kbd {
   }
 
   /* =========================================================
+     문법 (12유닛 · 60문제) + 복습 하위 3영역(단어·문법·문장)
+     - 복습은 하루 한 판 20개까지: 20개를 채우면 그 영역은 '오늘 목표 달성'
+     - 정답을 누르면 바로 SM-2(정답=보통, 오답=10분)를 잡고, 아래에서 바꿀 수 있다
+     - 보기 4개는 문제가 바뀔 때마다 자리를 섞는다
+     ========================================================= */
+  /* =========================================================
+     문법 12유닛 · 60문제 (English Grammar in Use Intermediate 기준)
+     각 문제: 빈칸 1개, 서로 다른 보기 4개, 정답 1개, 한국어 해설
+     ========================================================= */
+  var GRAMMAR_UNITS = [
+    { id: "u1",  n: 1, short: "현재완료",  emoji: "⏳", title: "현재완료 vs 과거시제", sub: "since / for · 끝난 시간" },
+    { id: "u2",  n: 2, short: "현재완료진행",  emoji: "🔄", title: "현재완료진행", sub: "have been -ing" },
+    { id: "u3",  n: 3, short: "과거완료",  emoji: "⏮️", title: "과거완료·과거 이야기", sub: "had + p.p." },
+    { id: "u4",  n: 4, short: "미래 표현",  emoji: "📅", title: "미래 표현", sub: "will · be going to · 현재진행" },
+    { id: "u5",  n: 5, short: "의무·조언",  emoji: "✅", title: "의무·조언", sub: "must · have to · should" },
+    { id: "u6",  n: 6, short: "추측",  emoji: "🔮", title: "추측", sub: "must be · might be · can't be" },
+    { id: "u7",  n: 7, short: "조건문",  emoji: "🔀", title: "조건문", sub: "if · would · had known" },
+    { id: "u8",  n: 8, short: "수동태",  emoji: "📄", title: "수동태", sub: "is being reviewed" },
+    { id: "u9",  n: 9, short: "관계사",  emoji: "🔗", title: "관계사", sub: "which · whose · where" },
+    { id: "u10", n: 10, short: "동명사/to", emoji: "🧩", title: "동명사 vs to부정사", sub: "suggest -ing · decide to" },
+    { id: "u11", n: 11, short: "관사·불가산", emoji: "🔢", title: "관사·불가산명사", sub: "information · feedback" },
+    { id: "u12", n: 12, short: "업무 전치사", emoji: "📌", title: "회의·업무 전치사", sub: "by vs until · in charge of" }
+  ];
+
+  var STARTER_GRAMMAR = [
+    /* ---------- Unit 1: 현재완료 vs 과거시제 ---------- */
+    {
+      id: "g1-1", unit: "u1",
+      prompt: "I ____ in this lab since 2021.",
+      options: ["have worked", "work", "worked", "am working"], answer: 0,
+      full: "I have worked in this lab since 2021.",
+      kr: "나는 2021년부터 이 실험실에서 일해 왔다.",
+      ko: "since 2021처럼 지금까지 이어지는 기간에는 현재완료(have worked)를 씁니다. worked는 끝난 과거라 since와 함께 쓰지 않습니다."
+    },
+    {
+      id: "g1-2", unit: "u1",
+      prompt: "She ____ the report last Friday, so the numbers are final.",
+      options: ["submitted", "has submitted", "submits", "is submitting"], answer: 0,
+      full: "She submitted the report last Friday, so the numbers are final.",
+      kr: "그녀는 지난 금요일에 보고서를 제출해서 수치는 확정됐다.",
+      ko: "last Friday처럼 끝난 시점이 있으면 과거시제를 씁니다. 현재완료는 지금과 이어지는 일에만 씁니다."
+    },
+    {
+      id: "g1-3", unit: "u1",
+      prompt: "We ____ this supplier for over three years.",
+      options: ["have used", "used", "use", "are using"], answer: 0,
+      full: "We have used this supplier for over three years.",
+      kr: "우리는 3년 넘게 이 공급업체를 써 왔다.",
+      ko: "for + 기간(~동안)은 지금까지 이어지므로 현재완료(have used)를 씁니다."
+    },
+    {
+      id: "g1-4", unit: "u1",
+      prompt: "Have you ever ____ a safety audit on your own?",
+      options: ["attended", "attend", "attending", "attends"], answer: 0,
+      full: "Have you ever attended a safety audit on your own?",
+      kr: "혼자서 안전 감사를 진행해 본 적이 있나요?",
+      ko: "Have you ever 뒤에는 과거분사(p.p.)가 옵니다. ever는 '지금까지 한 번이라도'라는 현재완료 신호입니다."
+    },
+    {
+      id: "g1-5", unit: "u1",
+      prompt: "It's been three weeks ____ we last reviewed the data.",
+      options: ["since", "for", "during", "from"], answer: 0,
+      full: "It's been three weeks since we last reviewed the data.",
+      kr: "데이터를 마지막으로 검토한 지 3주가 됐다.",
+      ko: "'It's been + 기간 + since + 과거 시점' 형태입니다. since 뒤에는 시작점(절), for 뒤에는 기간이 옵니다."
+    },
+
+    /* ---------- Unit 2: 현재완료진행 ---------- */
+    {
+      id: "g2-1", unit: "u2",
+      prompt: "It ____ for two hours, so the site visit is cancelled.",
+      options: ["has been raining", "has been rained", "is rained", "rains"], answer: 0,
+      full: "It has been raining for two hours, so the site visit is cancelled.",
+      kr: "두 시간째 비가 오고 있어서 현장 방문이 취소됐다.",
+      ko: "for two hours 동안 계속된 일이 지금 결과로 이어지므로 현재완료진행(has been raining)입니다. rain은 자동사라 수동태로 쓸 수 없습니다."
+    },
+    {
+      id: "g2-2", unit: "u2",
+      prompt: "I ____ to reach the supplier all morning, but the line is always busy.",
+      options: ["have been trying", "have been tried", "am trying", "tried"], answer: 0,
+      full: "I have been trying to reach the supplier all morning, but the line is always busy.",
+      kr: "아침 내내 공급업체에 연락하려고 했지만 전화가 계속 통화 중이다.",
+      ko: "all morning처럼 지금까지 이어진 반복·지속에는 현재완료진행을 씁니다. try는 자동사로 쓰여 수동(have been tried)이 될 수 없습니다."
+    },
+    {
+      id: "g2-3", unit: "u2",
+      prompt: "The pump ____ for the last twenty minutes.",
+      options: ["has been running", "has been ran", "have been running", "is been running"], answer: 0,
+      full: "The pump has been running for the last twenty minutes.",
+      kr: "펌프가 지난 20분 동안 계속 돌고 있다.",
+      ko: "주어 The pump는 단수라 has를 쓰고, 진행형이므로 has been running입니다. run의 과거분사는 run이라 진행 의미가 되지 않습니다."
+    },
+    {
+      id: "g2-4", unit: "u2",
+      prompt: "We ____ the samples since 8 a.m.",
+      options: ["have been preparing", "have been prepared", "are prepared", "prepare"], answer: 0,
+      full: "We have been preparing the samples since 8 a.m.",
+      kr: "우리는 오전 8시부터 시료를 준비하고 있다.",
+      ko: "since 8 a.m.부터 지금까지 이어지는 동작이라 현재완료진행입니다. have been prepared는 '준비된 상태'라는 수동 의미라 the samples와 맞지 않습니다."
+    },
+    {
+      id: "g2-5", unit: "u2",
+      prompt: "____ you been waiting long?",
+      options: ["Have", "Has", "Are", "Did"], answer: 0,
+      full: "Have you been waiting long?",
+      kr: "오래 기다리셨어요?",
+      ko: "you에 맞는 조동사는 have이고 현재완료진행은 have/has been -ing입니다. Did 뒤에는 been이 올 수 없습니다."
+    },
+
+    /* ---------- Unit 3: 과거완료 ---------- */
+    {
+      id: "g3-1", unit: "u3",
+      prompt: "She ____ the data before she sent the report.",
+      options: ["had checked", "has checked", "checks", "was checked"], answer: 0,
+      full: "She had checked the data before she sent the report.",
+      kr: "그녀는 보고서를 보내기 전에 데이터를 확인했었다.",
+      ko: "과거(sent)보다 더 먼저 일어난 일은 과거완료(had + p.p.)로 씁니다."
+    },
+    {
+      id: "g3-2", unit: "u3",
+      prompt: "The equipment failed because nobody ____ it.",
+      options: ["had maintained", "has maintained", "maintains", "was maintained"], answer: 0,
+      full: "The equipment failed because nobody had maintained it.",
+      kr: "아무도 정비하지 않았기 때문에 장비가 고장 났다.",
+      ko: "고장(failed)보다 앞선 원인은 과거완료입니다. nobody가 주어라 능동 had maintained가 맞습니다."
+    },
+    {
+      id: "g3-3", unit: "u3",
+      prompt: "It was the first time I ____ a full-scale audit.",
+      options: ["had led", "have led", "led", "was leading"], answer: 0,
+      full: "It was the first time I had led a full-scale audit.",
+      kr: "그때가 내가 전면 감사를 이끈 첫 번째였다.",
+      ko: "'It was the first time + 과거' 뒤에는 과거완료를 씁니다. 지금까지의 첫 경험은 현재완료지만, 과거 기준이면 과거완료입니다."
+    },
+    {
+      id: "g3-4", unit: "u3",
+      prompt: "He told me he ____ the result the day before.",
+      options: ["had received", "has received", "receives", "was receiving"], answer: 0,
+      full: "He told me he had received the result the day before.",
+      kr: "그는 전날 결과를 받았다고 내게 말했다.",
+      ko: "간접화법에서 과거(told)보다 앞선 일은 과거완료로 한 단계 물러나 표현합니다(the day before = 전날)."
+    },
+    {
+      id: "g3-5", unit: "u3",
+      prompt: "By the time the auditor arrived, we ____ everything.",
+      options: ["had prepared", "have prepared", "prepare", "were prepare"], answer: 0,
+      full: "By the time the auditor arrived, we had prepared everything.",
+      kr: "감사관이 도착했을 때 우리는 모든 것을 준비해 둔 상태였다.",
+      ko: "By the time + 과거 시점보다 먼저 끝난 일이라 과거완료(had prepared)입니다."
+    },
+
+    /* ---------- Unit 4: 미래 표현 ---------- */
+    {
+      id: "g4-1", unit: "u4",
+      prompt: "A: The printer is jammed again.  B: Don't worry, I ____ it before the meeting.",
+      options: ["will fix", "will fixing", "am fix", "fixes"], answer: 0,
+      full: "Don't worry, I will fix it before the meeting.",
+      kr: "걱정 마세요, 회의 전에 제가 고칠게요.",
+      ko: "그 자리에서 즉석으로 결정한 일에는 will을 씁니다(이미 정해 둔 계획은 be going to). will 뒤에는 동사원형만 옵니다."
+    },
+    {
+      id: "g4-2", unit: "u4",
+      prompt: "Look at that queue — we ____ miss the train.",
+      options: ["are going to", "are going", "will going", "go to"], answer: 0,
+      full: "Look at that queue — we are going to miss the train.",
+      kr: "저 줄 좀 봐 — 기차 놓치겠다.",
+      ko: "지금 눈앞의 증거로 예측할 때는 be going to를 씁니다. will going처럼 조동사 뒤에 -ing를 쓰지 않습니다."
+    },
+    {
+      id: "g4-3", unit: "u4",
+      prompt: "The flight to Frankfurt ____ at 06:15, so let's leave at four.",
+      options: ["departs", "is depart", "departing", "will departing"], answer: 0,
+      full: "The flight to Frankfurt departs at 06:15, so let's leave at four.",
+      kr: "프랑크푸르트행 비행기는 6시 15분에 출발하니 4시에 출발합시다.",
+      ko: "정해진 시간표(교통편·일정표)에는 현재시제를 씁니다. 미래라도 will을 쓰지 않습니다."
+    },
+    {
+      id: "g4-4", unit: "u4",
+      prompt: "I ____ the auditor at 10 tomorrow — the room is already booked.",
+      options: ["am meeting", "meet", "am meet", "will meeting"], answer: 0,
+      full: "I am meeting the auditor at 10 tomorrow — the room is already booked.",
+      kr: "내일 10시에 감사관을 만나기로 했다 — 회의실도 이미 예약했다.",
+      ko: "이미 잡아 둔 약속·일정에는 현재진행형(am meeting)을 씁니다."
+    },
+    {
+      id: "g4-5", unit: "u4",
+      prompt: "We ____ announce anything until the results are confirmed.",
+      options: ["are not going to", "will not going to", "don't going to", "not going to"], answer: 0,
+      full: "We are not going to announce anything until the results are confirmed.",
+      kr: "결과가 확정될 때까지 우리는 아무것도 발표하지 않을 것이다.",
+      ko: "부정 미래는 be not going to 또는 will not + 동사원형입니다. will not going to, don't going to는 형태가 틀립니다."
+    },
+
+    /* ---------- Unit 5: 의무·조언 ---------- */
+    {
+      id: "g5-1", unit: "u5",
+      prompt: "All visitors ____ wear safety goggles in this area — it's the rule.",
+      options: ["must", "should", "don't have to", "might"], answer: 0,
+      full: "All visitors must wear safety goggles in this area — it's the rule.",
+      kr: "이 구역에서는 모든 방문자가 보안경을 써야 한다 — 규정이다.",
+      ko: "규정에 따른 강한 의무는 must입니다. should는 조언, don't have to는 '할 필요 없음', might는 추측입니다."
+    },
+    {
+      id: "g5-2", unit: "u5",
+      prompt: "You ____ bring your own laptop — we provide one for every trainee.",
+      options: ["don't have to", "mustn't", "shouldn't", "must"], answer: 0,
+      full: "You don't have to bring your own laptop — we provide one for every trainee.",
+      kr: "노트북을 가져올 필요는 없다 — 교육생 모두에게 제공한다.",
+      ko: "'할 필요가 없다'는 don't have to입니다. mustn't는 '하면 안 된다'는 금지라 뜻이 반대입니다."
+    },
+    {
+      id: "g5-3", unit: "u5",
+      prompt: "You ____ touch that valve while the system is pressurized.",
+      options: ["mustn't", "don't have to", "needn't", "not have to"], answer: 0,
+      full: "You mustn't touch that valve while the system is pressurized.",
+      kr: "시스템에 압력이 걸려 있는 동안 그 밸브를 만지면 안 된다.",
+      ko: "금지에는 mustn't를 씁니다. don't have to와 needn't는 '할 필요 없음'입니다."
+    },
+    {
+      id: "g5-4", unit: "u5",
+      prompt: "You ____ have told me earlier — I could have fixed it.",
+      options: ["should", "must", "have to", "can"], answer: 0,
+      full: "You should have told me earlier — I could have fixed it.",
+      kr: "더 일찍 말해 줬어야지 — 그러면 내가 고칠 수 있었을 텐데.",
+      ko: "과거에 하지 않은 일에 대한 후회·비판은 should have + p.p.입니다. must have p.p.는 '~했음이 틀림없다'는 추측입니다."
+    },
+    {
+      id: "g5-5", unit: "u5",
+      prompt: "In Korea, drivers ____ to carry a licence at all times.",
+      options: ["have", "must", "should", "can"], answer: 0,
+      full: "In Korea, drivers have to carry a licence at all times.",
+      kr: "한국에서는 운전자가 항상 면허증을 소지해야 한다.",
+      ko: "have to는 외부 규정·제도에 따른 의무입니다. must·should·can 뒤에는 to를 쓰지 않습니다."
+    },
+
+    /* ---------- Unit 6: 추측 ---------- */
+    {
+      id: "g6-1", unit: "u6",
+      prompt: "The lights are off and the door is locked — they ____ at home.",
+      options: ["can't be", "must be", "might be", "should be"], answer: 0,
+      full: "The lights are off and the door is locked — they can't be at home.",
+      kr: "불이 꺼져 있고 문이 잠겨 있다 — 그들이 집에 있을 리 없다.",
+      ko: "상황상 '있을 수 없다'는 확신을 나타내므로 can't be입니다. must be는 반대 뜻입니다."
+    },
+    {
+      id: "g6-2", unit: "u6",
+      prompt: "He ____ be at his desk — I just saw him walk into the meeting room.",
+      options: ["can't", "must", "should", "might"], answer: 0,
+      full: "He can't be at his desk — I just saw him walk into the meeting room.",
+      kr: "그가 책상에 있을 리 없다 — 방금 회의실로 들어가는 걸 봤다.",
+      ko: "직접 본 사실과 반대되므로 '~일 리 없다'는 can't입니다. must·should·might는 여기서 상황과 맞지 않습니다."
+    },
+    {
+      id: "g6-3", unit: "u6",
+      prompt: "The light is on in her office, so she ____ be working late.",
+      options: ["must", "can't", "needn't", "mustn't"], answer: 0,
+      full: "The light is on in her office, so she must be working late.",
+      kr: "그녀 사무실 불이 켜져 있어서 야근 중인 게 틀림없다.",
+      ko: "근거를 바탕으로 '틀림없다'는 강한 추측은 must be -ing입니다."
+    },
+    {
+      id: "g6-4", unit: "u6",
+      prompt: "I'm not sure where the samples are — they ____ be in the cold room.",
+      options: ["might", "must", "can't", "mustn't"], answer: 0,
+      full: "I'm not sure where the samples are — they might be in the cold room.",
+      kr: "시료가 어디 있는지 확실치 않다 — 냉장실에 있을지도 모른다.",
+      ko: "확신이 없는 가능성은 might be입니다. must는 강한 확신이라 I'm not sure와 어울리지 않습니다."
+    },
+    {
+      id: "g6-5", unit: "u6",
+      prompt: "He ____ the email — otherwise he would have replied by now.",
+      options: ["must have missed", "must miss", "can't have missed", "should have missed"], answer: 0,
+      full: "He must have missed the email — otherwise he would have replied by now.",
+      kr: "그가 메일을 못 본 게 틀림없다 — 그렇지 않으면 벌써 답장했을 테니까.",
+      ko: "과거 사실에 대한 강한 추측은 must have + p.p.입니다. can't have p.p.는 '~했을 리 없다'입니다."
+    },
+
+    /* ---------- Unit 7: 조건문 ---------- */
+    {
+      id: "g7-1", unit: "u7",
+      prompt: "If I ____ more time, I would double-check every figure.",
+      options: ["had", "have", "would have", "will have"], answer: 0,
+      full: "If I had more time, I would double-check every figure.",
+      kr: "시간이 더 있다면 모든 수치를 다시 확인할 텐데.",
+      ko: "가정법 과거: If + 과거형, would + 동사원형. 지금 사실의 반대를 상상할 때 씁니다."
+    },
+    {
+      id: "g7-2", unit: "u7",
+      prompt: "If I ____ about the deadline, I would have started earlier.",
+      options: ["had known", "knew", "have known", "would know"], answer: 0,
+      full: "If I had known about the deadline, I would have started earlier.",
+      kr: "마감을 알았더라면 더 일찍 시작했을 텐데.",
+      ko: "가정법 과거완료: If + had p.p., would have p.p. 과거에 하지 못한 일에 대한 아쉬움입니다."
+    },
+    {
+      id: "g7-3", unit: "u7",
+      prompt: "Would you mind if I ____ the window?",
+      options: ["opened", "open", "will open", "would open"], answer: 0,
+      full: "Would you mind if I opened the window?",
+      kr: "창문을 열어도 괜찮을까요?",
+      ko: "Would you mind if I + 과거형은 정중한 허락 요청입니다. if절에는 will·would를 쓰지 않습니다."
+    },
+    {
+      id: "g7-4", unit: "u7",
+      prompt: "If the pump ____ again, call the maintenance team immediately.",
+      options: ["fails", "failed", "will fail", "would fail"], answer: 0,
+      full: "If the pump fails again, call the maintenance team immediately.",
+      kr: "펌프가 또 고장 나면 즉시 정비팀에 연락하세요.",
+      ko: "명령문과 함께 쓰는 첫 번째 조건문은 If + 현재시제입니다. 미래 일이라도 if절에 will을 쓰지 않습니다."
+    },
+    {
+      id: "g7-5", unit: "u7",
+      prompt: "Unless we ____ the budget, the project will be delayed.",
+      options: ["approve", "approved", "will approve", "would approve"], answer: 0,
+      full: "Unless we approve the budget, the project will be delayed.",
+      kr: "예산을 승인하지 않으면 프로젝트가 늦어질 것이다.",
+      ko: "unless는 if not의 뜻입니다. 조건절에는 현재시제를 씁니다."
+    },
+
+    /* ---------- Unit 8: 수동태 ---------- */
+    {
+      id: "g8-1", unit: "u8",
+      prompt: "The report ____ by the compliance team right now.",
+      options: ["is being reviewed", "is reviewing", "has reviewed", "reviews"], answer: 0,
+      full: "The report is being reviewed by the compliance team right now.",
+      kr: "보고서는 지금 컴플라이언스 팀이 검토하고 있다.",
+      ko: "지금 진행 중인 수동은 is being + p.p.입니다. by the compliance team이 행위자를 보여 줍니다."
+    },
+    {
+      id: "g8-2", unit: "u8",
+      prompt: "All samples ____ before the shipment leaves the plant.",
+      options: ["must be tested", "must test", "must have test", "must being tested"], answer: 0,
+      full: "All samples must be tested before the shipment leaves the plant.",
+      kr: "출하 전에 모든 시료를 시험해야 한다.",
+      ko: "조동사 + be + p.p.가 수동의 기본형입니다(must be tested). must being은 형태가 틀립니다."
+    },
+    {
+      id: "g8-3", unit: "u8",
+      prompt: "The new reactor ____ next month.",
+      options: ["will be installed", "will install", "will be install", "is install"], answer: 0,
+      full: "The new reactor will be installed next month.",
+      kr: "새 반응기는 다음 달에 설치될 것이다.",
+      ko: "미래 수동은 will be + p.p.입니다. will be install처럼 p.p.를 빼먹지 않습니다."
+    },
+    {
+      id: "g8-4", unit: "u8",
+      prompt: "The data ____ by an external lab last year.",
+      options: ["was verified", "verified", "has verified", "is verifying"], answer: 0,
+      full: "The data was verified by an external lab last year.",
+      kr: "그 데이터는 작년에 외부 연구소에서 검증되었다.",
+      ko: "과거의 수동은 was/were + p.p.이고, by an external lab이 행위자를 보여 줍니다. last year라 현재완료도 아닙니다."
+    },
+    {
+      id: "g8-5", unit: "u8",
+      prompt: "The results ____ in the appendix.",
+      options: ["are shown", "is shown", "are showing", "show"], answer: 0,
+      full: "The results are shown in the appendix.",
+      kr: "결과는 부록에 실려 있다.",
+      ko: "주어 The results가 복수라 are를 쓰고, 결과가 '보여 지는' 대상이므로 수동 are shown입니다."
+    },
+
+    /* ---------- Unit 9: 관계사 ---------- */
+    {
+      id: "g9-1", unit: "u9",
+      prompt: "The engineer ____ designed the pump will join the call.",
+      options: ["who", "which", "whose", "where"], answer: 0,
+      full: "The engineer who designed the pump will join the call.",
+      kr: "펌프를 설계한 엔지니어가 통화에 참여할 것이다.",
+      ko: "사람 선행사 engineer를 받는 주격 관계대명사는 who입니다."
+    },
+    {
+      id: "g9-2", unit: "u9",
+      prompt: "The company ____ equipment we use is based in Daejeon.",
+      options: ["whose", "who", "which", "where"], answer: 0,
+      full: "The company whose equipment we use is based in Daejeon.",
+      kr: "우리가 장비를 쓰는 그 회사는 대전에 있다.",
+      ko: "'그 회사의 장비'처럼 소유 관계를 이어 줄 때는 whose입니다."
+    },
+    {
+      id: "g9-3", unit: "u9",
+      prompt: "The lab ____ we ran the tests is on the third floor.",
+      options: ["where", "which", "who", "whose"], answer: 0,
+      full: "The lab where we ran the tests is on the third floor.",
+      kr: "우리가 시험을 한 실험실은 3층에 있다.",
+      ko: "장소 선행사 lab 뒤에서 '거기서'라는 뜻을 담당하는 관계부사는 where입니다."
+    },
+    {
+      id: "g9-4", unit: "u9",
+      prompt: "Our new sensor array, ____ was installed in March, has already failed.",
+      options: ["which", "that", "who", "where"], answer: 0,
+      full: "Our new sensor array, which was installed in March, has already failed.",
+      kr: "3월에 설치한 새 센서 어레이가 벌써 고장 났다.",
+      ko: "쉼표로 이어지는 계속적 용법에서는 that을 쓰지 않고 which를 씁니다(사물)."
+    },
+    {
+      id: "g9-5", unit: "u9",
+      prompt: "My manager, ____ has worked here for ten years, reviewed the draft.",
+      options: ["who", "which", "whose", "where"], answer: 0,
+      full: "My manager, who has worked here for ten years, reviewed the draft.",
+      kr: "여기서 10년 일한 내 매니저가 초안을 검토했다.",
+      ko: "사람 선행사의 계속적 용법에는 who를 씁니다."
+    },
+
+    /* ---------- Unit 10: 동명사 vs to부정사 ---------- */
+    {
+      id: "g10-1", unit: "u10",
+      prompt: "I suggest ____ the meeting until Thursday.",
+      options: ["postponing", "to postpone", "postpone", "postponed"], answer: 0,
+      full: "I suggest postponing the meeting until Thursday.",
+      kr: "회의를 목요일로 미루는 게 좋겠다.",
+      ko: "suggest는 동명사(-ing)를 받습니다(suggest + -ing). suggest to do는 쓰지 않습니다."
+    },
+    {
+      id: "g10-2", unit: "u10",
+      prompt: "We decided ____ the pilot test.",
+      options: ["to delay", "delaying", "delay", "delayed"], answer: 0,
+      full: "We decided to delay the pilot test.",
+      kr: "우리는 파일럿 테스트를 미루기로 했다.",
+      ko: "decide는 to부정사를 받습니다(decide to + 동사원형)."
+    },
+    {
+      id: "g10-3", unit: "u10",
+      prompt: "Please avoid ____ the samples to room temperature.",
+      options: ["exposing", "to expose", "expose", "exposed"], answer: 0,
+      full: "Please avoid exposing the samples to room temperature.",
+      kr: "시료가 상온에 노출되지 않도록 하세요.",
+      ko: "avoid는 동명사를 받습니다(avoid + -ing)."
+    },
+    {
+      id: "g10-4", unit: "u10",
+      prompt: "Our plant ____ use coal, but it switched to gas in 2019.",
+      options: ["used to", "is used to", "uses to", "was used to"], answer: 0,
+      full: "Our plant used to use coal, but it switched to gas in 2019.",
+      kr: "우리 공장은 석탄을 썼지만 2019년에 가스로 바꿨다.",
+      ko: "used to + 동사원형은 '예전에는 ~했다'는 과거 습관입니다. is used to는 '~에 익숙하다'입니다."
+    },
+    {
+      id: "g10-5", unit: "u10",
+      prompt: "She is used to ____ under pressure.",
+      options: ["working", "work", "to work", "worked"], answer: 0,
+      full: "She is used to working under pressure.",
+      kr: "그녀는 압박 속에서 일하는 데 익숙하다.",
+      ko: "be used to + -ing는 '~에 익숙하다'입니다. be used to + 동사원형은 없습니다(be used to do는 '~하는 데 쓰이다')."
+    },
+
+    /* ---------- Unit 11: 관사·불가산명사 ---------- */
+    {
+      id: "g11-1", unit: "u11",
+      prompt: "Could you send me ____ information about the new protocol?",
+      options: ["some", "an", "a", "many"], answer: 0,
+      full: "Could you send me some information about the new protocol?",
+      kr: "새 절차에 관한 정보를 좀 보내 줄 수 있나요?",
+      ko: "information은 불가산명사라 a/an을 쓰지 않고 some으로 수량을 나타냅니다. many도 쓸 수 없습니다."
+    },
+    {
+      id: "g11-2", unit: "u11",
+      prompt: "We need ____ new equipment for the lab.",
+      options: ["some", "a", "an", "many"], answer: 0,
+      full: "We need some new equipment for the lab.",
+      kr: "실험실에 새 장비가 좀 필요하다.",
+      ko: "equipment는 불가산명사입니다. a/an을 붙이지 않고 some으로 표현합니다."
+    },
+    {
+      id: "g11-3", unit: "u11",
+      prompt: "The feedback from the client ____ very positive.",
+      options: ["was", "were", "are", "have been"], answer: 0,
+      full: "The feedback from the client was very positive.",
+      kr: "고객의 피드백은 매우 긍정적이었다.",
+      ko: "feedback은 불가산명사라 단수로 취급합니다(feedback ... was)."
+    },
+    {
+      id: "g11-4", unit: "u11",
+      prompt: "____ information you sent was very helpful.",
+      options: ["The", "A", "An", "Many"], answer: 0,
+      full: "The information you sent was very helpful.",
+      kr: "보내 주신 정보는 큰 도움이 됐다.",
+      ko: "이미 언급한 특정 정보라 정관사 the를 씁니다. information은 불가산이라 a/an을 쓸 수 없고, 관계절로 한정된 명사라 some도 맞지 않습니다."
+    },
+    {
+      id: "g11-5", unit: "u11",
+      prompt: "We have ____ feedback from the pilot run.",
+      options: ["a little", "a few", "many", "few"], answer: 0,
+      full: "We have a little feedback from the pilot run.",
+      kr: "파일럿 운전에서 받은 피드백이 조금 있다.",
+      ko: "불가산명사 feedback에는 a little을 씁니다. a few·many는 셀 수 있는 명사에만 씁니다."
+    },
+
+    /* ---------- Unit 12: 회의·업무 전치사 ---------- */
+    {
+      id: "g12-1", unit: "u12",
+      prompt: "Please send the draft ____ Friday at the latest.",
+      options: ["by", "until", "during", "since"], answer: 0,
+      full: "Please send the draft by Friday at the latest.",
+      kr: "늦어도 금요일까지 초안을 보내 주세요.",
+      ko: "by는 '~까지(마감)'입니다. until은 어떤 상태가 그때까지 계속된다는 뜻이라 마감에는 쓰지 않습니다."
+    },
+    {
+      id: "g12-2", unit: "u12",
+      prompt: "The machine must stay off ____ the repair is finished.",
+      options: ["until", "by", "during", "in"], answer: 0,
+      full: "The machine must stay off until the repair is finished.",
+      kr: "수리가 끝날 때까지 기계는 꺼 둬야 한다.",
+      ko: "'그때까지 계속 꺼 둔다'이므로 until입니다. by는 마감 시점이라 계속되는 상태와 어울리지 않습니다."
+    },
+    {
+      id: "g12-3", unit: "u12",
+      prompt: "____ the meeting, she took detailed notes.",
+      options: ["During", "While", "Since", "From"], answer: 0,
+      full: "During the meeting, she took detailed notes.",
+      kr: "회의 중에 그녀는 자세히 메모했다.",
+      ko: "during은 명사 앞에, while은 절(주어+동사) 앞에 씁니다. the meeting은 명사입니다."
+    },
+    {
+      id: "g12-4", unit: "u12",
+      prompt: "____ I was presenting, the projector failed.",
+      options: ["While", "During", "By", "Until"], answer: 0,
+      full: "While I was presenting, the projector failed.",
+      kr: "내가 발표하는 동안 프로젝터가 멈췄다.",
+      ko: "while + 주어+동사(I was presenting)입니다. during 뒤에는 명사만 옵니다."
+    },
+    {
+      id: "g12-5", unit: "u12",
+      prompt: "She is ____ of the quality team.",
+      options: ["in charge", "responsible", "in responsible", "charged"], answer: 0,
+      full: "She is in charge of the quality team.",
+      kr: "그녀는 품질팀을 책임지고 있다.",
+      ko: "'~을 책임지다'는 be in charge of 또는 be responsible for입니다. responsible는 of와 쓰지 않습니다."
+    }
+  ];
+
+  var GR_UNIT_BY_ID = {};
+  for (var _gu = 0; _gu < GRAMMAR_UNITS.length; _gu++) GR_UNIT_BY_ID[GRAMMAR_UNITS[_gu].id] = GRAMMAR_UNITS[_gu];
+
+  var GR_LETTERS = ["A", "B", "C", "D"];
+
+  var RV_CAP = 20;                              // 복습 한 판에 보는 최대 개수
+  var RV_ORDER = ["words", "grammar", "sentences"];   // 인지 부담이 낮은 순서
+
+  // 문법 탭에서 고른 유닛·필터
+  var gr = { unit: "all", mode: "today", forceAll: false, unitOpen: "", voiceWarn: {} };
+
+  // 복습 탭의 하위 화면(기본: 단어 → 문법 → 문장 순서로 이어서)
+  var rvSub = "words";
+  var rvLang = "all";                     // 복습 언어 필터: all / en / de
+
+  /* ---------- 오늘 영역별 복습 횟수 (자정에 새로 시작) ---------- */
+  function reviewDayState() {
+    var k = dayKey(Date.now());
+    if (!state.reviewDay || typeof state.reviewDay !== "object" || state.reviewDay.day !== k) {
+      state.reviewDay = { day: k, words: 0, grammar: 0, sentences: 0 };
+    }
+    return state.reviewDay;
+  }
+
+  function reviewCatCount(cat) {
+    var d = reviewDayState();
+    var n = cat === "words" ? d.words : cat === "grammar" ? d.grammar : d.sentences;
+    return Math.max(0, Math.floor(Number(n) || 0));
+  }
+
+  function noteReviewDone(cat) {
+    var d = reviewDayState();
+    if (cat === "words") d.words = reviewCatCount("words") + 1;
+    else if (cat === "grammar") d.grammar = reviewCatCount("grammar") + 1;
+    else d.sentences = reviewCatCount("sentences") + 1;
+  }
+
+  function normalizeQuestion(raw) {
+    if (!raw || typeof raw !== "object") return null;
+    var prompt = String(raw.prompt || "").trim();
+    if (!prompt || prompt.indexOf("____") < 0) return null;
+    var opts = [];
+    if (Array.isArray(raw.options) && raw.options.length === 4) {
+      var seen = {};
+      for (var i = 0; i < raw.options.length; i++) {
+        var o = String(raw.options[i] == null ? "" : raw.options[i]).trim();
+        if (!o || seen[o]) return null;
+        seen[o] = 1;
+        opts.push(o);
+      }
+    } else {
+      return null;
+    }
+    var ans = Math.round(Number(raw.answer));
+    if (!(ans >= 0 && ans < 4)) return null;
+    var unit = String(raw.unit || "");
+    if (!GR_UNIT_BY_ID[unit]) return null;
+    var now = Date.now();
+    return {
+      id: raw.id ? String(raw.id) : "g-" + uid(),
+      unit: unit,
+      prompt: prompt,
+      options: opts,
+      answer: ans,
+      full: String(raw.full || prompt.replace("____", opts[ans])),
+      kr: String(raw.kr || ""),
+      ko: String(raw.ko || ""),
+      reps: Math.max(0, Math.floor(Number(raw.reps) || 0)),
+      interval: Math.max(0, Number(raw.interval) || 0),
+      ef: clamp(Number(raw.ef) || 2.5, 1.3, 3.2),
+      lapses: Math.max(0, Math.floor(Number(raw.lapses) || 0)),
+      due: isFinite(Number(raw.due)) ? Number(raw.due) : now,
+      createdAt: isFinite(Number(raw.createdAt)) ? Number(raw.createdAt) : now,
+      lastReviewed: isFinite(Number(raw.lastReviewed)) ? Number(raw.lastReviewed) : 0,
+      mastered: !!raw.mastered,
+      missed: !!raw.missed
+    };
+  }
+
+  // 처음 열 때 60문제를 한 번만 채운다(저장은 사용자가 실제로 뭔가 할 때 함께 된다)
+  function seedGrammar() {
+    if (state.grammarSeeded) return;
+    if (!state.grammar.length) {
+      var now = Date.now();
+      for (var i = 0; i < STARTER_GRAMMAR.length; i++) {
+        var q = normalizeQuestion(STARTER_GRAMMAR[i]);
+        if (!q) continue;
+        q.due = now;
+        q.createdAt = now - (STARTER_GRAMMAR.length - i) * 1000;
+        state.grammar.push(q);
+      }
+    }
+    state.grammarSeeded = true;
+  }
+
+  function findQuestion(id) {
+    for (var i = 0; i < state.grammar.length; i++) {
+      if (state.grammar[i].id === id) return state.grammar[i];
+    }
+    return null;
+  }
+
+  function logGrammarStudied(id, ts) {
+    var gid = String(id || "");
+    if (!gid) return false;
+    var k = dayKey(ts);
+    var list = state.grammarLog[k];
+    if (!list) { list = []; state.grammarLog[k] = list; }
+    if (list.indexOf(gid) >= 0) return false;
+    list.push(gid);
+    return true;
+  }
+
+  function mergeGrammarLog(raw) {
+    var incoming = sanitizeDailyLog(raw);
+    var days = 0, added = 0;
+    for (var k in incoming) {
+      if (!Object.prototype.hasOwnProperty.call(incoming, k)) continue;
+      var list = state.grammarLog[k];
+      if (!list) { list = []; state.grammarLog[k] = list; }
+      for (var i = 0; i < incoming[k].length; i++) {
+        if (list.indexOf(incoming[k][i]) < 0) { list.push(incoming[k][i]); added++; }
+      }
+      days++;
+    }
+    return { days: days, added: added };
+  }
+
+  function grammarDayCount(key) {
+    var list = state.grammarLog[key];
+    return list && list.length ? list.length : 0;
+  }
+
+  function grammarStreak(ts) {
+    var today = dayKey(ts);
+    var n = 0;
+    var start = grammarDayCount(today) > 0 ? 0 : -1;
+    for (var i = start; i > -400; i--) {
+      if (grammarDayCount(dayKeyOffset(i, ts)) <= 0) break;
+      n++;
+    }
+    return n;
+  }
+
+  function grInUnit(q) {
+    return gr.unit === "all" || q.unit === gr.unit;
+  }
+
+  function grUnitSolved(unitId) {
+    var n = 0;
+    for (var i = 0; i < state.grammar.length; i++) {
+      var q = state.grammar[i];
+      if (q.unit !== unitId) continue;
+      if (q.mastered || q.reps > 0) n++;
+    }
+    return n;
+  }
+
+  function grUnitTotal(unitId) {
+    var n = 0;
+    for (var i = 0; i < state.grammar.length; i++) {
+      if (state.grammar[i].unit === unitId) n++;
+    }
+    return n;
+  }
+
+  function grDueAllCount() {
+    var now = Date.now();
+    var n = 0;
+    for (var i = 0; i < state.grammar.length; i++) {
+      if (!state.grammar[i].mastered && state.grammar[i].due <= now) n++;
+    }
+    return n;
+  }
+
+  function grDueCount() {
+    var now = Date.now();
+    var n = 0;
+    for (var i = 0; i < state.grammar.length; i++) {
+      var q = state.grammar[i];
+      if (!grInUnit(q)) continue;
+      if (!q.mastered && q.due <= now) n++;
+    }
+    return n;
+  }
+
+  function grWrongCount() {
+    var n = 0;
+    for (var i = 0; i < state.grammar.length; i++) {
+      var q = state.grammar[i];
+      if (!grInUnit(q)) continue;
+      if (!q.mastered && q.missed) n++;
+    }
+    return n;
+  }
+
+  // 복습 큐 정렬: 갓 배운(간격 짧은) 카드 → 놓치기 쉬운(ef 낮은) 카드 → 기한이 오래된 카드
+  function rvSmartSort(a, b) {
+    var ai = Number(a && a.interval) || 0, bi = Number(b && b.interval) || 0;
+    if (ai !== bi) return ai - bi;
+    var ae = Number(a && a.ef) || 2.5, be = Number(b && b.ef) || 2.5;
+    if (ae !== be) return ae - be;
+    return (Number(a && a.due) || 0) - (Number(b && b.due) || 0);
+  }
+
+  function grSort(a, b) {
+    if (!!a.mastered !== !!b.mastered) return a.mastered ? 1 : -1;
+    if (a.due !== b.due) return a.due - b.due;
+    return a.createdAt - b.createdAt;
+  }
+
+  function grList() {
+    var now = Date.now();
+    var out = [];
+    for (var i = 0; i < state.grammar.length; i++) {
+      var q = state.grammar[i];
+      if (!grInUnit(q)) continue;
+      if (gr.mode === "wrong") {
+        if (!q.mastered && q.missed) out.push(q);
+        continue;
+      }
+      if (gr.forceAll) { out.push(q); continue; }
+      if (!q.mastered && q.due <= now) out.push(q);
+    }
+    out.sort(grSort);
+    return out;
+  }
+
+  function grReviewList() {
+    var now = Date.now();
+    var out = [];
+    if (rvLang === "de") return out;
+    for (var i = 0; i < state.grammar.length; i++) {
+      var q = state.grammar[i];
+      if (!q.mastered && q.due <= now) out.push(q);
+    }
+    out.sort(rvSmartSort);
+    return out;
+  }
+
+  function grUnitName(q) {
+    if (!q) return "—";
+    var u = GR_UNIT_BY_ID[q.unit];
+    return u ? (u.n + " · " + u.title) : "—";
+  }
+
+  function grMasteredCount() {
+    var n = 0;
+    for (var i = 0; i < state.grammar.length; i++) if (state.grammar[i].mastered) n++;
+    return n;
+  }
+
+  function grSentenceHTML(q, answered) {
+    if (!q) return "";
+    var parts = String(q.prompt).split("____");
+    var blank = answered
+      ? '<span class="gr-blank done">' + esc(q.options[q.answer]) + "</span>"
+      : '<span class="gr-blank">____</span>';
+    var out = [];
+    for (var i = 0; i < parts.length; i++) {
+      out.push(esc(parts[i]));
+      if (i < parts.length - 1) out.push(blank);
+    }
+    return out.join("");
+  }
+
+  function grPv(q, g) {
+    if (!q) return "";
+    if (g === "mastered") return "완료";
+    return computeNext(q, g).label;
+  }
+
+  function grShuffle() {
+    var a = [0, 1, 2, 3];
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  /* ---------- 복습 영역 공통 ---------- */
+  function rvLabel(cat) {
+    return cat === "words" ? "단어" : cat === "grammar" ? "문법" : "문장";
+  }
+
+  // 언어 필터: 복습 안에서 영어와 독일어를 섞지 않는다
+  function rvLangOk(lang) {
+    var l = String(lang || "en");
+    return rvLang === "all" || l === rvLang;
+  }
+
+  function rvWordDue() {
+    var now = Date.now(), n = 0;
+    for (var i = 0; i < state.words.length; i++) {
+      var w = state.words[i];
+      if (w.mastered || w.due > now) continue;
+      if (!rvLangOk(w.lang)) continue;
+      n++;
+    }
+    return n;
+  }
+
+  function rvSentenceDue() {
+    var now = Date.now(), n = 0;
+    for (var i = 0; i < state.cards.length; i++) {
+      var c = state.cards[i];
+      if (c.mastered || c.due > now) continue;
+      if (!rvLangOk(cardLang(c))) continue;
+      n++;
+    }
+    return n;
+  }
+
+  // 필터를 적용한 오늘 복습할 개수(복습 탭의 배지·한 판 큐)
+  function rvDueOf(cat) {
+    if (cat === "words") return rvWordDue();
+    if (cat === "grammar") return rvLang === "de" ? 0 : grDueAllCount();
+    return rvSentenceDue();
+  }
+
+  // 필터와 무관한 전체 개수(오늘 목표 판정·상단 복습 배지)
+  function rvDueRaw(cat) {
+    if (cat === "words") return wordDueCount();
+    if (cat === "grammar") return grDueAllCount();
+    return dueCount();
+  }
+
+  function rvRemainingFor(cat) {
+    var due = rvDueRaw(cat);
+    var left = Math.max(0, RV_CAP - reviewCatCount(cat));
+    return Math.min(due, left);
+  }
+
+  function rvRemainingTotal() {
+    return rvRemainingFor("words") + rvRemainingFor("grammar") + rvRemainingFor("sentences");
+  }
+
+  // 그 영역의 오늘 목표: 기한이 다 없어졌거나, 오늘 20개를 채웠거나
+  function rvCatGoalMet(cat) {
+    return rvDueRaw(cat) === 0 || reviewCatCount(cat) >= RV_CAP;
+  }
+
+  function rvTotalToday() {
+    return reviewCatCount("words") + reviewCatCount("grammar") + reviewCatCount("sentences");
+  }
+
+  function rvAllClear() {
+    if (rvTotalToday() < 1) return false;
+    return rvCatGoalMet("words") && rvCatGoalMet("grammar") && rvCatGoalMet("sentences");
+  }
+
+  // 지금 영역 다음에 이어서 할 영역(남은 게 있는 곳)
+  function rvChainNext(after) {
+    var i = RV_ORDER.indexOf(after);
+    if (i < 0) i = 0;
+    for (var k = 1; k <= 3; k++) {
+      var cat = RV_ORDER[(i + k) % 3];
+      if (cat === after) continue;
+      var due = rvDueOf(cat);
+      if (due > 0) return { key: cat, label: rvLabel(cat), n: Math.min(due, RV_CAP) };
+    }
+    return null;
+  }
+
+  /* ---------- 문법 문제 카드(문법 탭·복습 탭 공용) ---------- */
+  function GRSession(mountId, opts) {
+    this.mountId = mountId;
+    this.kind = opts.kind === "review" ? "review" : "browse";
+    this.listFn = opts.listFn;
+    this.emptyText = opts.emptyText || "지금은 풀 문제가 없어요.";
+    this.queue = [];
+    this.idx = 0;
+    this.order = [0, 1, 2, 3];
+    this.picked = -1;
+    this.answered = false;
+    this.correct = false;
+    this.overridden = false;
+    this.doneCount = 0;
+    this.finished = false;
+  }
+
+  GRSession.prototype.prepare = function () {
+    this.picked = -1;
+    this.answered = false;
+    this.correct = false;
+    this.overridden = false;
+    this.order = grShuffle();
+  };
+
+  GRSession.prototype.build = function () {
+    var list = this.listFn();
+    if (this.kind === "review") list = list.slice(0, RV_CAP);
+    this.queue = [];
+    for (var i = 0; i < list.length; i++) this.queue.push(list[i].id);
+    if (this.idx >= this.queue.length) this.idx = 0;
+    this.prepare();
+  };
+
+  GRSession.prototype.startSession = function () {
+    this.build();
+    this.idx = 0;
+    this.doneCount = 0;
+    this.finished = false;
+    this.prepare();
+  };
+
+  GRSession.prototype.current = function () {
+    var id = this.queue[this.idx];
+    return id ? findQuestion(id) : null;
+  };
+
+  GRSession.prototype.render = function (rebuild) {
+    if (rebuild || (!this.queue.length && !this.finished)) this.build();
+    if (this.kind === "review" && !this.queue.length && !this.finished) { this.finished = true; }
+    var box = el(this.mountId);
+    if (box) box.innerHTML = this.html();
+    if (typeof updateReviewSubCounts === "function") { try { updateReviewSubCounts(); } catch (e) {} }
+  };
+
+  GRSession.prototype.html = function () {
+    if (this.kind === "review" && this.finished) return this.completionHTML();
+    var len = this.queue.length;
+    var q = this.current();
+    var h = '<div class="card vw-card gr-card">';
+    if (!q) {
+      h += '<div class="gr-empty">' + esc(this.emptyText) + "</div>";
+      h += "</div>";
+      return h;
+    }
+    var pct = len ? Math.round(((this.idx + (this.answered ? 1 : 0)) / len) * 100) : 0;
+    h += '<div class="vw-progress"><span>' + (this.idx + 1) + " / " + len + "</span><span>" + esc(grUnitName(q)) + "</span></div>";
+    h += '<div class="gr-bar"><span style="width:' + Math.max(2, Math.min(100, pct)) + '%"></span></div>';
+
+    var meta = [];
+    if (q.mastered) meta.push("외움 완료");
+    else if (q.missed) meta.push("틀린 적 있음");
+    else if (!q.reps) meta.push("새 문제");
+    if (!q.mastered && q.reps > 0) meta.push("다음 복습 " + dueText(q, Date.now()));
+    if (q.lapses) meta.push("틀린 횟수 " + q.lapses);
+    h += '<div class="gr-qmeta">' + esc(meta.join(" · ")) + "</div>";
+    h += '<div class="gr-sentence">' + grSentenceHTML(q, this.answered) + "</div>";
+
+    h += '<div class="gr-options" role="group" aria-label="보기">';
+    for (var i = 0; i < 4; i++) {
+      var real = this.order[i];
+      var cls = "gr-opt";
+      if (this.answered) {
+        if (real === q.answer) cls += " ok";
+        else if (i === this.picked) cls += " no";
+        else cls += " dim";
+      }
+      h += '<button type="button" class="' + cls + '" data-gpick="' + i + '"' + (this.answered ? " disabled" : "") +
+        '><span class="k">' + GR_LETTERS[i] + '</span><span class="t">' + esc(q.options[real]) + "</span></button>";
+    }
+    h += "</div>";
+
+    h += '<div class="gr-explain"' + (this.answered ? "" : " hidden") + ">";
+    h += '<div class="gr-result ' + (this.correct ? "ok" : "no") + '">' +
+      (this.correct ? "정답이에요 ✅ · '보통'으로 잡았어요" : "아쉬워요 · 정답은 '" + esc(q.options[q.answer]) + "' · 10분 뒤 다시로 잡았어요") + "</div>";
+    h += '<div class="gr-why">' + esc(q.ko) + "</div>";
+    h += '<div class="gr-full">' + esc(q.full) + "</div>";
+    if (q.kr) h += '<div class="gr-kr">' + esc(q.kr) + "</div>";
+    h += '<div class="vw-say gr-say">' +
+      '<button type="button" class="vw-saybtn" data-gsay="en-US">🇺🇸 미국식</button>' +
+      '<button type="button" class="vw-saybtn" data-gsay="en-GB">🇬🇧 영국식</button></div>';
+    h += '<div class="gr-over" role="group" aria-label="평가 바꾸기">' +
+      '<button type="button" class="gr-ovbtn' + (this.overridden && this.lastOverride === "hard" ? " on" : "") + '" data-gov="hard">찍었음·어려움</button>' +
+      '<button type="button" class="gr-ovbtn' + (this.overridden && this.lastOverride === "mastered" ? " on" : "") + '" data-gov="mastered">완벽·외움</button>' +
+      "</div>";
+    h += "</div>";
+
+    h += '<div class="vw-nav gr-nav">' +
+      '<button type="button" class="btn sm ghost" data-gnav="-1" aria-label="이전 문제">←</button>' +
+      '<button type="button" class="btn primary sm" data-gnav="1">' + (this.answered ? "다음 문제" : "건너뛰기") + "</button>" +
+      '<button type="button" class="btn sm ghost" data-gnav="0" aria-label="이 문제 다시 풀기">↺</button>' +
+      "</div>";
+    h += '<div class="gr-note">' + (this.answered
+      ? "정답을 고르면 자동으로 일정이 잡혀요. 다르면 위 버튼으로 바꾸고 다음 문제로 넘어가세요."
+      : "보기를 누르면 바로 채점되고 해설이 열려요.") + "</div>";
+    h += "</div>";
+    return h;
+  };
+
+  GRSession.prototype.completionHTML = function () {
+    var cat = "grammar";
+    var more = grReviewList().length;
+    var next = rvChainNext(cat);
+    var goal = rvCatGoalMet(cat);
+    var h = '<div class="card vw-card rv-done-card">';
+    h += '<div class="rv-done-emoji">🎉</div>';
+    h += '<div class="rv-done-title">문법 ' + this.doneCount + "문제 복습 완료</div>";
+    h += '<div class="rv-done-sub">' + (more
+      ? "오늘 20개 목표를 채웠어요 · 남은 " + more + "문제는 '20개 더'로 볼 수 있어요."
+      : "오늘 복습할 문법 문제를 다 봤어요.") + "</div>";
+    if (goal) h += '<div class="rv-goal">오늘 문법 목표 달성 ✅</div>';
+    if (next) h += '<button type="button" class="btn primary wide" data-gchain="' + next.key + '">이어서 ' + next.label + " 풀기 →</button>";
+    if (more) h += '<button type="button" class="btn ghost wide" data-gmore="1">20개 더 복습하기</button>';
+    h += "</div>";
+    return h;
+  };
+
+  GRSession.prototype.pick = function (i) {
+    var q = this.current();
+    if (!q || this.answered) return;
+    var shown = Math.round(Number(i));
+    if (!(shown >= 0 && shown < 4)) return;
+    var real = this.order[shown];
+    var now = Date.now();
+    this.picked = shown;
+    this.answered = true;
+    this.correct = real === q.answer;
+    // 정답이면 '보통', 틀리면 '어려움(10분)'으로 바로 잡는다 — 아래 버튼으로 바꿀 수 있다
+    applyPackGrade(q, this.correct ? "good" : "again", false, now);
+    q.missed = !this.correct;
+    logGrammarStudied(q.id, now);
+    noteReviewDone("grammar");
+    saveStore();
+    this.render(false);
+    grScrollIntoView();
+  };
+
+  GRSession.prototype.override = function (g) {
+    var q = this.current();
+    if (!q || !this.answered || this.overridden) return;
+    var grade = g === "mastered" ? "mastered" : "hard";
+    applyPackGrade(q, grade, false, Date.now());
+    if (grade === "mastered") q.missed = false;
+    this.overridden = true;
+    this.lastOverride = grade;
+    saveStore();
+    this.render(false);
+    toast(grade === "mastered" ? "완벽·외움으로 바꿨어요" : "찍었음·어려움으로 바꿨어요");
+  };
+
+  GRSession.prototype.next = function () {
+    if (!this.queue.length) return;
+    if (this.kind === "review") {
+      this.doneCount++;
+      this.queue.splice(this.idx, 1);
+      if (!this.queue.length) {
+        this.finished = true;
+        this.idx = 0;
+        this.prepare();
+        this.render(false);
+        return;
+      }
+      if (this.idx >= this.queue.length) this.idx = this.queue.length - 1;
+      this.prepare();
+      this.render(false);
+      grScrollIntoView();
+      return;
+    }
+    this.idx = (this.idx + 1) % this.queue.length;
+    this.prepare();
+    this.render(false);
+    grScrollIntoView();
+  };
+
+  GRSession.prototype.step = function (n) {
+    if (!this.queue.length) return;
+    if (this.kind === "review") { this.next(); return; }
+    this.idx = ((this.idx + n) % this.queue.length + this.queue.length) % this.queue.length;
+    this.prepare();
+    this.render(false);
+    grScrollIntoView();
+  };
+
+  // 문법 탭 문제 세션 · 복습 탭 문법 세션
+  var grs = new GRSession("grMount", {
+    kind: "browse",
+    listFn: function () { return grList(); },
+    emptyText: "지금은 풀 문제가 없어요. 유닛을 골라 복습하거나 '틀린 문제 다시 풀기'를 눌러 보세요."
+  });
+  var grr = new GRSession("rvgMount", {
+    kind: "review",
+    listFn: function () { return grReviewList(); },
+    emptyText: "오늘 복습할 문법 문제가 없어요 🎉 문법 탭에서 유닛별로 더 풀 수 있어요."
+  });
+
+  function grScrollIntoView() {
+    var heads = document.querySelectorAll(".gr-sentence");
+    if (!heads || !heads.length) return;
+    var box = null;
+    for (var i = 0; i < heads.length; i++) {
+      if (heads[i].getBoundingClientRect().height) { box = heads[i]; break; }
+    }
+    if (!box) return;
+    var head = stickyTopHeight();
+    var r = box.getBoundingClientRect();
+    var vh = window.innerHeight || 0;
+    if (r.top >= head + 4 && (!vh || r.bottom <= vh - 8)) return;
+    var y = r.top + (window.pageYOffset || 0) - head - 8;
+    if (!isFinite(y) || y < 0) y = 0;
+    try { window.scrollTo({ top: y, behavior: "smooth" }); }
+    catch (e) { try { window.scrollTo(0, y); } catch (e2) {} }
+  }
+
+  /* ---------- 복습 탭 > 단어 (한 판 20개) ---------- */
+  function rwList() {
+    var now = Date.now();
+    var out = [];
+    for (var i = 0; i < state.words.length; i++) {
+      var w = state.words[i];
+      if (!w.mastered && w.due <= now && rvLangOk(w.lang)) out.push(w);
+    }
+    out.sort(rvSmartSort);
+    return out;
+  }
+
+  var rws = { queue: [], idx: 0, flipped: false, doneCount: 0, finished: false };
+
+  function rwStartSession() {
+    var list = rwList().slice(0, RV_CAP);
+    rws.queue = [];
+    for (var i = 0; i < list.length; i++) rws.queue.push(list[i].id);
+    rws.idx = 0;
+    rws.doneCount = 0;
+    rws.flipped = false;
+    rws.finished = false;
+  }
+
+  function rwCurrent() {
+    var id = rws.queue[rws.idx];
+    return id ? findWord(id) : null;
+  }
+
+  function rwCompletionHTML() {
+    var more = rwList().length;
+    var next = rvChainNext("words");
+    var goal = rvCatGoalMet("words");
+    var h = '<div class="card vw-card rv-done-card">';
+    h += '<div class="rv-done-emoji">🎉</div>';
+    h += '<div class="rv-done-title">단어 ' + rws.doneCount + "개 복습 완료</div>";
+    h += '<div class="rv-done-sub">' + (more
+      ? "오늘 20개 목표를 채웠어요 · 남은 " + more + "개는 '20개 더'로 볼 수 있어요."
+      : "오늘 복습할 단어를 다 봤어요.") + "</div>";
+    if (goal) h += '<div class="rv-goal">오늘 단어 목표 달성 ✅</div>';
+    if (next) h += '<button type="button" class="btn primary wide" data-rchain="' + next.key + '">이어서 ' + next.label + " 풀기 →</button>";
+    if (more) h += '<button type="button" class="btn ghost wide" data-rmore="1">20개 더 복습하기</button>';
+    h += "</div>";
+    return h;
+  }
+
+  function renderReviewWords(rebuild) {
+    var box = el("rwMount");
+    if (!box) return;
+    if (rebuild && !rws.queue.length && !rws.finished) rwStartSession();
+    if (!rws.queue.length && !rws.finished && rwList().length) rwStartSession();
+    if (rws.finished) {
+      box.innerHTML = rwCompletionHTML();
+      updateReviewSubCounts();
+      return;
+    }
+    var cur = rwCurrent();
+    if (!cur) {
+      box.innerHTML = '<div class="card vw-card"><div class="gr-empty">오늘 복습할 단어가 없어요 🎉 단어장 탭에서 새 단어를 골라보세요.</div></div>';
+      rws.flipped = false;
+      updateReviewSubCounts();
+      return;
+    }
+    var h = '<div class="card vw-card">';
+    h += '<div class="vw-progress"><span>' + (rws.idx + 1) + " / " + rws.queue.length + "</span><span>" +
+      esc((DECK_EMOJI[cur.deck] || "") + " " + (DECK_NAMES[cur.deck] || "내 단어")) + "</span></div>";
+    h += '<div class="vw-flip" id="rwFlip" role="button" tabindex="0" aria-label="카드를 눌러 뒤집기">';
+    h += '<div class="vw-front"' + (rws.flipped ? " hidden" : "") + ">" +
+      '<div class="vw-word">' + esc(cur.word) + "</div>" +
+      '<div class="vw-meta">' + esc(cur.level || "") + "</div>" +
+      '<div class="vw-say">' + vwSayButtonsHTML(cur, false) + "</div>" +
+      '<div class="vw-hint">카드를 누르면 뜻이 보여요</div></div>';
+    h += '<div class="vw-back"' + (rws.flipped ? "" : " hidden") + ">" +
+      '<div class="vw-meaning">' + esc(cur.meaning || "(뜻을 적어 두지 않았어요)") + "</div>" +
+      (cur.example ? '<div class="vw-ex">' + esc(cur.example) + "</div>" : "") +
+      (cur.exampleKo ? '<div class="vw-exko">' + esc(cur.exampleKo) + "</div>" : "") +
+      '<div class="vw-say">' + (cur.example
+        ? '<button type="button" class="vw-saybtn" data-rwsay="example" data-lang="' + (cur.lang === "de" ? "de-DE" : "en-US") + '">🔊 예문 듣기</button>'
+        : "") + "</div></div>";
+    h += "</div>";
+    h += '<div class="vw-nav"><button type="button" class="btn sm ghost" data-rwnav="-1" aria-label="이전 단어">←</button>' +
+      '<button type="button" class="btn primary sm" data-rwflip>뒤집기</button>' +
+      '<button type="button" class="btn sm ghost" data-rwnav="1" aria-label="다음 단어">→</button></div>';
+    h += '<div class="ratings vw-ratings rv-word-ratings">';
+    h += '<button type="button" class="rate" data-rwgrade="again"><span class="key">1</span><b>모름</b><small class="pv">다시 · ' + grPv(cur, "again") + "</small></button>";
+    h += '<button type="button" class="rate" data-rwgrade="good"><span class="key">2</span><b>알겠음</b><small class="pv">보통 · ' + grPv(cur, "good") + "</small></button>";
+    h += '<button type="button" class="rate" data-rwgrade="easy"><span class="key">3</span><b>쉬움</b><small class="pv">' + grPv(cur, "easy") + "</small></button>";
+    h += '<button type="button" class="rate" data-rwgrade="mastered"><span class="key">4</span><b>외움</b><small class="pv">완료</small></button>';
+    h += "</div>";
+    h += "</div>";
+    box.innerHTML = h;
+    updateReviewSubCounts();
+  }
+
+  function rwGrade(g) {
+    var w = rwCurrent();
+    if (!w) return;
+    var grade = g === "mastered" || g === "easy" || g === "again" ? g : "good";
+    var now = Date.now();
+    var label = applyPackGrade(w, grade, false, now);
+    logWordStudied(w.id, now);
+    noteReviewDone("words");
+    saveStore();
+    rws.flipped = false;
+    rws.doneCount++;
+    rws.queue.splice(rws.idx, 1);
+    if (!rws.queue.length) {
+      rws.finished = true;
+      rws.idx = 0;
+    } else if (rws.idx >= rws.queue.length) {
+      rws.idx = rws.queue.length - 1;
+    }
+    renderReviewWords(false);
+    try { updateWordBadge(); } catch (e) {}
+    toast(grade === "mastered" ? "외움 완료 · " + w.word : (grade === "again" ? "다시 볼 단어 · " : label + " 뒤 다시 봐요 · ") + w.word);
+  }
+
+  // 문장 복습 완료 카드: '20개 더' + '이어서 다른 영역' 버튼
+  function rvUpdateDoneCTA() {
+    if (el("doneSummary")) {
+      el("doneSummary").textContent = "오늘 복습 · 단어 " + reviewCatCount("words") + "개 · 문법 " +
+        reviewCatCount("grammar") + "문제 · 문장 " + reviewCatCount("sentences") + "개";
+    }
+    if (el("doneAllClear")) el("doneAllClear").hidden = !rvAllClear();
+    if (!el("doneMoreBtn")) return;
+    var more = dueCount();
+    el("doneMoreBtn").textContent = more ? "20개 더 복습하기" : "남은 카드 더 보기";
+    var chain = el("doneChainBtn");
+    if (!chain) return;
+    var next = rvChainNext("sentences");
+    if (next) {
+      chain.hidden = false;
+      chain.textContent = "이어서 " + next.label + " " + next.n + "개 바로 하기 →";
+    } else {
+      chain.hidden = true;
+    }
+  }
+
+  /* ---------- 복습 탭 하위 전환 · 올클리어 ---------- */
+  // 이미 한 번이라도 본 카드가 복습 대기로 40개를 넘으면 살짝 알려준다(새 사용자는 해당 없음)
+  function startedDueCount() {
+    var now = Date.now(), n = 0;
+    for (var i = 0; i < state.cards.length; i++) {
+      var c = state.cards[i];
+      if (!c.mastered && c.reps > 0 && c.due <= now) n++;
+    }
+    for (var j = 0; j < state.words.length; j++) {
+      var w = state.words[j];
+      if (!w.mastered && w.reps > 0 && w.due <= now) n++;
+    }
+    for (var k = 0; k < state.grammar.length; k++) {
+      var q = state.grammar[k];
+      if (!q.mastered && q.reps > 0 && q.due <= now) n++;
+    }
+    return n;
+  }
+
+  function updateBacklogNudge() {
+    var n = startedDueCount();
+    var show = n > 40;
+    var boxes = ["vwNudge", "grNudge"];
+    for (var i = 0; i < boxes.length; i++) {
+      var box = el(boxes[i]);
+      if (!box) continue;
+      box.hidden = !show;
+      var t = box.querySelector(".bl-n");
+      if (t) t.textContent = String(n);
+    }
+  }
+
+  function updateReviewSubCounts() {
+    var counts = { words: rvDueOf("words"), grammar: rvDueOf("grammar"), sentences: rvDueOf("sentences") };
+    var ids = { words: "rvSubWords", grammar: "rvSubGr", sentences: "rvSubSent" };
+    for (var i = 0; i < RV_ORDER.length; i++) {
+      var cat = RV_ORDER[i];
+      var b = el(ids[cat]);
+      if (!b) continue;
+      var n = counts[cat];
+      b.textContent = n > RV_CAP ? RV_CAP + "+" : String(n);
+      var pill = b.parentNode;
+      if (pill && pill.classList) pill.classList.toggle("done", rvCatGoalMet(cat));
+    }
+    var w = counts.words, g = counts.grammar, s = counts.sentences;
+    if (el("rvwNote")) {
+      el("rvwNote").textContent = w
+        ? "오늘 복습할 단어 " + w + "개 · 한 판에 " + Math.min(w, RV_CAP) + "개씩 봐요"
+        : "오늘 복습할 단어가 없어요. 단어장 탭에서 새 단어를 볼 수 있어요.";
+    }
+    if (el("rvgNote")) {
+      el("rvgNote").textContent = g
+        ? "오늘 복습할 문법 " + g + "문제 · 한 판에 " + Math.min(g, RV_CAP) + "문제씩 봐요"
+        : "오늘 복습할 문법 문제가 없어요. 문법 탭에서 유닛별로 더 풀 수 있어요.";
+    }
+    if (el("rvAllClear")) el("rvAllClear").hidden = !rvAllClear();
+    if (el("dueBadge")) {
+      var rn = rvRemainingTotal();
+      el("dueBadge").textContent = rn > 99 ? "99+" : String(rn);
+      el("dueBadge").classList.toggle("zero", rn === 0);
+    }
+    updateBacklogNudge();
+    qsa("#rvSubBar [data-rvsub]").forEach(function (b) {
+      var on = b.getAttribute("data-rvsub") === rvSub;
+      b.classList.toggle("on", on);
+      b.setAttribute("aria-selected", on ? "true" : "false");
+    });
+    qsa("#rvLangBar [data-rvlang]").forEach(function (b) {
+      var on = b.getAttribute("data-rvlang") === rvLang;
+      b.classList.toggle("on", on);
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+  }
+
+  function rvSubStart(name) {
+    if (name === "words") {
+      rws.finished = false;
+      rwStartSession();
+      renderReviewWords(false);
+    } else if (name === "grammar") {
+      grr.startSession();
+      grr.render(false);
+    } else {
+      try { if (rv.active) { /* 이미 진행 중이면 그대로 */ } else { startReview(); } } catch (e) {}
+    }
+  }
+
+  function rvSetLang(lang) {
+    rvLang = (lang === "en" || lang === "de") ? lang : "all";
+    rws.finished = false;
+    rwStartSession();
+    renderReviewWords(false);
+    grr.startSession();
+    grr.render(false);
+    try { refreshReviewStart(); } catch (e) {}
+    updateReviewSubCounts();
+    toast(rvLang === "all" ? "복습 언어: 전체" : (rvLang === "en" ? "복습 언어: 영어" : "복습 언어: 독일어"));
+  }
+
+  function rvSetSub(name) {
+    if (name !== "sentences" && name !== "words" && name !== "grammar") return;
+    rvSub = name;
+    if (el("rvPaneSentences")) el("rvPaneSentences").hidden = name !== "sentences";
+    if (el("rvPaneWords")) el("rvPaneWords").hidden = name !== "words";
+    if (el("rvPaneGrammar")) el("rvPaneGrammar").hidden = name !== "grammar";
+    if (name !== "sentences" && rv.player) { try { rv.player.pause(); } catch (e) {} }
+    if (name === "words") renderReviewWords(true);
+    if (name === "grammar") grr.render(true);
+    if (name === "sentences" && rv.active && rv.player) { try { rv.player.playRange(); } catch (e) {} }
+    updateReviewSubCounts();
+  }
+
+  /* ---------- 문법 탭: 유닛 칩·진도·머리말 ---------- */
+  function renderGrammarTab(rebuild) {
+    var now = Date.now();
+    if (el("grToday")) el("grToday").textContent = String(grammarDayCount(dayKey(now)));
+    if (el("grStreak")) el("grStreak").textContent = String(grammarStreak(now));
+    if (el("grDue")) el("grDue").textContent = String(grDueCount());
+    if (el("grTotal")) el("grTotal").textContent = String(state.grammar.length);
+    if (el("grModeTodayN")) el("grModeTodayN").textContent = String(grDueCount());
+    if (el("grModeWrongN")) el("grModeWrongN").textContent = String(grWrongCount());
+    if (el("grModeToday")) {
+      el("grModeToday").classList.toggle("on", gr.mode === "today");
+      el("grModeToday").setAttribute("aria-pressed", gr.mode === "today" ? "true" : "false");
+    }
+    if (el("grModeWrong")) {
+      el("grModeWrong").classList.toggle("on", gr.mode === "wrong");
+      el("grModeWrong").setAttribute("aria-pressed", gr.mode === "wrong" ? "true" : "false");
+    }
+
+    var tiles = ['<button type="button" class="gr-unit' + (gr.unit === "all" ? " on" : "") + '" data-gunit="all">' +
+      '<span class="n">ALL</span><span class="s">전체</span><span class="c">' + state.grammar.length + "</span></button>"];
+    for (var u = 0; u < GRAMMAR_UNITS.length; u++) {
+      var un = GRAMMAR_UNITS[u];
+      var total = grUnitTotal(un.id), solved = grUnitSolved(un.id);
+      if (!total) continue;
+      tiles.push('<button type="button" class="gr-unit' + (gr.unit === un.id ? " on" : "") + '" data-gunit="' + un.id + '" title="' + esc(un.title) + '">' +
+        '<span class="n">' + un.n + '</span><span class="s">' + esc(un.short || un.title) + '</span><span class="c">' + solved + "/" + total + "</span></button>");
+    }
+    if (el("grUnits")) el("grUnits").innerHTML = tiles.join("");
+
+    if (el("grUnitList")) {
+      var rows = [];
+      for (var r = 0; r < GRAMMAR_UNITS.length; r++) {
+        var ur = GRAMMAR_UNITS[r];
+        var sn = grUnitTotal(ur.id), sv = grUnitSolved(ur.id);
+        if (!sn) continue;
+        var pctU = Math.round((sv / sn) * 100);
+        rows.push('<div class="vw-item gr-urow" data-gopen="' + ur.id + '">' +
+          '<div class="tt"><b>' + ur.emoji + " " + ur.n + ". " + esc(ur.title) + "</b><span>" + esc(ur.sub) + " · " + sv + "/" + sn + "문제</span>" +
+          '<div class="gr-mini"><span style="width:' + pctU + '%"></span></div></div>' +
+          '<span class="bdg' + (sv >= sn ? " done" : "") + '">' + pctU + "%</span>" +
+          '<div class="acts"><button type="button" data-gopen="' + ur.id + '" aria-label="유닛 자세히">›</button></div></div>');
+      }
+      el("grUnitList").innerHTML = rows.join("");
+    }
+    if (el("grListMeta")) {
+      el("grListMeta").textContent = "유닛 " + GRAMMAR_UNITS.length + " · 문제 " + state.grammar.length + " · 외움 " + grMasteredCount();
+    }
+    grs.render(rebuild);
+    try { updateReviewSubCounts(); } catch (e) {}
+  }
+
+  function grSetUnit(id) {
+    var unitId = String(id || "all");
+    if (unitId !== "all" && !GR_UNIT_BY_ID[unitId]) return;
+    gr.unit = unitId;
+    gr.mode = "today";
+    gr.forceAll = false;
+    grs.build();
+    grs.idx = 0;
+    grs.prepare();
+    renderGrammarTab(false);
+  }
+
+  function grSetMode(mode) {
+    gr.mode = mode === "wrong" ? "wrong" : "today";
+    gr.forceAll = false;
+    grs.build();
+    grs.idx = 0;
+    grs.prepare();
+    renderGrammarTab(false);
+    toast((gr.mode === "wrong" ? "틀린 문제 " : "오늘 풀 문제 ") + grs.queue.length + "개");
+  }
+
+  /* ---------- 문법 탭: 유닛 자세히 보기 (history.pushState / popstate) ---------- */
+  function grUnitViewOpen() {
+    var box = el("grUnitView");
+    return !!(gr.unitOpen && box && !box.hidden);
+  }
+
+  function grOpenUnit(id) {
+    var u = GR_UNIT_BY_ID[id];
+    if (!u) return;
+    var qs = [];
+    for (var i = 0; i < state.grammar.length; i++) if (state.grammar[i].unit === id) qs.push(state.grammar[i]);
+    qs.sort(function (a, b) { return a.createdAt - b.createdAt; });
+    gr.unitOpen = id;
+    if (el("grUnitTitle")) el("grUnitTitle").textContent = u.emoji + " " + u.n + ". " + u.title;
+    if (el("grUnitSub")) el("grUnitSub").textContent = u.sub + " · " + qs.length + "문제";
+    if (el("grUnitStat")) {
+      var done = 0, miss = 0, mast = 0;
+      for (var k = 0; k < qs.length; k++) {
+        if (qs[k].reps > 0 || qs[k].mastered) done++;
+        if (qs[k].missed && !qs[k].mastered) miss++;
+        if (qs[k].mastered) mast++;
+      }
+      el("grUnitStat").textContent = "푼 문제 " + done + "/" + qs.length + " · 틀린 문제 " + miss + " · 외움 " + mast;
+    }
+    if (el("grUnitQs")) {
+      var rows = [];
+      for (var j = 0; j < qs.length; j++) {
+        var q = qs[j];
+        var mark = q.mastered ? '<span class="bdg done">외움</span>'
+          : (q.missed ? '<span class="bdg due">틀림</span>'
+            : (q.reps > 0 ? '<span class="bdg">푼 문제</span>' : '<span class="bdg">새 문제</span>'));
+        rows.push('<div class="gr-uq">' +
+          '<div class="gr-uq-n">' + (j + 1) + "</div>" +
+          '<div class="gr-uq-t">' + esc(q.prompt) + '<span class="gr-uq-a">정답 · ' + esc(q.options[q.answer]) + "</span></div>" +
+          mark + "</div>");
+      }
+      el("grUnitQs").innerHTML = rows.join("");
+    }
+    if (el("grMain")) el("grMain").hidden = true;
+    if (el("grUnitView")) el("grUnitView").hidden = false;
+    historyPushView("grammar-unit", { unit: id });
+    try { window.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) { try { window.scrollTo(0, 0); } catch (e2) {} }
+  }
+
+  // 화면만 되돌리기(history는 popstate/드롭이 담당) — 팩 화면과 같은 방식
+  function closeGrUnitView() {
+    if (!grUnitViewOpen()) return;
+    gr.unitOpen = "";
+    if (el("grUnitView")) el("grUnitView").hidden = true;
+    if (el("grMain")) el("grMain").hidden = false;
+  }
+
+  function grStartUnit() {
+    var id = gr.unitOpen || gr.unit;
+    if (!GR_UNIT_BY_ID[id]) return;
+    gr.unit = id;
+    gr.mode = "today";
+    gr.forceAll = true;      // 유닛의 5문제를 순서대로 다 본다
+    grs.build();
+    grs.idx = 0;
+    grs.prepare();
+    closeGrUnitView();
+    historyDropSilent();
+    renderGrammarTab(false);
+    grScrollIntoView();
+    toast("유닛 " + GR_UNIT_BY_ID[id].n + " · " + grs.queue.length + "문제를 시작해요");
+  }
+
+  function bindGrammar() {
+    var pane = el("tab-grammar");
+    if (pane) {
+      pane.addEventListener("click", function (e) {
+        var unitTile = e.target.closest("[data-gunit]");
+        if (unitTile) { grSetUnit(unitTile.getAttribute("data-gunit")); return; }
+        var modeBtn = e.target.closest("[data-grmode]");
+        if (modeBtn) { grSetMode(modeBtn.getAttribute("data-grmode")); return; }
+        var open = e.target.closest("[data-gopen]");
+        if (open) { grOpenUnit(open.getAttribute("data-gopen")); return; }
+        grHandleCard(e, grs);
+      });
+      if (el("grUnitBack")) el("grUnitBack").addEventListener("click", function () { historyBackOr(closeGrUnitView); });
+      if (el("grUnitStart")) el("grUnitStart").addEventListener("click", grStartUnit);
+    }
+
+    var rvp = el("rvPaneGrammar");
+    if (rvp) {
+      rvp.addEventListener("click", function (e) {
+        var chain = e.target.closest("[data-gchain]");
+        if (chain) {
+          var target = chain.getAttribute("data-gchain");
+          rvSetSub(target);
+          rvSubStart(target);
+          return;
+        }
+        var more = e.target.closest("[data-gmore]");
+        if (more) { grr.startSession(); grr.render(false); return; }
+        grHandleCard(e, grr);
+      });
+    }
+
+    var rwp = el("rvPaneWords");
+    if (rwp) {
+      rwp.addEventListener("click", function (e) {
+        var chain = e.target.closest("[data-rchain]");
+        if (chain) {
+          var target = chain.getAttribute("data-rchain");
+          rvSetSub(target);
+          rvSubStart(target);
+          return;
+        }
+        var more = e.target.closest("[data-rmore]");
+        if (more) { rws.finished = false; rwStartSession(); renderReviewWords(false); return; }
+        var flip = e.target.closest("[data-rwflip]") || e.target.closest("#rwFlip");
+        if (flip) { rws.flipped = !rws.flipped; renderReviewWords(false); return; }
+        var say = e.target.closest("[data-rwsay]") || e.target.closest("[data-say]");
+        if (say) {
+          var cur = rwCurrent();
+          if (!cur) return;
+          var what = say.getAttribute("data-rwsay") || say.getAttribute("data-say");
+          var tag = say.getAttribute("data-lang") || (cur.lang === "de" ? "de-DE" : "en-US");
+          vwSpeak(what === "example" ? cur.example : cur.word, tag, say);
+          return;
+        }
+        var nav = e.target.closest("[data-rwnav]");
+        if (nav) {
+          if (!rws.queue.length) return;
+          rws.flipped = false;
+          var step = Number(nav.getAttribute("data-rwnav"));
+          var len = rws.queue.length;
+          rws.idx = ((rws.idx + step) % len + len) % len;
+          renderReviewWords(false);
+          return;
+        }
+        var grade = e.target.closest("[data-rwgrade]");
+        if (grade) { rwGrade(grade.getAttribute("data-rwgrade")); return; }
+      });
+    }
+
+    if (el("doneChainBtn")) {
+      el("doneChainBtn").addEventListener("click", function () {
+        var next = rvChainNext("sentences");
+        if (!next) return;
+        rvSetSub(next.key);
+        rvSubStart(next.key);
+      });
+    }
+
+    ["vwNudge", "grNudge"].forEach(function (id) {
+      var box = el(id);
+      if (box) box.addEventListener("click", function (e) {
+        if (e.target.closest("[data-goreview]")) switchTab("review");
+      });
+    });
+
+    var langBar = el("rvLangBar");
+    if (langBar) {
+      langBar.addEventListener("click", function (e) {
+        var b = e.target.closest("[data-rvlang]");
+        if (b) rvSetLang(b.getAttribute("data-rvlang"));
+      });
+    }
+
+    var subBar = el("rvSubBar");
+    if (subBar) {
+      subBar.addEventListener("click", function (e) {
+        var b = e.target.closest("[data-rvsub]");
+        if (b) rvSetSub(b.getAttribute("data-rvsub"));
+      });
+    }
+
+    document.addEventListener("keydown", function (e) {
+      if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+      if (el("editModal") && !el("editModal").hidden) return;
+      var onGrammarTab = currentTab === "grammar" && !grUnitViewOpen();
+      var onReviewGrammar = currentTab === "review" && rvSub === "grammar";
+      if (onGrammarTab || onReviewGrammar) {
+        var sess = onGrammarTab ? grs : grr;
+        var q = sess.current();
+        if (!q) return;
+        if (/^[1-4]$/.test(e.key)) {
+          var n = Number(e.key) - 1;
+          if (!sess.answered) sess.pick(n);
+          return;
+        }
+        if (e.key === "1" && sess.answered) return;
+        if (e.code === "Space" || e.key === " " || e.key === "Enter") {
+          e.preventDefault();
+          if (sess.answered) sess.next();
+          else sess.step(1);
+        }
+        return;
+      }
+      if (currentTab === "review" && rvSub === "words") {
+        var w = rwCurrent();
+        if (!w) return;
+        if (e.code === "Space" || e.key === " ") {
+          e.preventDefault();
+          rws.flipped = !rws.flipped;
+          renderReviewWords(false);
+          return;
+        }
+        if (/^[1-4]$/.test(e.key)) rwGrade({ 1: "again", 2: "good", 3: "easy", 4: "mastered" }[e.key]);
+      }
+    });
+  }
+
+  function grHandleCard(e, sess) {
+    var pick = e.target.closest("[data-gpick]");
+    if (pick) { sess.pick(pick.getAttribute("data-gpick")); return; }
+    var say = e.target.closest("[data-gsay]");
+    if (say) {
+      var q = sess.current();
+      if (!q) return;
+      vwSpeak(q.full, say.getAttribute("data-gsay") || "en-US", say);
+      return;
+    }
+    var ov = e.target.closest("[data-gov]");
+    if (ov) { sess.override(ov.getAttribute("data-gov")); return; }
+    var nav = e.target.closest("[data-gnav]");
+    if (nav) {
+      var d = Number(nav.getAttribute("data-gnav"));
+      if (d === 0) { sess.prepare(); sess.render(false); return; }
+      if (d > 0) { sess.next(); return; }
+      sess.step(d);
+    }
+  }
+
+  /* =========================================================
      init
      ========================================================= */
   function init() {
@@ -9250,10 +11242,14 @@ kbd {
     bind();
     bindVocab();
     seedWords();
+    seedGrammar();
+    bindGrammar();
     renderPacks();
     renderLibrary();
     renderVocab();
+    renderGrammarTab();
     updateDueBadge();
+    try { rvSetSub(rvSub || "words"); } catch (e) {}
     refreshReviewStart();
     syncPlayButton();
     syncSegmentUI();
