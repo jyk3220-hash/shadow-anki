@@ -2117,6 +2117,7 @@ kbd {
     words: [],           // 단어장 카드(추천 단어 묶음 + 내가 추가한 단어)
     wordLog: {},         // 단어 학습 기록(문장 기록 dailyLog와 따로 센다)
     wordsSeeded: false,  // 기본 단어 묶음을 한 번 넣었는지
+    wordsSeedVersion: 0, // 기본 단어 묶음의 세대(2 = 2026-11 추가분까지)
     lastBackupAt: 0      // 마지막으로 백업 파일을 내려받은 시각(라이브러리의 백업 알림)
   };
 
@@ -2129,6 +2130,7 @@ kbd {
         words: state.words,
         wordLog: state.wordLog,
         wordsSeeded: !!state.wordsSeeded,
+        wordsSeedVersion: state.wordsSeedVersion || 0,
         lastBackupAt: state.lastBackupAt || 0,
         savedAt: Date.now()
       }));
@@ -2212,6 +2214,7 @@ kbd {
     }
     state.wordLog = sanitizeDailyLog(data.wordLog);
     state.wordsSeeded = !!data.wordsSeeded || state.words.length > 0;
+    state.wordsSeedVersion = Math.max(0, Math.floor(Number(data.wordsSeedVersion) || (data.wordsSeeded ? 1 : 0)));
     if (isFinite(Number(data.lastBackupAt)) && Number(data.lastBackupAt) > 0) {
       state.lastBackupAt = Number(data.lastBackupAt);
     }
@@ -2387,8 +2390,8 @@ kbd {
       emoji: "💼",
       name: "비즈니스·학회·발표 영어",
       level: "B1 → B2",
-      sub: "Oxford Online English · TED · 회의·전화·발표·Q&A 46문장",
-      desc: "회의에서 의견·반대·질문·마감을 말하는 문장부터, TED에서 연구를 소개하고 주장을 세우는 문장까지 — 일과 발표에 바로 쓰는 46문장. 전화 통화 예절과 발표 도입·마무리·Q&A 대응까지 5편의 검증된 영상에서 모았습니다.",
+      sub: "Oxford Online English · TED · 회의·전화·발표·Q&A 51문장",
+      desc: "회의에서 의견·반대·질문·마감을 말하는 문장부터, TED에서 연구를 소개하고 주장을 세우는 문장까지 — 일과 발표에 바로 쓰는 51문장. 전화 통화 예절과 발표 도입·마무리·Q&A 대응까지 5편의 검증된 영상에서 모았습니다.",
       cards: [
         {
           id: "pack-biz-1",
@@ -2701,6 +2704,41 @@ kbd {
           sentence: "And good, close relationships seem to buffer us from some of the slings and arrows of getting old.",
           meaning: "그리고 좋은 가까운 관계는 늙어가며 겪는 온갖 시련으로부터 우리를 완충해 주는 것 같습니다.\n· buffer somebody from = ~을 완충·보호하다. the slings and arrows of ~ = ~의 시련(셰익스피어에서 온 표현).",
           tags: ["TED", "관계", "표현"], level: "B2"
+        },
+        {
+          id: "pack-biz-30",
+          videoId: "NEKZFA7L7Lg", start: 50.96, end: 57.5,
+          sentence: "Other times, the chair will ask for quick introductions to break the ice.",
+          meaning: "때로는 진행자가 분위기를 풀기 위해 짧은 자기소개를 하라고 합니다.\n· the chair = 회의 진행자(의장). break the ice = 어색한 분위기를 풀다.",
+          tags: ["비즈니스", "회의", "자기소개"], level: "B2"
+        },
+        {
+          id: "pack-biz-31",
+          videoId: "NEKZFA7L7Lg", start: 528.52, end: 532.22,
+          sentence: "Sorry to interrupt, but I have a question.",
+          meaning: "방해해서 죄송하지만, 질문이 하나 있습니다.\n· Sorry to interrupt, but ~ = 회의·발표 도중 끼어들 때 쓰는 정중한 시작. interrupt = 말을 끊다.",
+          tags: ["비즈니스", "회의", "Q&A"], level: "B1"
+        },
+        {
+          id: "pack-biz-32",
+          videoId: "fzIxD1jXn44", start: 359.76, end: 366.16,
+          sentence: "Mention an interesting fact, or a surprising statistic to get people's attention.",
+          meaning: "사람들의 주의를 끌려면 흥미로운 사실이나 의외의 통계를 언급하세요.\n· mention + 명사 = ~을 언급하다. statistic = 통계 수치. 발표 도입에서 청중을 붙잡는 방법입니다.",
+          tags: ["비즈니스", "발표", "스피킹"], level: "B2"
+        },
+        {
+          id: "pack-biz-33",
+          videoId: "fzIxD1jXn44", start: 864.83, end: 868.48,
+          sentence: "Let me return to an earlier point briefly.",
+          meaning: "앞서 말씀드린 부분으로 잠깐 돌아가겠습니다.\n· Let me ~ = 제가 ~하겠습니다. briefly = 간단히. 발표 중 빠뜨린 내용을 보완할 때 씁니다.",
+          tags: ["비즈니스", "발표", "연결"], level: "B1"
+        },
+        {
+          id: "pack-biz-34",
+          videoId: "fzIxD1jXn44", start: 936.98, end: 942.44,
+          sentence: "Finally, if the question is irrelevant, you can dismiss the question and move on.",
+          meaning: "마지막으로, 질문이 논점과 무관하다면 그 질문은 접고 다음으로 넘어가도 됩니다.\n· irrelevant = 관계없는. dismiss = 일축하다, 넘기다. move on = 다음으로 넘어가다.",
+          tags: ["비즈니스", "Q&A", "회의"], level: "B2"
         }
       ]
     },
@@ -2710,8 +2748,8 @@ kbd {
       emoji: "🧪",
       name: "에너지·기후·공학 영어",
       level: "B1 → B2",
-      sub: "DW Planet A · 수소·CCS·배터리·e-fuel·지열·리튬·태양광 54문장",
-      desc: "수소 생산과 블루 수소, 탄소 포집(CCS·DAC)과 비용, EV 배터리 재활용, 합성연료(e-fuel)의 효율, 차세대 지열과 지열 리튬까지 — 히트펌프와 태양광·전력망 안정성까지 실제 에너지·기후 영상 8편에서 뽑은 54문장.",
+      sub: "DW Planet A · 수소·CCS·배터리·e-fuel·지열·리튬·태양광 59문장",
+      desc: "수소 생산과 블루 수소, 탄소 포집(CCS·DAC)과 비용, EV 배터리 재활용, 합성연료(e-fuel)의 효율, 차세대 지열과 지열 리튬까지 — 히트펌프와 태양광·전력망 안정성까지 실제 에너지·기후 영상 8편에서 뽑은 59문장.",
       cards: [
         {
           id: "pack-energy-1",
@@ -3080,6 +3118,41 @@ kbd {
           sentence: "No matter how close you look at this thing, there is nothing spinning to generate electricity.",
           meaning: "아무리 가까이 들여다봐도 전기를 만드는 회전부는 없습니다.\n· No matter how ~ = 아무리 ~해도. 태양광의 구조적 차이를 강조하는 문장입니다.",
           tags: ["에너지", "태양광", "원리"], level: "B2"
+        },
+        {
+          id: "pack-energy-55",
+          videoId: "AGTjKJHu99c", start: 331.24, end: 336.48,
+          sentence: "This means we still make hydrogen from natural gas in a process called steam methane reforming.",
+          meaning: "즉 우리는 여전히 수증기 메탄 개질이라는 공정으로 천연가스에서 수소를 만든다는 뜻입니다.\n· steam methane reforming(SMR) = 수증기 메탄 개질. a process called ~ = ~라고 불리는 공정.",
+          tags: ["에너지", "수소", "공정"], level: "B2"
+        },
+        {
+          id: "pack-energy-56",
+          videoId: "AGTjKJHu99c", start: 106.04, end: 110.07,
+          sentence: "These essentially work like a battery running on hydrogen and oxygen.",
+          meaning: "이것들은 기본적으로 수소와 산소로 움직이는 배터리처럼 작동합니다.\n· essentially = 본질적으로. work like ~ = ~처럼 작동하다. run on ~ = ~로 가동하다. 연료전지 설명입니다.",
+          tags: ["에너지", "수소", "화학"], level: "B2"
+        },
+        {
+          id: "pack-energy-57",
+          videoId: "PmMFRhlKjuI", start: 376.76, end: 380.97,
+          sentence: "It basically works like a filter and makes the lithium stick to it.",
+          meaning: "기본적으로 필터처럼 작동해서 리튬이 그 표면에 달라붙게 합니다.\n· basically = 기본적으로. stick to ~ = ~에 달라붙다. 직접 리튬 추출(DLE) 공정 설명.",
+          tags: ["에너지", "리튬", "공정"], level: "B2"
+        },
+        {
+          id: "pack-energy-58",
+          videoId: "PbOBmnZRpZ4", start: 318.04, end: 322.45,
+          sentence: "It often involves smelting, so essentially heating them until they melt.",
+          meaning: "여기에는 보통 제련이 들어가는데, 쉽게 말해 녹을 때까지 가열하는 것입니다.\n· involve = 포함하다. smelting = 제련. essentially = 사실상, 본질적으로.",
+          tags: ["에너지", "재활용", "공정"], level: "B2"
+        },
+        {
+          id: "pack-energy-59",
+          videoId: "PmMFRhlKjuI", start: 496.84, end: 503.23,
+          sentence: "That's because pumping geothermal brine can change pressure underground and trigger tiny earthquakes.",
+          meaning: "지열 염수를 퍼 올리면 지하 압력이 바뀌어 작은 지진을 유발할 수 있기 때문입니다.\n· geothermal brine = 지열 염수. trigger = 유발하다. tiny earthquakes = 미소 지진.",
+          tags: ["에너지", "지열", "환경"], level: "B2"
         }
       ]
     },
@@ -3089,8 +3162,8 @@ kbd {
       emoji: "🎙️",
       name: "셀럽 인터뷰 영어",
       level: "B1 → B2",
-      sub: "Vogue 73 Questions · Taylor·Margot·Zendaya·Emma Stone·Anne Hathaway·Olivia Rodrigo 55문장",
-      desc: "Taylor Swift·Margot Robbie·Zendaya·Emma Stone·Anne Hathaway의 인터뷰를 먼저, 이어서 Zac Efron·Robert Downey Jr.의 농담과 리액션까지 — 실제 인터뷰 말투 55문장.",
+      sub: "Vogue 73 Questions · Taylor·Margot·Zendaya·Emma Stone·Anne Hathaway·Olivia Rodrigo 60문장",
+      desc: "Taylor Swift·Margot Robbie·Zendaya·Emma Stone·Anne Hathaway의 인터뷰를 먼저, 이어서 Zac Efron·Robert Downey Jr.의 농담과 리액션까지 — 실제 인터뷰 말투 60문장.",
       cards: [
         {
           id: "pack-female-celeb-1",
@@ -3466,6 +3539,41 @@ kbd {
           sentence: "I get to do what I love every single day and it’s because of you.",
           meaning: "매일 좋아하는 일을 할 수 있는 건 여러분 덕분이에요.\n· get to + 동사 = ~할 수 있다(기회가 있다). 팬에게 고마움을 전하는 문장입니다.",
           tags: ["여성 셀럽", "인터뷰", "감사"], level: "B1"
+        },
+        {
+          id: "pack-celeb-56",
+          videoId: "_DfmauOCSJ4", start: 404.72, end: 406.75,
+          sentence: "I like when someone is swinging for the fences.",
+          meaning: "저는 누군가 크게 한 방을 노리는 모습이 좋아요.\n· swing for the fences = (야구에서) 담장을 넘기려 크게 휘두르다 → 큰 승부를 걸다, 과감히 도전하다.",
+          tags: ["인터뷰", "B2", "표현"], level: "B2"
+        },
+        {
+          id: "pack-celeb-57",
+          videoId: "wZFblGM42Mw", start: 600.92, end: 603.67,
+          sentence: "Acting is not a solo sport. It's a team sport.",
+          meaning: "연기는 개인 종목이 아니에요. 팀 스포츠죠.\n· solo sport = 개인 종목. team sport와 대비해 협업이 필요하다는 뜻을 짧게 전합니다.",
+          tags: ["인터뷰", "일", "B1"], level: "B1"
+        },
+        {
+          id: "pack-celeb-58",
+          videoId: "wZFblGM42Mw", start: 633.29, end: 638.01,
+          sentence: "I have taken my craft seriously. I've learned a great deal, and you can trust me.",
+          meaning: "저는 제 일을 진지하게 해 왔어요. 많이 배웠고, 저를 믿으셔도 됩니다.\n· craft = (직업으로서의) 기예. take ~ seriously = ~을 진지하게 여기다. a great deal = much.",
+          tags: ["인터뷰", "커리어", "B2"], level: "B2"
+        },
+        {
+          id: "pack-celeb-59",
+          videoId: "XnbCSboujF4", start: 191.64, end: 196.7,
+          sentence: "I think you should never Google yourself again.",
+          meaning: "자기 자신을 다시는 검색하지 않는 게 좋을 것 같아요.\n· Google을 동사로 '검색하다'. never ~ again = 다시는 ~하지 않다.",
+          tags: ["인터뷰", "유머", "B1"], level: "B1"
+        },
+        {
+          id: "pack-celeb-60",
+          videoId: "XnbCSboujF4", start: 460.52, end: 465.94,
+          sentence: "I'm going to be dressed as a robot. And I'm going to carry a sword.",
+          meaning: "저는 로봇 분장을 할 거예요. 그리고 칼도 들 거고요.\n· be dressed as ~ = ~ 분장을 하다. carry = (손에) 들고 다니다.",
+          tags: ["인터뷰", "유머", "B1"], level: "B1"
         }
       ]
     },
@@ -3475,8 +3583,8 @@ kbd {
       emoji: "🗣️",
       name: "일상·스몰토크 영어",
       level: "B1 → B2",
-      sub: "Harvard Business Review · Easy English · 스몰토크 41문장",
-      desc: "가벼운 대화에서 바로 쓰는 말투 — 시작, 맞장구, 칭찬, 자연스럽게 빠져나오기까지. HBR 인터뷰와 영국인 스트리트 인터뷰에서 뽑은 41문장.",
+      sub: "Harvard Business Review · Easy English · 스몰토크 46문장",
+      desc: "가벼운 대화에서 바로 쓰는 말투 — 시작, 맞장구, 칭찬, 자연스럽게 빠져나오기까지. HBR 인터뷰와 영국인 스트리트 인터뷰에서 뽑은 46문장.",
       cards: [
         {
           id: "pack-talk-1",
@@ -3754,6 +3862,41 @@ kbd {
           sentence: "However, it can be challenging to find new and interesting stories every day.",
           meaning: "하지만 매일 새롭고 흥미로운 이야기를 찾는 건 쉽지 않아요.\n· However = 하지만(격식). It can be challenging to ~ = ~은 어려울 수 있다.",
           tags: ["일상", "스몰토크", "직업"], level: "B2"
+        },
+        {
+          id: "pack-talk-42",
+          videoId: "IRG-YubP1rw", start: 8.6, end: 15.71,
+          sentence: "When, in fact, small talk is a wonderful way of connecting, bonding, learning, growing.",
+          meaning: "사실 스몰토크는 사람과 연결되고, 가까워지고, 배우고, 성장하는 멋진 방법입니다.\n· in fact = 사실은. a way of -ing = ~하는 방법. connecting·bonding·learning·growing을 리듬 있게 나열.",
+          tags: ["스몰토크", "B2", "연결"], level: "B2"
+        },
+        {
+          id: "pack-talk-43",
+          videoId: "IRG-YubP1rw", start: 15.69, end: 20.71,
+          sentence: "And what makes it so challenging is the fact that we can't have a script.",
+          meaning: "그렇게 어렵게 만드는 건, 대본이 없다는 점입니다.\n· What makes it so challenging is ~ = 그것을 그렇게 어렵게 만드는 것은 ~이다. script = 대본.",
+          tags: ["스몰토크", "B2", "설명"], level: "B2"
+        },
+        {
+          id: "pack-talk-44",
+          videoId: "IRG-YubP1rw", start: 297.68, end: 302.64,
+          sentence: "So I'd like people to reframe a mistake as a missed take.",
+          meaning: "그래서 사람들이 실수를 '놓친 테이크'로 다시 보기를 바랍니다.\n· reframe A as B = A를 B로 재해석하다. take = (촬영·녹음의) 한 번의 시도.",
+          tags: ["스몰토크", "B2", "표현"], level: "B2"
+        },
+        {
+          id: "pack-talk-45",
+          videoId: "IRG-YubP1rw", start: 608.66, end: 613.52,
+          sentence: "It's just a much better, cleaner way to end a small talk conversation.",
+          meaning: "그게 스몰토크를 끝내는 훨씬 낫고 깔끔한 방법입니다.\n· cleaner way = 더 깔끔한 방법. end a conversation = 대화를 마무리하다.",
+          tags: ["스몰토크", "B2", "마무리"], level: "B2"
+        },
+        {
+          id: "pack-talk-46",
+          videoId: "rPgykzyHg6I", start: 355.73, end: 358.78,
+          sentence: "I'll just ask them how their day was, if they've had a nice day.",
+          meaning: "그냥 오늘 하루 어땠는지, 좋은 하루 보냈는지 물어봐요.\n· how one's day was = 하루가 어땠는지. if they've had a nice day로 가볍게 이어 묻습니다.",
+          tags: ["스몰토크", "B1", "질문"], level: "B1"
         }
       ]
     },
@@ -3763,8 +3906,8 @@ kbd {
       emoji: "🇩🇪",
       name: "독일어 기초·일상 회화",
       level: "A1 → A2",
-      sub: "Easy German · 자기소개·주문·장보기·약국 84문장",
-      desc: "이름·출신·직업을 묻고 답하기부터 카페·식당에서 주문하고 계산하기까지, 천천히 또박또박 말하는 문장 84개. 슈퍼마켓 장보기와 약국에서 증상 말하기까지 담았습니다.",
+      sub: "Easy German · 자기소개·주문·장보기·약국 94문장",
+      desc: "이름·출신·직업을 묻고 답하기부터 카페·식당에서 주문하고 계산하기까지, 천천히 또박또박 말하는 문장 94개. 슈퍼마켓 장보기와 약국에서 증상 말하기까지 담았습니다.",
       cards: [
         {
           id: "pack-de-a1-1",
@@ -4051,6 +4194,41 @@ kbd {
           tags: ["독일어", "A1", "쇼핑"], level: "A1"
         },
         {
+          id: "pack-de-a1-43",
+          videoId: "OFSHdj_2FQA", start: 26.8, end: 28.47,
+          sentence: "Wollen wir was essen gehen?",
+          meaning: "우리 뭐 먹으러 갈까?\n· wollen wir ~? = 우리 ~할까? was = etwas의 구어형. essen gehen = 먹으러 가다.",
+          tags: ["독일어", "A1", "식당"], level: "A1"
+        },
+        {
+          id: "pack-de-a1-44",
+          videoId: "OFSHdj_2FQA", start: 191.92, end: 194.38,
+          sentence: "Ich glaube, das ist eine gute Idee.",
+          meaning: "좋은 생각인 것 같아요.\n· ich glaube = ~인 것 같다. das ist eine gute Idee = 좋은 생각이다. 상대 제안에 동의할 때.",
+          tags: ["독일어", "A1", "동의"], level: "A1"
+        },
+        {
+          id: "pack-de-a1-45",
+          videoId: "D91icSuPYQ4", start: 115.56, end: 117.77,
+          sentence: "Hast du eine Einkaufsliste?",
+          meaning: "장바구니 목록 있어?\n· Einkaufsliste = 쇼핑 목록. haben의 2인칭 의문형 hast du.",
+          tags: ["독일어", "A1", "쇼핑"], level: "A1"
+        },
+        {
+          id: "pack-de-a1-46",
+          videoId: "D91icSuPYQ4", start: 536.2, end: 537.35,
+          sentence: "Was brauchst du?",
+          meaning: "뭐 필요해?\n· brauchen = 필요로 하다. was = 무엇. 장보러 가기 전에 바로 쓰는 질문.",
+          tags: ["독일어", "A1", "쇼핑"], level: "A1"
+        },
+        {
+          id: "pack-de-a1-47",
+          videoId: "D91icSuPYQ4", start: 616.28, end: 618.95,
+          sentence: "Das ist das Getränkeregal.",
+          meaning: "이건 음료 진열대예요.\n· das Regal = 진열대, 선반. Getränkeregal = 음료 진열대. 매장에서 위치를 짚을 때.",
+          tags: ["독일어", "A1", "쇼핑"], level: "A1"
+        },
+        {
           id: "pack-de-a2-1",
           videoId: "OFSHdj_2FQA", start: 21.5, end: 24,
           sentence: "Ich habe Hunger.",
@@ -4333,6 +4511,41 @@ kbd {
           sentence: "Ich nehme ein alkoholfreies Bier, bitte.",
           meaning: "무알코올 맥주 하나로 할게요.\n· alkoholfrei = 무알코올의. 중성 das Bier에 맞춰 형용사 어미 -es가 붙습니다.",
           tags: ["독일어", "A2", "주문"], level: "A2"
+        },
+        {
+          id: "pack-de-a2-43",
+          videoId: "1bFgK6wtuNY", start: 262.68, end: 267.0,
+          sentence: "Ich kann mich gar nicht entscheiden. Es ist wirklich die Qual der Wahl.",
+          meaning: "정말 못 고르겠어요. 이건 정말 선택의 고통이네요.\n· sich entscheiden = 결정하다. Qual der Wahl = 선택지가 많아 겪는 고민이라는 관용구.",
+          tags: ["독일어", "A2", "쇼핑"], level: "A2"
+        },
+        {
+          id: "pack-de-a2-44",
+          videoId: "CtxKpeYfKvw", start: 222.68, end: 226.27,
+          sentence: "Ja, immer noch. Aber es wird vom Tag zu Tag besser.",
+          meaning: "네, 아직도요. 그래도 날이 갈수록 나아지고 있어요.\n· immer noch = 아직도. von Tag zu Tag = 날이 갈수록. besser werden = 좋아지다.",
+          tags: ["독일어", "A2", "건강"], level: "A2"
+        },
+        {
+          id: "pack-de-a2-45",
+          videoId: "CtxKpeYfKvw", start: 671.88, end: 675.71,
+          sentence: "Das heißt, man muss erst zum Arzt gehen und danach fragen.",
+          meaning: "즉, 먼저 의사에게 가서 물어봐야 한다는 뜻이에요.\n· Das heißt = 즉. erst = 먼저. zum Arzt gehen = 의사에게 가다.",
+          tags: ["독일어", "A2", "약국"], level: "A2"
+        },
+        {
+          id: "pack-de-a2-46",
+          videoId: "D91icSuPYQ4", start: 622.84, end: 625.83,
+          sentence: "Jeder darf sich ein Getränk aussuchen.",
+          meaning: "누구나 음료를 하나씩 골라도 돼요.\n· jeder darf = 누구나 ~해도 된다. sich etwas aussuchen = ~을 골라 정하다.",
+          tags: ["독일어", "A2", "쇼핑"], level: "A2"
+        },
+        {
+          id: "pack-de-a2-47",
+          videoId: "OFSHdj_2FQA", start: 229.0, end: 231.43,
+          sentence: "Wir haben uns endlich entschieden.",
+          meaning: "우리 드디어 정했어요.\n· endlich = 드디어. sich entscheiden = 마음을 정하다. haben ... entschieden = 현재완료.",
+          tags: ["독일어", "A2", "식당"], level: "A2"
         }
       
       ]
@@ -4343,8 +4556,8 @@ kbd {
       emoji: "✈️",
       name: "엄마를 위한 여행영어",
       level: "A1 → B1",
-      sub: "Oxford Online English · BBC · 공항·호텔·주문·관광 56문장",
-      desc: "공항·입국심사에서 호텔 체크인, 카페 주문, 쇼핑·환불, 길찾기, 아플 때 약국까지 — 처음 해외여행을 가도 바로 쓸 수 있는 56문장.",
+      sub: "Oxford Online English · BBC · 공항·호텔·주문·관광 61문장",
+      desc: "공항·입국심사에서 호텔 체크인, 카페 주문, 쇼핑·환불, 길찾기, 아플 때 약국까지 — 처음 해외여행을 가도 바로 쓸 수 있는 61문장.",
       cards: [
         {
           id: "pack-travel-mom-1",
@@ -4727,6 +4940,41 @@ kbd {
           sentence: "What time would you like the ticket for?",
           meaning: "몇 시 표로 드릴까요?\n· What time would you like ~ for? = ~을 몇 시로 원하세요? 입장 시간대를 정할 때 듣는 질문입니다.",
           tags: ["여행", "쇼핑", "티켓"], level: "A2"
+        },
+        {
+          id: "pack-travel-mom-57",
+          videoId: "5otanR_Jg2M", start: 661.78, end: 664.25,
+          sentence: "Would you like to exchange them for a larger size?",
+          meaning: "더 큰 사이즈로 교환해 드릴까요?\n· exchange A for B = A를 B로 교환하다. 사이즈가 안 맞을 때 매장에서 듣는 말.",
+          tags: ["여행", "쇼핑", "교환"], level: "B1"
+        },
+        {
+          id: "pack-travel-mom-58",
+          videoId: "5otanR_Jg2M", start: 76.0, end: 78.24,
+          sentence: "Will you be getting any more in?",
+          meaning: "이거 더 들어오나요?\n· get in = (상품이) 들어오다, 입고되다. 품절된 물건의 재입고를 물을 때 씁니다.",
+          tags: ["여행", "쇼핑", "질문"], level: "B1"
+        },
+        {
+          id: "pack-travel-mom-59",
+          videoId: "5otanR_Jg2M", start: 676.48, end: 681.08,
+          sentence: "I'm sorry, but we can only issue a refund to the card you paid with.",
+          meaning: "죄송하지만 결제하신 카드로만 환불해 드릴 수 있습니다.\n· issue a refund = 환불해 주다. the card you paid with = 결제에 쓴 카드.",
+          tags: ["여행", "쇼핑", "환불"], level: "B2"
+        },
+        {
+          id: "pack-travel-mom-60",
+          videoId: "FJrRiVjeOMc", start: 646.73, end: 649.6,
+          sentence: "I think there's a problem with the sink.",
+          meaning: "세면대에 문제가 있는 것 같아요.\n· there's a problem with ~ = ~에 문제가 있다. 호텔에서 고장을 알릴 때.",
+          tags: ["여행", "호텔", "문제"], level: "B1"
+        },
+        {
+          id: "pack-travel-mom-61",
+          videoId: "FJrRiVjeOMc", start: 616.08, end: 619.66,
+          sentence: "Sometimes, older key cards don't work so well.",
+          meaning: "가끔 오래된 키 카드는 잘 작동하지 않거든요.\n· key card = 카드형 객실 키. work = 작동하다.",
+          tags: ["여행", "호텔", "문제"], level: "B1"
         }
       ]
     },
@@ -4736,8 +4984,8 @@ kbd {
       emoji: "🤖",
       name: "AI·테크 트렌드 영어",
       level: "B1 → B2",
-      sub: "TED · Harvard Business Review · AI 전환·제품·전략 20문장",
-      desc: "AI 전환을 설명하고, 제품과 전략을 제안하고, 숫자로 현황을 보여주는 20문장. Andrew Ng·Mustafa Suleyman·Jessica Apotheker·Sasha Luccioni의 TED 강연과 HBR IdeaCast(Ethan Mollick)에서 회의·발표·테크 토론에 바로 쓰는 문장만 골랐습니다.",
+      sub: "TED · Harvard Business Review · AI 전환·제품·전략 25문장",
+      desc: "AI 전환을 설명하고, 제품과 전략을 제안하고, 숫자로 현황을 보여주는 25문장. Andrew Ng·Mustafa Suleyman·Jessica Apotheker·Sasha Luccioni의 TED 강연과 HBR IdeaCast(Ethan Mollick)에서 회의·발표·테크 토론에 바로 쓰는 문장만 골랐습니다.",
       cards: [
         {
           id: "pack-ai-1", videoId: "reUZRyXxUs4", start: 196.79, end: 206.66,
@@ -4858,6 +5106,41 @@ kbd {
           sentence: "We're building the road as we walk it, and we can collectively decide what direction we want to go in together.",
           meaning: "우리는 걸으면서 길을 만들고 있고, 어느 방향으로 갈지는 함께 정할 수 있습니다.\n· build the road as we walk it = 걸으면서 길을 닦다, 즉 해 나가면서 만들어 간다. 마무리 발표 문장으로 좋습니다.",
           tags: ["AI", "발표", "마무리"], level: "B2"
+        },
+        {
+          id: "pack-ai-21",
+          videoId: "9f3qnX6aiIE", start: 1492.46, end: 1494.51,
+          sentence: "The first is, what have you stopped doing as a result of AI?",
+          meaning: "첫째는, AI 덕분에 무엇을 그만두게 되었느냐입니다.\n· as a result of ~ = ~의 결과로. stop doing = 하던 일을 그만두다.",
+          tags: ["AI", "전략", "질문"], level: "B2"
+        },
+        {
+          id: "pack-ai-22",
+          videoId: "9f3qnX6aiIE", start: 1502.37, end: 1504.35,
+          sentence: "Second thing is, what are you building that's impossible?",
+          meaning: "둘째는, 불가능해 보이는 무엇을 만들고 있느냐입니다.\n· build = 만들다, 구축하다. that's impossible = (예전엔) 불가능했던.",
+          tags: ["AI", "전략", "질문"], level: "B2"
+        },
+        {
+          id: "pack-ai-23",
+          videoId: "9f3qnX6aiIE", start: 285.5, end: 288.59,
+          sentence: "But unless we do active experimentation, we're not going to know anything.",
+          meaning: "하지만 적극적으로 실험하지 않으면 우리는 아무것도 알 수 없습니다.\n· unless = ~하지 않으면. active experimentation = 적극적인 실험.",
+          tags: ["AI", "실험", "전략"], level: "B2"
+        },
+        {
+          id: "pack-ai-24",
+          videoId: "9f3qnX6aiIE", start: 451.97, end: 457.52,
+          sentence: "So when we're talking about strategy, we're also talking about finding competitive advantage.",
+          meaning: "그래서 전략을 말할 때는 경쟁 우위를 찾는 일도 함께 말하는 것입니다.\n· competitive advantage = 경쟁 우위. when we're talking about A, we're also talking about B.",
+          tags: ["AI", "전략", "비즈니스"], level: "B2"
+        },
+        {
+          id: "pack-ai-25",
+          videoId: "9f3qnX6aiIE", start: 423.6, end: 426.99,
+          sentence: "And automation is a well-worn playbook in the business world.",
+          meaning: "그리고 자동화는 비즈니스 세계에서 이미 많이 쓰인 정석입니다.\n· well-worn = 많이 닳은, 진부할 만큼 익숙한. playbook = 정석, 작전 계획.",
+          tags: ["AI", "자동화", "비즈니스"], level: "B2"
         }
       ]
     }
@@ -8001,6 +8284,390 @@ kbd {
       example: "Viel Erfolg bei der Präsentation!",
       exampleKo: "발표에서 좋은 결과 있기를 바라요!",
       tags: ["기초"]
+    },
+    {
+      id: "word-biz-15", deck: "biz", lang: "en", level: "B2", batch: 2,
+      word: "leverage",
+      meaning: "활용하다; 지렛대",
+      example: "We can leverage the new data to shorten the review cycle.",
+      exampleKo: "새 데이터를 활용해 검토 주기를 줄일 수 있습니다.",
+      tags: ["전략", "회의"]
+    },
+    {
+      id: "word-biz-16", deck: "biz", lang: "en", level: "B2", batch: 2,
+      word: "bandwidth",
+      meaning: "(일을 감당할) 여유, 역량",
+      example: "The team doesn't have the bandwidth to take on another project.",
+      exampleKo: "팀은 다른 프로젝트를 맡을 여유가 없습니다.",
+      tags: ["프로젝트", "일정"]
+    },
+    {
+      id: "word-biz-17", deck: "biz", lang: "en", level: "B1", batch: 2,
+      word: "align",
+      meaning: "맞추다, 조율하다",
+      example: "Let's align our schedules before the client meeting.",
+      exampleKo: "고객 미팅 전에 일정을 맞춰 둡시다.",
+      tags: ["회의", "일정"]
+    },
+    {
+      id: "word-biz-18", deck: "biz", lang: "en", level: "B2", batch: 2,
+      word: "contingent",
+      meaning: "(~에) 달려 있는",
+      example: "The timeline is contingent on the test results.",
+      exampleKo: "일정은 시험 결과에 달려 있습니다.",
+      tags: ["프로젝트", "조건"]
+    },
+    {
+      id: "word-biz-19", deck: "biz", lang: "en", level: "B2", batch: 2,
+      word: "escalate",
+      meaning: "상급자에게 올리다; 확대되다",
+      example: "If the issue isn't resolved by Friday, we'll escalate it to the director.",
+      exampleKo: "금요일까지 해결되지 않으면 이사에게 보고하겠습니다.",
+      tags: ["회의", "프로젝트"]
+    },
+    {
+      id: "word-biz-20", deck: "biz", lang: "en", level: "B2", batch: 2,
+      word: "turnaround",
+      meaning: "회복; 처리 기간",
+      example: "The new supplier cut our turnaround time by two days.",
+      exampleKo: "새 공급업체 덕분에 처리 기간이 이틀 줄었습니다.",
+      tags: ["공정", "일정"]
+    },
+    {
+      id: "word-biz-21", deck: "biz", lang: "en", level: "B2", batch: 2,
+      word: "comply",
+      meaning: "준수하다 (comply with)",
+      example: "All samples must comply with the new safety standard.",
+      exampleKo: "모든 시료는 새 안전 기준을 준수해야 합니다.",
+      tags: ["규정", "품질"]
+    },
+    {
+      id: "word-biz-22", deck: "biz", lang: "en", level: "B1", batch: 2,
+      word: "on track",
+      meaning: "순조롭게 진행되는",
+      example: "The pilot run is still on track for next month.",
+      exampleKo: "시범 운전은 다음 달 일정대로 순조롭게 진행 중입니다.",
+      tags: ["프로젝트", "일정"]
+    },
+    {
+      id: "word-biz-23", deck: "biz", lang: "en", level: "B2", batch: 2,
+      word: "caveat",
+      meaning: "단서, 주의 사항",
+      example: "One caveat: the numbers exclude shipping costs.",
+      exampleKo: "한 가지 단서를 붙이면, 이 수치는 운송비를 제외한 것입니다.",
+      tags: ["발표", "데이터"]
+    },
+    {
+      id: "word-biz-24", deck: "biz", lang: "en", level: "B2", batch: 2,
+      word: "bottleneck",
+      meaning: "병목 (현상)",
+      example: "Drying is the biggest bottleneck in the line.",
+      exampleKo: "건조 공정이 라인에서 가장 큰 병목입니다.",
+      tags: ["공정", "설비"]
+    },
+    {
+      id: "word-biz-25", deck: "biz", lang: "en", level: "B2", batch: 2,
+      word: "due diligence",
+      meaning: "실사, 사전 조사",
+      example: "We did due diligence on the vendor before signing.",
+      exampleKo: "계약 전에 업체에 대한 실사를 진행했습니다.",
+      tags: ["계약", "프로젝트"]
+    },
+    {
+      id: "word-biz-26", deck: "biz", lang: "en", level: "B2", batch: 2,
+      word: "sign off",
+      meaning: "승인하다 (sign off on)",
+      example: "The lab manager needs to sign off on the final report.",
+      exampleKo: "연구소장이 최종 보고서를 승인해야 합니다.",
+      tags: ["보고", "회의"]
+    },
+    {
+      id: "word-energy-15", deck: "energy", lang: "en", level: "B2", batch: 2,
+      word: "stoichiometry",
+      meaning: "화학량론",
+      example: "Check the stoichiometry before you calculate the yield.",
+      exampleKo: "수율을 계산하기 전에 화학량론을 확인하세요.",
+      tags: ["화학", "계산"]
+    },
+    {
+      id: "word-energy-16", deck: "energy", lang: "en", level: "B2", batch: 2,
+      word: "exothermic",
+      meaning: "발열의",
+      example: "The reaction is strongly exothermic, so cool it slowly.",
+      exampleKo: "이 반응은 발열이 강하므로 천천히 냉각하세요.",
+      tags: ["화학", "안전"]
+    },
+    {
+      id: "word-energy-17", deck: "energy", lang: "en", level: "B1", batch: 2,
+      word: "solvent",
+      meaning: "용매",
+      example: "Choose a solvent that won't dissolve the membrane.",
+      exampleKo: "분리막을 녹이지 않는 용매를 고르세요.",
+      tags: ["화학", "공정"]
+    },
+    {
+      id: "word-energy-18", deck: "energy", lang: "en", level: "B2", batch: 2,
+      word: "membrane",
+      meaning: "분리막",
+      example: "The membrane separates hydrogen from the gas mixture.",
+      exampleKo: "분리막이 혼합 기체에서 수소를 분리합니다.",
+      tags: ["소재", "수소"]
+    },
+    {
+      id: "word-energy-19", deck: "energy", lang: "en", level: "B2", batch: 2,
+      word: "throughput",
+      meaning: "처리량",
+      example: "The upgrade raised throughput by 15 percent.",
+      exampleKo: "설비 개선으로 처리량이 15퍼센트 늘었습니다.",
+      tags: ["공정", "설비"]
+    },
+    {
+      id: "word-energy-20", deck: "energy", lang: "en", level: "B1", batch: 2,
+      word: "impurity",
+      meaning: "불순물",
+      example: "Even a small impurity can poison the catalyst.",
+      exampleKo: "아주 적은 불순물도 촉매를 망가뜨릴 수 있습니다.",
+      tags: ["품질", "화학"]
+    },
+    {
+      id: "word-energy-21", deck: "energy", lang: "en", level: "B2", batch: 2,
+      word: "retrofit",
+      meaning: "(설비를) 개조하다",
+      example: "They plan to retrofit the old plant for carbon capture.",
+      exampleKo: "그들은 노후 공장을 탄소 포집용으로 개조할 계획입니다.",
+      tags: ["설비", "환경"]
+    },
+    {
+      id: "word-energy-22", deck: "energy", lang: "en", level: "B2", batch: 2,
+      word: "scale up",
+      meaning: "규모를 확대하다",
+      example: "We need to scale up the process from lab to pilot.",
+      exampleKo: "이 공정을 실험실에서 파일럿 규모로 키워야 합니다.",
+      tags: ["공정", "개발"]
+    },
+    {
+      id: "word-energy-23", deck: "energy", lang: "en", level: "B2", batch: 2,
+      word: "enthalpy",
+      meaning: "엔탈피",
+      example: "The enthalpy change tells us how much heat is released.",
+      exampleKo: "엔탈피 변화로 얼마나 많은 열이 방출되는지 알 수 있습니다.",
+      tags: ["화학", "열역학"]
+    },
+    {
+      id: "word-energy-24", deck: "energy", lang: "en", level: "B2", batch: 2,
+      word: "inert",
+      meaning: "불활성의",
+      example: "Nitrogen is used as an inert blanket in the tank.",
+      exampleKo: "탱크에서는 질소를 불활성 보호 기체로 씁니다.",
+      tags: ["화학", "안전"]
+    },
+    {
+      id: "word-energy-25", deck: "energy", lang: "en", level: "B1", batch: 2,
+      word: "sediment",
+      meaning: "침전물, 퇴적물",
+      example: "Let the sediment settle before you take the sample.",
+      exampleKo: "시료를 채취하기 전에 침전물이 가라앉도록 두세요.",
+      tags: ["실험", "수처리"]
+    },
+    {
+      id: "word-energy-26", deck: "energy", lang: "en", level: "B1", batch: 2,
+      word: "desalination",
+      meaning: "담수화",
+      example: "Desalination plants need a lot of energy to run.",
+      exampleKo: "담수화 설비는 운영에 많은 에너지가 필요합니다.",
+      tags: ["수처리", "에너지"]
+    },
+    {
+      id: "word-ai-15", deck: "ai", lang: "en", level: "B1", batch: 2,
+      word: "token",
+      meaning: "토큰 (모델이 다루는 텍스트 단위)",
+      example: "Long documents can use up a lot of tokens.",
+      exampleKo: "긴 문서는 토큰을 많이 소모할 수 있습니다.",
+      tags: ["AI"]
+    },
+    {
+      id: "word-ai-16", deck: "ai", lang: "en", level: "B2", batch: 2,
+      word: "context window",
+      meaning: "콘텍스트 창 (한 번에 다루는 범위)",
+      example: "The context window is too small for the whole report.",
+      exampleKo: "콘텍스트 창이 보고서 전체를 담기엔 너무 작습니다.",
+      tags: ["AI", "개발"]
+    },
+    {
+      id: "word-ai-17", deck: "ai", lang: "en", level: "B2", batch: 2,
+      word: "embedding",
+      meaning: "임베딩 (의미를 벡터로 표현한 값)",
+      example: "We store each sentence as an embedding for search.",
+      exampleKo: "검색을 위해 각 문장을 임베딩으로 저장합니다.",
+      tags: ["AI", "검색"]
+    },
+    {
+      id: "word-ai-18", deck: "ai", lang: "en", level: "B1", batch: 2,
+      word: "agent",
+      meaning: "에이전트 (스스로 작업을 수행하는 AI)",
+      example: "The agent books the meeting and sends the invites.",
+      exampleKo: "에이전트가 회의를 잡고 초대장을 보냅니다.",
+      tags: ["AI", "자동화"]
+    },
+    {
+      id: "word-ai-19", deck: "ai", lang: "en", level: "B2", batch: 2,
+      word: "guardrail",
+      meaning: "안전장치, 가드레일",
+      example: "Set guardrails before you let the model talk to customers.",
+      exampleKo: "모델이 고객과 대화하게 하기 전에 안전장치를 설정하세요.",
+      tags: ["AI", "정책"]
+    },
+    {
+      id: "word-ai-20", deck: "ai", lang: "en", level: "B1", batch: 2,
+      word: "rollout",
+      meaning: "(기능의) 출시, 단계적 배포",
+      example: "The rollout starts with a small group of users.",
+      exampleKo: "출시는 소수 사용자 그룹부터 시작합니다.",
+      tags: ["개발", "배포"]
+    },
+    {
+      id: "word-ai-21", deck: "ai", lang: "en", level: "B2", batch: 2,
+      word: "overfit",
+      meaning: "과적합되다",
+      example: "The model overfits when the training set is too small.",
+      exampleKo: "학습 데이터가 너무 적으면 모델이 과적합됩니다.",
+      tags: ["AI", "평가"]
+    },
+    {
+      id: "word-ai-22", deck: "ai", lang: "en", level: "B2", batch: 2,
+      word: "compute",
+      meaning: "컴퓨팅 자원",
+      example: "Training this model takes a huge amount of compute.",
+      exampleKo: "이 모델을 학습시키려면 막대한 컴퓨팅 자원이 필요합니다.",
+      tags: ["AI", "인프라"]
+    },
+    {
+      id: "word-ai-23", deck: "ai", lang: "en", level: "B2", batch: 2,
+      word: "interpretability",
+      meaning: "해석 가능성",
+      example: "Interpretability matters when the model affects people.",
+      exampleKo: "모델이 사람에게 영향을 줄 때는 해석 가능성이 중요합니다.",
+      tags: ["AI", "정책"]
+    },
+    {
+      id: "word-ai-24", deck: "ai", lang: "en", level: "B2", batch: 2,
+      word: "multimodal",
+      meaning: "멀티모달의 (여러 형식 입력을 함께 처리)",
+      example: "Multimodal models can read images as well as text.",
+      exampleKo: "멀티모달 모델은 텍스트뿐 아니라 이미지도 읽습니다.",
+      tags: ["AI"]
+    },
+    {
+      id: "word-ai-25", deck: "ai", lang: "en", level: "B2", batch: 2,
+      word: "deprecated",
+      meaning: "지원이 종료된, 더 이상 쓰지 않는",
+      example: "This endpoint is deprecated and will be removed in June.",
+      exampleKo: "이 엔드포인트는 지원이 종료되어 6월에 삭제됩니다.",
+      tags: ["개발"]
+    },
+    {
+      id: "word-ai-26", deck: "ai", lang: "en", level: "B2", batch: 2,
+      word: "sandbox",
+      meaning: "샌드박스 (격리된 시험 환경)",
+      example: "Test the script in a sandbox before running it live.",
+      exampleKo: "실제로 실행하기 전에 샌드박스에서 스크립트를 시험하세요.",
+      tags: ["개발", "보안"]
+    },
+    {
+      id: "word-de-15", deck: "de", lang: "de", level: "A1", batch: 2,
+      word: "der Bahnhof",
+      meaning: "기차역",
+      example: "Der Bahnhof ist gleich um die Ecke.",
+      exampleKo: "기차역은 바로 모퉁이에 있어요.",
+      tags: ["교통"]
+    },
+    {
+      id: "word-de-16", deck: "de", lang: "de", level: "A1", batch: 2,
+      word: "die Fahrkarte",
+      meaning: "승차권",
+      example: "Eine Fahrkarte nach Berlin, bitte.",
+      exampleKo: "베를린행 승차권 하나 주세요.",
+      tags: ["교통", "주문"]
+    },
+    {
+      id: "word-de-17", deck: "de", lang: "de", level: "A2", batch: 2,
+      word: "umsteigen",
+      meaning: "환승하다",
+      example: "Du musst in Köln umsteigen.",
+      exampleKo: "쾰른에서 환승해야 해요.",
+      tags: ["교통"]
+    },
+    {
+      id: "word-de-18", deck: "de", lang: "de", level: "A2", batch: 2,
+      word: "die Verspätung",
+      meaning: "지연",
+      example: "Der Zug hat zwanzig Minuten Verspätung.",
+      exampleKo: "기차가 20분 지연되고 있어요.",
+      tags: ["교통", "일정"]
+    },
+    {
+      id: "word-de-19", deck: "de", lang: "de", level: "A2", batch: 2,
+      word: "das Gleis",
+      meaning: "승강장, 선로",
+      example: "Der Zug fährt von Gleis drei ab.",
+      exampleKo: "기차는 3번 승강장에서 출발해요.",
+      tags: ["교통"]
+    },
+    {
+      id: "word-de-20", deck: "de", lang: "de", level: "A2", batch: 2,
+      word: "der Fahrplan",
+      meaning: "시간표",
+      example: "Laut Fahrplan kommt der Bus um acht.",
+      exampleKo: "시간표에 따르면 버스는 8시에 와요.",
+      tags: ["교통"]
+    },
+    {
+      id: "word-de-21", deck: "de", lang: "de", level: "A2", batch: 2,
+      word: "sich anmelden",
+      meaning: "등록하다, 신고하다",
+      example: "Ich muss mich für den Kurs anmelden.",
+      exampleKo: "그 강좌에 등록해야 해요.",
+      tags: ["행정", "일정"]
+    },
+    {
+      id: "word-de-22", deck: "de", lang: "de", level: "A2", batch: 2,
+      word: "die Anmeldung",
+      meaning: "등록, 신고",
+      example: "Die Anmeldung ist bis Freitag möglich.",
+      exampleKo: "등록은 금요일까지 가능해요.",
+      tags: ["행정"]
+    },
+    {
+      id: "word-de-23", deck: "de", lang: "de", level: "B1", batch: 2,
+      word: "die Krankenkasse",
+      meaning: "건강보험 (조합)",
+      example: "Die Krankenkasse übernimmt die Kosten.",
+      exampleKo: "건강보험이 비용을 부담해요.",
+      tags: ["행정", "의료"]
+    },
+    {
+      id: "word-de-24", deck: "de", lang: "de", level: "B1", batch: 2,
+      word: "der Mietvertrag",
+      meaning: "임대차 계약서",
+      example: "Den Mietvertrag unterschreiben wir nächste Woche.",
+      exampleKo: "임대차 계약서는 다음 주에 서명해요.",
+      tags: ["행정", "주거"]
+    },
+    {
+      id: "word-de-25", deck: "de", lang: "de", level: "B1", batch: 2,
+      word: "die Nebenkosten",
+      meaning: "관리비 등 부대비용",
+      example: "Sind die Nebenkosten in der Miete enthalten?",
+      exampleKo: "관리비가 월세에 포함되어 있나요?",
+      tags: ["주거"]
+    },
+    {
+      id: "word-de-26", deck: "de", lang: "de", level: "B1", batch: 2,
+      word: "der Aufenthalt",
+      meaning: "체류",
+      example: "Wie lange dauert Ihr Aufenthalt in Deutschland?",
+      exampleKo: "독일 체류는 얼마나 되세요?",
+      tags: ["여행", "행정"]
     }
   ];
 
@@ -8038,24 +8705,42 @@ kbd {
     };
   }
 
-  // 처음 열 때 기본 단어 묶음(52개)을 한 번만 채운다. 이후에는 사용자가 넣고 지운 그대로 둔다.
-  function seedWords() {
-    if (state.wordsSeeded) return;
-    if (!state.words.length) {
-      var now = Date.now();
-      for (var i = 0; i < STARTER_WORDS.length; i++) {
-        var s = STARTER_WORDS[i];
-        var n = normalizeWord({
-          id: s.id, deck: s.deck, lang: s.lang, level: s.level, word: s.word,
-          meaning: s.meaning, example: s.example, exampleKo: s.exampleKo, tags: s.tags,
-          due: now, createdAt: now - (STARTER_WORDS.length - i) * 1000
-        });
-        if (n) state.words.push(n);
-      }
+  // 기본 단어 묶음을 한 번 채운다. 이후에는 사용자가 넣고 지운 그대로 둔다.
+  // 세대(WORD_SEED_VERSION)가 올라가면 그때까지 없던 단어만 조용히 덧붙인다.
+  var WORD_SEED_VERSION = 2;
+
+  function addStarterWords(minBatch, maxBatch) {
+    var now = Date.now(), have = {}, added = 0, i;
+    for (i = 0; i < state.words.length; i++) have[state.words[i].id] = true;
+    for (i = 0; i < STARTER_WORDS.length; i++) {
+      var s = STARTER_WORDS[i];
+      var batch = s.batch || 1;
+      if (batch < minBatch || batch > maxBatch) continue;
+      if (have[s.id]) continue;
+      var n = normalizeWord({
+        id: s.id, deck: s.deck, lang: s.lang, level: s.level, word: s.word,
+        meaning: s.meaning, example: s.example, exampleKo: s.exampleKo, tags: s.tags,
+        due: now, createdAt: now - (STARTER_WORDS.length - i) * 1000
+      });
+      if (n) { state.words.push(n); added++; }
     }
-    // 처음 화면에서 곧바로 저장소를 건드리지 않는다(첫 실행은 빈 상태 그대로).
-    // 단어 학습·추가처럼 사용자가 실제로 뭔가 할 때 함께 저장된다.
-    state.wordsSeeded = true;
+    return added;
+  }
+
+  function seedWords() {
+    if (!state.wordsSeeded && !state.words.length) {
+      addStarterWords(1, WORD_SEED_VERSION);
+      state.wordsSeeded = true;
+      state.wordsSeedVersion = WORD_SEED_VERSION;
+      return;
+    }
+    // 이미 쓰던 기기: 새로 추가된 세대의 단어만 채운다(사용자가 지운 예전 단어는 되살리지 않음).
+    if (state.wordsSeedVersion < WORD_SEED_VERSION) {
+      var added = addStarterWords(state.wordsSeedVersion + 1, WORD_SEED_VERSION);
+      state.wordsSeedVersion = WORD_SEED_VERSION;
+      state.wordsSeeded = true;
+      if (added > 0) saveStore();
+    }
   }
 
   function findWord(id) {
