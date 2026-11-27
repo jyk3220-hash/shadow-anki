@@ -1359,6 +1359,76 @@ kbd {
   #reviewStage .peek-hint { display: none; }
 }
 
+
+/* ---------------- 단어장 ---------------- */
+.vw-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.vw-title { font-size: 19px; font-weight: 800; letter-spacing: -0.02em; }
+.vw-sub { font-size: 12.5px; color: var(--muted-2); font-weight: 600; margin-top: 3px; }
+.vw-stats { display: flex; gap: 6px; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); }
+.vw-pill { border: 1px solid var(--line); border-radius: 999px; padding: 5px 10px; background: rgba(255, 255, 255, 0.03); font-weight: 700; white-space: nowrap; }
+.vw-pill b { color: var(--text); font-weight: 800; }
+.vw-pill.due { border-color: rgba(255, 180, 84, 0.4); color: #ffd9a3; background: rgba(255, 180, 84, 0.1); }
+.vw-pill.due b { color: #fff; }
+.vw-decks { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.vw-deck { border: 1px solid var(--line); background: rgba(255, 255, 255, 0.03); color: var(--muted); border-radius: 999px; padding: 7px 12px; font-size: 12.5px; font-weight: 700; white-space: nowrap; }
+.vw-deck.on { color: #fff; background: linear-gradient(135deg, rgba(124, 140, 255, 0.95), rgba(169, 112, 255, 0.9)); border-color: transparent; }
+.vw-card { padding: 14px; }
+.vw-progress { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 11.5px; color: var(--muted-2); font-weight: 700; margin-bottom: 8px; }
+.vw-flip { position: relative; border-radius: 16px; border: 1px solid var(--line); background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.012)); padding: 22px 16px 18px; min-height: 196px; display: flex; flex-direction: column; justify-content: center; text-align: center; cursor: pointer; transform-origin: center; transition: transform 0.16s ease, opacity 0.16s ease; }
+.vw-flip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.vw-flip.flip-out { transform: rotateX(78deg); opacity: 0; }
+.vw-flip.flip-in { animation: vwIn 0.22s ease both; }
+@keyframes vwIn { from { transform: rotateX(-78deg); opacity: 0; } to { transform: none; opacity: 1; } }
+.vw-word { font-size: clamp(26px, 7.4vw, 34px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.25; overflow-wrap: anywhere; }
+.vw-meta { margin-top: 8px; font-size: 11.5px; color: var(--muted-2); font-weight: 700; }
+.vw-say { display: flex; gap: 7px; flex-wrap: wrap; justify-content: center; margin-top: 14px; }
+.vw-saybtn { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--line-strong); background: rgba(255, 255, 255, 0.055); color: var(--text); border-radius: 999px; padding: 8px 12px; font-size: 12.5px; font-weight: 700; }
+.vw-saybtn:active { transform: scale(0.97); }
+.vw-saybtn.on { border-color: rgba(124, 140, 255, 0.85); background: rgba(124, 140, 255, 0.22); }
+.vw-hint { margin-top: 12px; font-size: 11.5px; color: var(--muted-2); }
+.vw-meaning { font-size: 17px; font-weight: 750; line-height: 1.5; letter-spacing: -0.01em; }
+.vw-ex { margin-top: 10px; font-size: 14.5px; line-height: 1.55; color: var(--text); }
+.vw-exko { margin-top: 4px; font-size: 12.5px; color: var(--muted-2); line-height: 1.5; }
+.vw-back .vw-say { margin-top: 12px; }
+.vw-nav { display: flex; gap: 8px; margin-top: 10px; }
+.vw-nav .btn { flex: 0 0 auto; }
+.vw-nav #vwFlipBtn { flex: 1 1 auto; }
+.vw-ratings { margin-top: 10px; }
+.vw-add { margin-top: 14px; }
+.vw-form { display: grid; gap: 10px; margin-top: 12px; }
+.vw-formbtns { display: flex; gap: 8px; }
+.vw-formbtns .btn { flex: 1; }
+@media (min-width: 640px) {
+  .vw-form { grid-template-columns: 1fr 1fr; }
+  .vw-form-wide { grid-column: 1 / -1; }
+  .vw-formbtns { grid-column: 1 / -1; }
+}
+.vw-list-card { margin-top: 14px; }
+.vw-listhead { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+.vw-listhead .input { flex: 1 1 180px; }
+.vw-list { display: grid; gap: 7px; max-height: 420px; overflow-y: auto; overscroll-behavior: contain; }
+.vw-item { display: flex; align-items: center; gap: 10px; padding: 9px 11px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255, 255, 255, 0.025); }
+.vw-item.cur { border-color: rgba(124, 140, 255, 0.65); background: rgba(124, 140, 255, 0.12); }
+.vw-item .tt { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 1px; }
+.vw-item .tt b { font-size: 14px; font-weight: 750; overflow-wrap: anywhere; }
+.vw-item .tt span { font-size: 12px; color: var(--muted-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vw-item .bdg { flex: 0 0 auto; font-size: 10.5px; font-weight: 800; padding: 3px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+.vw-item .bdg.due { border-color: rgba(255, 180, 84, 0.55); color: #ffd9a3; }
+.vw-item .bdg.done { border-color: rgba(61, 220, 151, 0.5); color: #8bf0c4; }
+.vw-item .acts { display: flex; gap: 4px; flex: 0 0 auto; }
+.vw-item .acts button { border: 1px solid var(--line); background: rgba(255, 255, 255, 0.04); color: var(--muted); border-radius: 9px; width: 32px; height: 32px; font-size: 13px; line-height: 1; }
+.vw-empty { padding: 18px 6px; text-align: center; color: var(--muted-2); font-size: 13px; }
+@media (min-width: 900px) {
+  .vw-flip { max-width: 640px; margin-left: auto; margin-right: auto; }
+  .vw-nav { max-width: 640px; margin-left: auto; margin-right: auto; }
+  .vw-ratings { max-width: 640px; margin-left: auto; margin-right: auto; }
+}
+@media (max-width: 420px) {
+  .vw-pill { padding: 4px 8px; font-size: 12px; }
+  .vw-word { font-size: 26px; }
+  .vw-saybtn { padding: 7px 10px; font-size: 12px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001s !important; transition-duration: 0.001s !important; }
 }
@@ -1391,6 +1461,7 @@ kbd {
         복습 <span class="badge zero" id="dueBadge">0</span>
       </button>
       <button class="tab" data-tab="library" role="tab" aria-selected="false">라이브러리 <span class="bak-dot" id="backupDot" hidden title="백업이 필요해오" aria-label="백업 필요"></span></button>
+      <button class="tab" data-tab="words" role="tab" aria-selected="false">단어장 <span class="badge zero" id="wordDueBadge">0</span></button>
     </nav>
   </div>
 </header>
@@ -1461,6 +1532,7 @@ kbd {
           <span class="plm-meta" id="packListMeta">—</span>
         </div>
         <div class="plm-note">번호를 누르면 그 문장으로 바로 이동해요.</div>
+        <input class="input plm-search" id="packSearch" placeholder="이 팩의 문장 검색" autocomplete="off">
         <div class="pack-list" id="packMiniList" role="group" aria-label="팩 문장 목록"></div>
       </div>
     </div>
@@ -1637,7 +1709,7 @@ kbd {
           </div>
         </div>
         <div class="sl-chart" id="slChart" data-range="7" role="img" aria-label="최근 일별 학습 문장 수"></div>
-        <div class="sl-foot" id="slFoot">문장을 하나 평가하거나 저장하면 그날 1문장으로 세요. 같은 문장은 하루에 한 번만 셉니다.</div>
+        <div class="sl-foot" id="slFoot">문장을 하나 평가하거나 저장하면 그날 1문장으로 세요. 같은 문장은 하루에 한 번만 셉니다. 단어장에서 외운 단어는 단어장 탭에 따로 셉니다.</div>
       </div>
 
       <div class="card review-start" id="reviewStartPanel">
@@ -1764,6 +1836,91 @@ kbd {
 
     <div class="footer">
       카드는 이 브라우저의 localStorage에 저장됩니다. 기기를 바꾸기 전에는 <b>백업 파일 저장 (JSON)</b>으로 꼭 보관해 두세요.
+    </div>
+  </section>
+
+  <!-- ================= 단어장 (단어 카드 · 미국식/영국식/독일어 발음) ================= -->
+  <section class="tabpane" id="tab-words" role="tabpanel" aria-label="단어장">
+    <div class="vw-head">
+      <div>
+        <div class="vw-title">단어장</div>
+        <div class="vw-sub">뜻을 가린 채 발음부터 듣고, 카드를 뒤집어 확인하세요.</div>
+      </div>
+      <div class="vw-stats">
+        <span class="vw-pill due">오늘 복습 <b id="vwDue">0</b>개</span>
+        <span class="vw-pill">전체 <b id="vwTotal">0</b>개</span>
+        <span class="vw-pill">오늘 <b id="vwToday">0</b>개 · 연속 <b id="vwStreak">0</b>일</span>
+      </div>
+    </div>
+
+    <div class="vw-decks" id="vwDecks" role="group" aria-label="단어 묶음"></div>
+
+    <div class="card vw-card">
+      <div class="vw-progress"><span id="vwPos">0 / 0</span><span id="vwDeckName">—</span></div>
+      <div class="vw-flip" id="vwFlip" role="button" tabindex="0" aria-label="카드를 눌러 뒤집기">
+        <div class="vw-front" id="vwFront">
+          <div class="vw-word" id="vwWord">—</div>
+          <div class="vw-meta" id="vwMeta"></div>
+          <div class="vw-say" id="vwSayFront"></div>
+          <div class="vw-hint">카드를 누르거나 <b>뒤집기</b>를 누르면 뜻이 보여요</div>
+        </div>
+        <div class="vw-back" id="vwBack" hidden>
+          <div class="vw-meaning" id="vwMeaning"></div>
+          <div class="vw-ex" id="vwExample"></div>
+          <div class="vw-exko" id="vwExKo"></div>
+          <div class="vw-say" id="vwSayBack"></div>
+        </div>
+      </div>
+      <div class="vw-nav">
+        <button class="btn sm ghost" id="vwPrevBtn" aria-label="이전 단어">←</button>
+        <button class="btn primary sm wide" id="vwFlipBtn">뒤집기</button>
+        <button class="btn sm ghost" id="vwNextBtn" aria-label="다음 단어">→</button>
+      </div>
+      <div class="ratings vw-ratings" id="vwRatings">
+        <button class="rate" data-wgrade="hard"><span class="key">1</span><b>어려움</b><small class="pv"></small></button>
+        <button class="rate" data-wgrade="good"><span class="key">2</span><b>보통</b><small class="pv"></small></button>
+        <button class="rate" data-wgrade="easy"><span class="key">3</span><b>쉬움</b><small class="pv"></small></button>
+        <button class="rate" data-wgrade="mastered"><span class="key">4</span><b>외움</b><small class="pv">완료</small></button>
+      </div>
+      <div class="kbd-hint"><b>Space</b> 뒤집기 · <b>1–4</b> 어려움/보통/쉬움/외움 · 발음은 카드 위 버튼</div>
+    </div>
+
+    <div class="card vw-add">
+      <button class="btn ghost wide" id="vwAddToggle" aria-expanded="false">+ 단어 추가</button>
+      <div class="vw-form" id="vwAddForm" hidden>
+        <div class="field">
+          <label class="f" for="vwNewWord">단어</label>
+          <input class="input" id="vwNewWord" autocomplete="off" spellcheck="false" placeholder="예: stakeholder / die Rechnung">
+        </div>
+        <div class="field">
+          <label class="f" for="vwNewMeaning">뜻</label>
+          <input class="input" id="vwNewMeaning" autocomplete="off" placeholder="예: 이해관계자">
+        </div>
+        <div class="field vw-form-wide">
+          <label class="f" for="vwNewExample">예문 (선택)</label>
+          <input class="input" id="vwNewExample" autocomplete="off">
+        </div>
+        <div class="field">
+          <label class="f" for="vwNewLang">언어</label>
+          <select class="select" id="vwNewLang">
+            <option value="en">영어</option>
+            <option value="de">독일어</option>
+          </select>
+        </div>
+        <div class="vw-formbtns">
+          <button class="btn primary" id="vwAddSave">단어장에 저장</button>
+          <button class="btn ghost" id="vwAddCancel">닫기</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card vw-list-card">
+      <div class="vw-listhead">
+        <input class="input" id="vwSearch" placeholder="단어·뜻 검색" autocomplete="off">
+        <span class="plm-meta" id="vwListMeta">—</span>
+      </div>
+      <div class="vw-list" id="vwList"></div>
+      <div class="hint" style="margin-top:10px">단어를 누르면 그 단어로 이동하고, 🔊는 기본 발음을 들려줘요. 카드의 🇺🇸/🇬🇧 버튼으로 미국식·영국식을 골라 들을 수 있습니다.</div>
     </div>
   </section>
 </main>
@@ -1957,6 +2114,9 @@ kbd {
     cards: [],
     settings: { speed: 1, gap: 1.5, loop: true },
     dailyLog: {},
+    words: [],           // 단어장 카드(추천 단어 묶음 + 내가 추가한 단어)
+    wordLog: {},         // 단어 학습 기록(문장 기록 dailyLog와 따로 센다)
+    wordsSeeded: false,  // 기본 단어 묶음을 한 번 넣었는지
     lastBackupAt: 0      // 마지막으로 백업 파일을 내려받은 시각(라이브러리의 백업 알림)
   };
 
@@ -1966,6 +2126,9 @@ kbd {
         cards: state.cards,
         settings: state.settings,
         dailyLog: state.dailyLog,
+        words: state.words,
+        wordLog: state.wordLog,
+        wordsSeeded: !!state.wordsSeeded,
         lastBackupAt: state.lastBackupAt || 0,
         savedAt: Date.now()
       }));
@@ -2039,6 +2202,16 @@ kbd {
       if (typeof data.settings.loop === "boolean") state.settings.loop = data.settings.loop;
     }
     state.dailyLog = sanitizeDailyLog(data.dailyLog);
+    if (Array.isArray(data.words)) {
+      var wout = [];
+      for (var wi = 0; wi < data.words.length; wi++) {
+        var nw = normalizeWord(data.words[wi]);
+        if (nw) wout.push(nw);
+      }
+      state.words = wout;
+    }
+    state.wordLog = sanitizeDailyLog(data.wordLog);
+    state.wordsSeeded = !!data.wordsSeeded || state.words.length > 0;
     if (isFinite(Number(data.lastBackupAt)) && Number(data.lastBackupAt) > 0) {
       state.lastBackupAt = Number(data.lastBackupAt);
     }
@@ -2261,28 +2434,28 @@ kbd {
         },
         {
           id: "pack-biz-7",
-          videoId: "NEKZFA7L7Lg", start: 283, end: 289,
+          videoId: "NEKZFA7L7Lg", start: 283.78, end: 290.2,
           sentence: "We might want to consider looking for another engineer to help with this.",
           meaning: "이 일을 도와줄 다른 엔지니어를 찾는 것도 고려해볼 수 있을 것 같아요.\n· We might want to consider ~ = 강하게 밀지 않고 대안을 꺼내는 표현. 회의에서 반대 대신 다른 선택지를 제안할 때 씁니다.",
           tags: ["비즈니스", "회의", "제안"], level: "B1"
         },
         {
           id: "pack-biz-8",
-          videoId: "NEKZFA7L7Lg", start: 683, end: 692,
+          videoId: "NEKZFA7L7Lg", start: 683.44, end: 693.12,
           sentence: "I'll discuss this with the rest of my team and get back to you by the end of the week.",
           meaning: "나머지 팀원들과 논의한 뒤 이번 주말까지 다시 말씀드릴게요.\n· get back to you by + 시점 = ~까지 회신드리다. 마감·회신 약속을 할 때 그대로 쓰는 문장입니다.",
           tags: ["비즈니스", "회의", "마감"], level: "B2"
         },
         {
           id: "pack-biz-9",
-          videoId: "NEKZFA7L7Lg", start: 700, end: 706,
+          videoId: "NEKZFA7L7Lg", start: 702.32, end: 706.72,
           sentence: "I'm going to get a team together for this project.",
           meaning: "이 프로젝트를 위해 팀을 꾸릴 예정입니다.\n· be going to + 동사 = 이미 마음먹은 계획. get a team together = 팀을 모으다.",
           tags: ["비즈니스", "회의", "계획"], level: "B1"
         },
         {
           id: "pack-biz-10",
-          videoId: "NEKZFA7L7Lg", start: 706, end: 714,
+          videoId: "NEKZFA7L7Lg", start: 706.36, end: 715.2,
           sentence: "I'm planning to do one more round of testing, and then we can go live.",
           meaning: "테스트를 한 번 더 돌린 다음에 서비스에 올리면 되겠습니다.\n· be planning to ~ = 예정된 계획. go live = 실제로 서비스를 오픈하다(배포하다).",
           tags: ["비즈니스", "회의", "계획"], level: "B2"
@@ -2352,7 +2525,7 @@ kbd {
         },
         {
           id: "pack-ted-10",
-          videoId: "-FOCpMAww28", start: 437, end: 443,
+          videoId: "-FOCpMAww28", start: 435.2, end: 440.8,
           sentence: "Four, here's the final tip: Make your idea worth sharing.",
           meaning: "넷째, 마지막 조언입니다. 당신의 아이디어를 공유할 가치가 있는 것으로 만드세요.\n· here's the final tip = 마지막 조언을 꺼낼 때. worth ~ing = ~할 가치가 있는.",
           tags: ["TED", "발표", "마무리"], level: "B1"
@@ -2364,7 +2537,7 @@ kbd {
           tags: ["비즈니스", "자기소개", "B1"], level: "B1"
         },
         {
-          id: "pack-biz-12", videoId: "NEKZFA7L7Lg", start: 290, end: 298,
+          id: "pack-biz-12", videoId: "NEKZFA7L7Lg", start: 289.7, end: 298.52,
           sentence: "I think we should make this a priority for this month.",
           meaning: "이번 달에는 이걸 우선순위로 두는 게 좋겠습니다.\n· I think we should ~ = 부드러운 제안. make A a priority = A를 우선순위로 두다.",
           tags: ["비즈니스", "제안", "B1"], level: "B1"
@@ -2388,7 +2561,7 @@ kbd {
           tags: ["비즈니스", "제안", "B2"], level: "B2"
         },
         {
-          id: "pack-ted-11", videoId: "8KkKuTCFvzI", start: 376.8, end: 382,
+          id: "pack-ted-11", videoId: "8KkKuTCFvzI", start: 376.76, end: 382.79,
           sentence: "Good relationships keep us happier and healthier. Period.",
           meaning: "좋은 관계는 우리를 더 행복하고 더 건강하게 해 줍니다. 그게 전부입니다.\n· Period. = 이상, 더 말할 것 없음. 발표에서 결론을 못 박을 때 씁니다.",
           tags: ["TED", "발표", "강조"], level: "B2"
@@ -2549,7 +2722,7 @@ kbd {
         },
         {
           id: "pack-energy-2",
-          videoId: "AGTjKJHu99c", start: 61, end: 70,
+          videoId: "AGTjKJHu99c", start: 61.6, end: 68.84,
           sentence: "If we want to get pure hydrogen, we have to split up these bonds. And a simple way to do this is called electrolysis.",
           meaning: "순수한 수소를 얻으려면 이 결합을 끊어야 합니다. 그 간단한 방법이 바로 전기분해(electrolysis)입니다.\n· split up bonds = 결합을 끊다. '정의 → 방법'으로 넘어가는 발표 문장입니다.",
           tags: ["에너지", "수소", "전기분해"], level: "B1"
@@ -2570,14 +2743,14 @@ kbd {
         },
         {
           id: "pack-energy-5",
-          videoId: "AGTjKJHu99c", start: 402, end: 413,
+          videoId: "AGTjKJHu99c", start: 401.88, end: 410.94,
           sentence: "These release methane into the atmosphere, a greenhouse gas that in the short term is more than 80 times more powerful in warming the planet than CO2.",
           meaning: "이 과정에서 메탄이 대기로 새는데, 메탄은 단기적으로 CO2보다 80배 이상 강력한 온실가스입니다.\n· in the short term = 단기적으로. more powerful than = ~보다 강력한.",
           tags: ["에너지", "메탄", "온실가스"], level: "B2"
         },
         {
           id: "pack-energy-6",
-          videoId: "AGTjKJHu99c", start: 537, end: 545,
+          videoId: "AGTjKJHu99c", start: 541.51, end: 546.29,
           sentence: "One big challenge that remains is hydrogen's relatively low energy density.",
           meaning: "남아 있는 큰 문제는 수소의 상대적으로 낮은 에너지 밀도입니다.\n· One challenge that remains is ~ = 남은 과제를 짚고 넘어가는 문장.",
           tags: ["에너지", "수소", "한계"], level: "B2"
@@ -2591,7 +2764,7 @@ kbd {
         },
         {
           id: "pack-energy-8",
-          videoId: "JHs-eWHb16g", start: 22, end: 32,
+          videoId: "JHs-eWHb16g", start: 22.6, end: 28.46,
           sentence: "Climate scientists are now saying that without such technology, we won't hit our climate targets.",
           meaning: "기후 과학자들은 이제 이런 기술이 없으면 우리가 기후 목표를 달성하지 못할 것이라고 말합니다.\n· without + 명사 = ~ 없이는. hit a target = 목표를 달성하다.",
           tags: ["에너지", "CCS", "기후"], level: "B2"
@@ -2619,7 +2792,7 @@ kbd {
         },
         {
           id: "pack-energy-12",
-          videoId: "JHs-eWHb16g", start: 484, end: 496,
+          videoId: "JHs-eWHb16g", start: 484.2, end: 494.3,
           sentence: "But, without broad public support or government incentives, these technologies remain in the hands of private investors – who will only go where the profits are.",
           meaning: "하지만 폭넓은 대중의 지지나 정부 인센티브가 없으면, 이 기술들은 수익이 나는 곳으로만 가는 민간 투자자의 손에 남습니다.\n· remain in the hands of ~ = ~의 손에 남다. who will only go where the profits are = 수익이 나는 곳으로만 가는(관계사절).",
           tags: ["에너지", "정책", "투자"], level: "B2"
@@ -2640,14 +2813,14 @@ kbd {
         },
         {
           id: "pack-energy-15",
-          videoId: "PbOBmnZRpZ4", start: 217, end: 225,
+          videoId: "PbOBmnZRpZ4", start: 217.48, end: 225.82,
           sentence: "But according to recent figures, making just a small battery for a car like this could cause more than four tons of CO2.",
           meaning: "하지만 최근 수치에 따르면, 이런 차에 들어가는 작은 배터리 하나를 만드는 데만 4톤이 넘는 CO2가 배출될 수 있습니다.\n· according to + 자료 = ~에 따르면. more than + 숫자 = ~ 이상.",
           tags: ["에너지", "배터리", "배출량"], level: "B1"
         },
         {
           id: "pack-energy-16",
-          videoId: "PbOBmnZRpZ4", start: 232, end: 239,
+          videoId: "PbOBmnZRpZ4", start: 232.54, end: 239.73,
           sentence: "The good news is that emissions are sinking as battery production becomes more efficient and we shift towards cleaner energy sources.",
           meaning: "좋은 소식은 배터리 생산이 더 효율적이 되고 더 깨끗한 에너지원으로 옮겨 가면서 배출량이 줄고 있다는 점입니다.\n· The good news is that ~ = 좋은 소식은 ~라는 것. as + 절 = ~하면서(동시 변화). shift towards ~ = ~로 옮겨 가다.",
           tags: ["에너지", "배터리", "추세"], level: "B1"
@@ -2661,21 +2834,21 @@ kbd {
         },
         {
           id: "pack-energy-18",
-          videoId: "zDyh-H7AAcg", start: 227, end: 232,
+          videoId: "zDyh-H7AAcg", start: 227.59, end: 232.7,
           sentence: "So, before we can make clean eFuels, our electricity supplies need to be clean.",
           meaning: "그래서 깨끗한 e-fuel을 만들려면 먼저 우리의 전력 공급이 깨끗해져야 합니다.\n· before + 절 = ~하기 전에. supplies need to be clean = 공급이 깨끗해야 한다(전력 계통 문맥에서는 '탈탄소 전력'이라는 뜻).",
           tags: ["에너지", "e-fuel", "전력"], level: "B1"
         },
         {
           id: "pack-energy-19",
-          videoId: "zDyh-H7AAcg", start: 74, end: 88,
+          videoId: "zDyh-H7AAcg", start: 74.01, end: 86.45,
           sentence: "For the carbon, we can suck CO2 that already has been released out of the air or collect it from biomass, and split off one Oxygen atom to get Carbon Monoxide.",
           meaning: "탄소는 이미 대기로 배출된 CO2를 빨아들이거나 바이오매스에서 모아, 산소 원자 하나를 떼어내 일산화탄소로 만들 수 있습니다.\n· that already has been released = 이미 배출된(현재완료 수동). split off A = A를 떼어내다. to get B = B를 얻기 위해.",
           tags: ["에너지", "e-fuel", "화학공정"], level: "B2"
         },
         {
           id: "pack-energy-20",
-          videoId: "zDyh-H7AAcg", start: 301, end: 309,
+          videoId: "zDyh-H7AAcg", start: 301.69, end: 309.6,
           sentence: "When you power a car with synthetic fuels, a lot of the energy you put in initially gets lost along the way.",
           meaning: "합성연료로 차를 움직이면, 처음 투입한 에너지의 상당 부분이 과정에서 손실됩니다.\n· power A with B = B로 A를 움직이다. get lost along the way = 도중에 손실되다.",
           tags: ["에너지", "e-fuel", "효율"], level: "B2"
@@ -2689,21 +2862,21 @@ kbd {
         },
         {
           id: "pack-energy-22",
-          videoId: "zDyh-H7AAcg", start: 551, end: 558,
+          videoId: "zDyh-H7AAcg", start: 550.8, end: 559.14,
           sentence: "So, while eFuels might have their use cases, they're extremely unlikely to save the internal combustion engine.",
           meaning: "그래서 e-fuel이 쓰일 곳은 있겠지만, 내연기관을 구해 주기는 거의 불가능합니다.\n· while + 절 = ~이긴 하지만(양보). be unlikely to + 동사 = ~할 가능성이 낮다. use case = 용도.",
           tags: ["에너지", "e-fuel", "결론"], level: "B2"
         },
         {
           id: "pack-energy-23",
-          videoId: "_GCd30CSYa4", start: 131, end: 135.3,
+          videoId: "_GCd30CSYa4", start: 130.92, end: 135.94,
           sentence: "So, the deeper you drill, the more energy you can potentially harvest.",
           meaning: "그래서 더 깊이 시추할수록 잠재적으로 더 많은 에너지를 얻을 수 있습니다.\n· the 비교급 ~, the 비교급 … = ~할수록 더 …하다. harvest energy = 에너지를 얻다(수확하듯 끌어올린다는 느낌).",
           tags: ["에너지", "지열", "시추"], level: "B1"
         },
         {
           id: "pack-energy-24",
-          videoId: "_GCd30CSYa4", start: 308, end: 315.3,
+          videoId: "_GCd30CSYa4", start: 308.4, end: 316.06,
           sentence: "The idea being that horizontal drilling makes the heat transfer process more efficient and boosts water throughput.",
           meaning: "수평 시추가 열 전달 과정을 더 효율적으로 만들고 물의 처리량을 늘린다는 게 핵심 아이디어입니다.\n· The idea being that ~ = 핵심은 ~라는 것(분사구문). throughput = 처리량. 공정 설명에서 원리를 한 문장으로 붙일 때 쓰는 구조입니다.",
           tags: ["에너지", "지열", "공학"], level: "B2"
@@ -2749,13 +2922,13 @@ kbd {
           tags: ["에너지", "수소", "산업"], level: "B2"
         },
         {
-          id: "pack-energy-31", videoId: "AGTjKJHu99c", start: 184, end: 190,
+          id: "pack-energy-31", videoId: "AGTjKJHu99c", start: 184.51, end: 187.64,
           sentence: "And that's where we see the sweet spot for hydrogen.",
           meaning: "바로 그 지점이 수소의 적합한 쓰임새입니다.\n· sweet spot = 가장 효과적인 지점. 기술의 최적 용도를 짚을 때 씁니다.",
           tags: ["에너지", "수소", "응용"], level: "B2"
         },
         {
-          id: "pack-energy-32", videoId: "AGTjKJHu99c", start: 569, end: 575,
+          id: "pack-energy-32", videoId: "AGTjKJHu99c", start: 572.16, end: 575.58,
           sentence: "Hydrogen can be used for everything, but that doesn't mean it should.",
           meaning: "수소는 어디에나 쓸 수 있지만, 그렇다고 다 써야 한다는 뜻은 아닙니다.\n· but that doesn't mean it should = 그렇다고 해야 한다는 건 아니다. 균형 잡힌 주장의 틀입니다.",
           tags: ["에너지", "수소", "한계"], level: "B2"
@@ -2773,7 +2946,7 @@ kbd {
           tags: ["에너지", "수소", "전망"], level: "B2"
         },
         {
-          id: "pack-energy-35", videoId: "JHs-eWHb16g", start: 116, end: 127,
+          id: "pack-energy-35", videoId: "JHs-eWHb16g", start: 116.6, end: 126.06,
           sentence: "The CO2 is later stripped out of the solvent and can be used to make other products – like soda ash. Or it is used to heat greenhouses or even as a fuel.",
           meaning: "CO2는 나중에 용매에서 분리되어 소다회 같은 다른 제품을 만드는 데 쓰입니다. 온실 난방이나 연료로도 쓰입니다.\n· strip out = 분리해 내다. 부산물의 쓰임을 나열하는 구조입니다.",
           tags: ["에너지", "CCS", "활용"], level: "B2"
@@ -2785,7 +2958,7 @@ kbd {
           tags: ["에너지", "CCS", "개념"], level: "B2"
         },
         {
-          id: "pack-energy-37", videoId: "JHs-eWHb16g", start: 431, end: 443,
+          id: "pack-energy-37", videoId: "JHs-eWHb16g", start: 431.72, end: 437.83,
           sentence: "Up to 88% of carbon captured and sequestered at the moment, is used to extract more oil.",
           meaning: "현재 포집·저장된 탄소의 최대 88%가 더 많은 석유를 뽑는 데 쓰입니다.\n· up to = 최대. sequester = 격리 저장하다. 문제점을 수치로 짚는 문장입니다.",
           tags: ["에너지", "CCS", "석유"], level: "B2"
@@ -2868,7 +3041,7 @@ kbd {
         },
         {
           id: "pack-energy-49",
-          videoId: "nUPZf9LrF1s", start: 209.52, end: 217.76,
+          videoId: "nUPZf9LrF1s", start: 209.32, end: 215.14,
           sentence: "The water seems cold to us, but it’s easily warm enough to turn a liquid refrigerant into gas.",
           meaning: "그 물은 우리에게 차갑게 느껴지지만, 액체 냉매를 기체로 바꾸기에 충분히 따뜻합니다.\n· warm enough to + 동사 = ~하기에 충분히 따뜻한. seems cold to us = 우리에게 차갑게 보인다.",
           tags: ["에너지", "히트펌프", "원리"], level: "B2"
@@ -2889,7 +3062,7 @@ kbd {
         },
         {
           id: "pack-energy-52",
-          videoId: "nh_iX6hZvxY", start: 127.04, end: 138.8,
+          videoId: "nh_iX6hZvxY", start: 126.84, end: 133.26,
           sentence: "All these generators spin in sync, creating one common heartbeat for the entire grid.",
           meaning: "이 발전기들은 모두 동기화되어 돌아가며, 전력망 전체에 하나의 공통된 박동을 만듭니다.\n· in sync = 동기화되어. creating ~ 분사구문으로 결과를 덧붙입니다.",
           tags: ["에너지", "전력망", "원리"], level: "B2"
@@ -2921,14 +3094,14 @@ kbd {
       cards: [
         {
           id: "pack-female-celeb-1",
-          videoId: "XnbCSboujF4", start: 249, end: 258.3,
+          videoId: "XnbCSboujF4", start: 249.64, end: 259.16,
           sentence: "Well, when I'm sitting there, usually I just do this with my leg and people think that I'm nervous and then they get nervous and then everybody's nervous.",
           meaning: "그게, 제가 거기 앉아 있으면 보통 다리를 이렇게 떠는데, 사람들이 제가 긴장한 줄 알고, 그러면 그 사람들도 긴장하고, 결국 다 같이 긴장해요.\n· do this with my leg = 다리를 이렇게 하다(몸짓을 말로 설명하는 표현). people think (that) I'm nervous = 사람들이 내가 긴장한 줄 안다. then A, then B, then C = 그러면 A, 그러면 B, 결국 C — 말이 이어지는 구어체 리듬입니다.",
           tags: ["여성 셀럽", "인터뷰", "습관"], level: "B2"
         },
         {
           id: "pack-female-celeb-2",
-          videoId: "XnbCSboujF4", start: 264, end: 272.3,
+          videoId: "XnbCSboujF4", start: 265.04, end: 272.67,
           sentence: "I'm pleasantly surprised by the fact that I tell my friends absolutely everything and it never ends up getting out.",
           meaning: "저는 친구들에게 정말 모든 걸 다 말하는데도 그 얘기가 절대 밖으로 새지 않는다는 게 기분 좋게 놀라워요.\n· be pleasantly surprised by the fact that ~ = ~라는 사실에 기분 좋게 놀라다. tell someone everything = 속마음까지 다 털어놓다. end up getting out = 결국 밖으로 새나가다(end up ~ing = 결국 ~하게 되다).",
           tags: ["여성 셀럽", "인터뷰", "관계"], level: "B2"
@@ -2942,63 +3115,63 @@ kbd {
         },
         {
           id: "pack-female-celeb-4",
-          videoId: "XnbCSboujF4", start: 503, end: 511.3,
+          videoId: "XnbCSboujF4", start: 504.96, end: 512.13,
           sentence: "Something I will not be doing in 10 years, I'll be 36, I really hope that I'm not stressed about the idea of approaching 40.",
           meaning: "10년 뒤에 제가 하고 있지 않았으면 하는 게 하나 있는데, 그때 서른여섯이거든요. 40살이 다가온다는 생각에 스트레스받지 않았으면 정말 좋겠어요.\n· Something I will not be doing = 내가 하지 않을 일 — 문장 맨 앞에 주제를 먼저 던지는 구어체 방식. I'll be 36 = 그때 나는 서른여섯일 것이다. approach 40 = 40살에 가까워지다. be stressed about ~ = ~에 스트레스받다.",
           tags: ["여성 셀럽", "인터뷰", "나이"], level: "B2"
         },
         {
           id: "pack-female-celeb-5",
-          videoId: "Bl5630CeYFs", start: 309, end: 318.3,
+          videoId: "Bl5630CeYFs", start: 308.1, end: 318,
           sentence: "Well, I always feel a sense of responsibility for a character, whether they're real or not, but definitely an added sense of responsibility when they are real life people, yeah.",
           meaning: "저는 그 인물이 실제 사람이든 아니든 항상 책임감을 느껴요. 그런데 실제로 있었던 사람이면 책임감이 확실히 더 커지죠.\n· a sense of responsibility for ~ = ~에 대한 책임감. whether A or not = A이든 아니든. an added sense of ~ = 더해진 ~감. real-life people = 실존 인물.",
           tags: ["여성 셀럽", "인터뷰", "일"], level: "B2"
         },
         {
           id: "pack-female-celeb-6",
-          videoId: "Bl5630CeYFs", start: 185, end: 190.3,
+          videoId: "Bl5630CeYFs", start: 184.49, end: 189.88,
           sentence: "I love producing, but acting will always be my big love.",
           meaning: "프로듀싱도 정말 좋아하지만, 연기는 언제나 제 가장 큰 사랑이에요.\n· my big love = 내 인생의 가장 큰 사랑(첫사랑·가장 아끼는 일). A but B will always be my big love = A도 좋지만 B가 으뜸이라는 틀입니다.",
           tags: ["여성 셀럽", "인터뷰", "일"], level: "B1"
         },
         {
           id: "pack-female-celeb-7",
-          videoId: "Bl5630CeYFs", start: 382, end: 388.3,
+          videoId: "Bl5630CeYFs", start: 382.69, end: 385.86,
           sentence: "I don't know if that was a thing here, but it was when I was a kid.",
           meaning: "이 나라에서도 그게 유행이었는지는 모르겠는데, 제가 어렸을 때는 그랬어요.\n· be a thing = 유행이다, 흔한 일이다. it was when I was a kid = 내가 어릴 때는 그랬다(앞의 was a thing을 it was로 받습니다).",
           tags: ["여성 셀럽", "인터뷰", "구어체"], level: "B1"
         },
         {
           id: "pack-female-celeb-8",
-          videoId: "Bl5630CeYFs", start: 121, end: 126.6,
+          videoId: "Bl5630CeYFs", start: 120.79, end: 124.5,
           sentence: "I find real life people on YouTube, then I just kind of mimic them.",
           meaning: "유튜브에서 실제로 그렇게 말하는 사람을 찾아서, 그 사람을 그냥 따라 해요.\n· find someone on YouTube = 유튜브에서 ~하는 사람을 찾다. mimic = 흉내 내다. kind of = 그냥 어느 정도(말을 부드럽게 만드는 filler).",
           tags: ["여성 셀럽", "인터뷰", "방법"], level: "B1"
         },
         {
           id: "pack-female-celeb-9",
-          videoId: "MGO4_8YRKro", start: 210, end: 217.3,
+          videoId: "MGO4_8YRKro", start: 210.02, end: 217.96,
           sentence: "I try to keep in mind that everyone is dealing with something that we have no idea about, you know? So, I just try to have compassion for them, you know?",
           meaning: "모두가 우리가 전혀 모르는 어떤 문제를 겪고 있다는 걸 기억하려고 해요. 그래서 그냥 그 사람들에게 연민을 가지려고 하죠.\n· keep in mind that ~ = ~을 명심하다·기억하다. deal with something = 어떤 문제를 겪다·감당하다. have compassion for ~ = ~에게 연민을 느끼다. 끝의 you know?는 구어체 추임새입니다.",
           tags: ["여성 셀럽", "인터뷰", "태도"], level: "B2"
         },
         {
           id: "pack-female-celeb-10",
-          videoId: "MGO4_8YRKro", start: 229, end: 236.3,
+          videoId: "MGO4_8YRKro", start: 228.01, end: 236.2,
           sentence: "My fans, they keep me on my toes, they keep me politically aware, they keep me socially aware, and they always correct my grammar and spelling.",
           meaning: "제 팬들은 저를 늘 긴장하게 만들고, 정치적으로도 사회적으로도 계속 눈을 뜨게 해줘요. 그리고 항상 제 문법과 철자를 고쳐주죠.\n· keep someone on their toes = 긴장을 늦추지 않게 하다. keep me aware = 계속 인식하게 하다. keep me + 형용사를 세 번 반복해 리듬을 만드는 구조입니다.",
           tags: ["여성 셀럽", "인터뷰", "팬"], level: "B2"
         },
         {
           id: "pack-female-celeb-11",
-          videoId: "MGO4_8YRKro", start: 426, end: 431.3,
+          videoId: "MGO4_8YRKro", start: 425.26, end: 431.44,
           sentence: "It would probably be to follow your instincts and follow your gut, because it's always right.",
           meaning: "아마도 자기 직감을 따르라는 말을 하겠어요. 그게 항상 맞거든요.\n· follow your instincts = 본능·직감을 따르다(여기서 your는 특정인이 아니라 일반인 you). follow your gut = 촉·배짱을 믿고 따르다. 거의 같은 뜻을 두 번 반복해 힘을 줍니다.",
           tags: ["여성 셀럽", "인터뷰", "조언"], level: "B2"
         },
         {
           id: "pack-female-celeb-12",
-          videoId: "MGO4_8YRKro", start: 89, end: 96.3,
+          videoId: "MGO4_8YRKro", start: 88.48, end: 96.33,
           sentence: "The most Californian thing about me is that I still get excited when I see snow. I think it's really, really cool, because obviously we never get snow.",
           meaning: "제가 가장 캘리포니아 사람다운 점은, 눈을 보면 아직도 신이 난다는 거예요. 여기선 눈이 안 오니까 정말 멋지다고 생각해요.\n· the most ~ thing about me is that ~ = 내가 가장 ~한 점은 ~라는 것. get excited = 신이 나다·설레다. obviously = 당연히(여기서는 '이곳엔 눈이 안 오니까'를 강조).",
           tags: ["여성 셀럽", "인터뷰", "자기소개"], level: "B1"
@@ -3019,7 +3192,7 @@ kbd {
         },
         {
           id: "pack-celeb-25",
-          videoId: "wZFblGM42Mw", start: 392, end: 396.3,
+          videoId: "wZFblGM42Mw", start: 392.04, end: 396.96,
           sentence: "But you do need to have steeliness. You do need to be willing to go that extra mile.",
           meaning: "하지만 단단한 정신은 필요해요. 한 걸음 더 나아갈 의지도 있어야 하고요.\n· steeliness = 강철 같은 단단함. do need = 정말 필요하다(강조). go the extra mile = 남보다 더 애쓰다.",
           tags: ["셀럽", "인터뷰", "태도"], level: "B2"
@@ -3047,42 +3220,42 @@ kbd {
         },
         {
           id: "pack-celeb-29",
-          videoId: "_DfmauOCSJ4", start: 902, end: 905.3,
+          videoId: "_DfmauOCSJ4", start: 902.52, end: 906.06,
           sentence: "It was like the greatest, greatest dream of my life to get to go be there.",
           meaning: "그 자리에 가는 건 제 인생에서 가장, 가장 큰 꿈이었어요.\n· to get to go be there = 가서 그 자리에 있을 기회를 얻다. greatest를 두 번 반복해 감정을 강조하는 구어 표현입니다.",
           tags: ["셀럽", "인터뷰", "감정"], level: "B1"
         },
         {
           id: "pack-celeb-1",
-          videoId: "Y2GVVC_cD_E", start: 242, end: 247,
+          videoId: "Y2GVVC_cD_E", start: 242.35, end: 248.06,
           sentence: "Best habit is I always, always come through and get the job done.",
           meaning: "제 장점은 항상, 정말 항상 끝까지 해내고 결과를 낸다는 거예요.\n· come through = (기대·약속을) 끝내 지켜내다. get the job done = 일을 끝내다. 앞 질문이 '최고의 습관'이라 Best habit is ~로 받습니다.",
           tags: ["셀럽", "인터뷰", "습관"], level: "B2"
         },
         {
           id: "pack-celeb-2",
-          videoId: "Y2GVVC_cD_E", start: 289, end: 297,
+          videoId: "Y2GVVC_cD_E", start: 289.72, end: 294.97,
           sentence: "And it was improv, so she wasn't expecting it. It was pretty funny.",
           meaning: "그리고 즉흥 연기였으니까 그분은 전혀 예상 못 했어요. 꽤 웃겼어요.\n· improv = 즉흥 연기. wasn't expecting it = 예상하지 못했다. 과거 일을 이어 말할 때 And it was ~, so ~ 로 이유를 붙이는 구조입니다.",
           tags: ["셀럽", "인터뷰", "일화"], level: "B1"
         },
         {
           id: "pack-celeb-3",
-          videoId: "Y2GVVC_cD_E", start: 342, end: 349,
+          videoId: "Y2GVVC_cD_E", start: 342.79, end: 349.51,
           sentence: "Just, do what I say, dude. Come on, just, like, do what your big bro says to do.",
           meaning: "그냥 내가 하라는 대로 해, 얘야. 그러니까, 형이 하라는 대로 하라고.\n· dude = 얘/친구(가벼운 호칭). big bro = 형·오빠. Come on, just like ~ 는 말을 고쳐 다시 강조하는 구어체 틀입니다.",
           tags: ["셀럽", "인터뷰", "구어체"], level: "B1"
         },
         {
           id: "pack-celeb-4",
-          videoId: "fez7X_oevNs", start: 392, end: 395,
+          videoId: "fez7X_oevNs", start: 392.02, end: 396.05,
           sentence: "If Christopher Nolan had directed \"The Avengers,\" we would still be shooting it.",
           meaning: "크리스토퍼 놀란이 '어벤져스'를 연출했다면, 우린 아직도 촬영하고 있었을 거예요.\n· If + had p.p., would + 동사원형 = 가정법 과거완료. still be shooting it = 아직도 찍고 있는 중일 것이다 — 과장해서 웃기게 말할 때 그대로 쓰는 틀입니다.",
           tags: ["셀럽", "인터뷰", "가정법"], level: "B2"
         },
         {
           id: "pack-celeb-5",
-          videoId: "fez7X_oevNs", start: 457, end: 461,
+          videoId: "fez7X_oevNs", start: 458.14, end: 461.4,
           sentence: "Just remember, this was someone's idea to pair us up here.",
           meaning: "기억해 두세요, 우리를 여기 짝으로 붙여준 건 누군가의 아이디어였다는 걸요.\n· pair up = 짝을 짓다, 둘을 붙여주다. Just remember, ~ = ~라는 점만 기억하세요. 농담조로 책임을 남에게 넘길 때 씁니다.",
           tags: ["셀럽", "인터뷰", "농담"], level: "B1"
@@ -3096,14 +3269,14 @@ kbd {
         },
         {
           id: "pack-celeb-7",
-          videoId: "dSQ0jO2_jno", start: 196, end: 205,
+          videoId: "dSQ0jO2_jno", start: 195.72, end: 202.32,
           sentence: "Knowing that your work has meant something to someone in a real way, I think is the coolest part.",
           meaning: "내 작업이 누군가에게 실제로 의미가 있었다는 걸 아는 것, 그게 가장 멋진 부분인 것 같아요.\n· Knowing that + 문장 = ~라는 걸 아는 것. mean something to someone = 누군가에게 의미가 있다. 실제 발화에서는 Knowing that like, ... 처럼 like를 끼워 넣습니다.",
           tags: ["셀럽", "인터뷰", "일"], level: "B2"
         },
         {
           id: "pack-celeb-8",
-          videoId: "dSQ0jO2_jno", start: 367, end: 379,
+          videoId: "dSQ0jO2_jno", start: 371.08, end: 376.49,
           sentence: "And they're like, \"Can you stop sweating?\" I'm like, \"We're in the desert. I sweat in England.\"",
           meaning: "그러면 사람들이 '땀 좀 그만 흘려줄래?' 그러는데, 저는 '여기가 사막인데요. 전 영국에서도 땀 흘려요'라고 하죠.\n· be like = ~라고 말하다(구어체 인용). I'm like = 저는 ~라고 해요. 대화를 생생하게 옮길 때 쓰는 틀입니다.",
           tags: ["셀럽", "인터뷰", "인용"], level: "B2"
@@ -3123,7 +3296,7 @@ kbd {
           tags: ["셀럽", "인터뷰", "칭찬"], level: "B2"
         },
         {
-          id: "pack-celeb-30", videoId: "XnbCSboujF4", start: 46, end: 54,
+          id: "pack-celeb-30", videoId: "XnbCSboujF4", start: 45.64, end: 50.93,
           sentence: "I record a voice memo of myself singing it or I write it down in my notes.",
           meaning: "그 노래를 직접 불러서 음성 메모로 녹음하거나 메모장에 적어 둬요.\n· voice memo = 음성 메모. 작업 방식을 설명할 때 쓰는 자연스러운 말투입니다.",
           tags: ["셀럽", "인터뷰", "작업"], level: "B1"
@@ -3135,37 +3308,37 @@ kbd {
           tags: ["셀럽", "인터뷰", "작업"], level: "B2"
         },
         {
-          id: "pack-celeb-32", videoId: "XnbCSboujF4", start: 94, end: 102,
+          id: "pack-celeb-32", videoId: "XnbCSboujF4", start: 96.6, end: 99.82,
           sentence: "Nope, that was spontaneous. I'm a very spontaneous person.",
           meaning: "아니요, 그건 즉흥적이었어요. 저는 아주 즉흥적인 사람이거든요.\n· spontaneous = 즉흥적인. 놀림을 받았을 때 가볍게 받아치는 말투입니다.",
           tags: ["셀럽", "인터뷰", "성격"], level: "B2"
         },
         {
-          id: "pack-celeb-33", videoId: "XnbCSboujF4", start: 143, end: 149,
+          id: "pack-celeb-33", videoId: "XnbCSboujF4", start: 142.76, end: 147.33,
           sentence: "It was for my 25th birthday and it was so good that even Jay-Z raved about it.",
           meaning: "제 25번째 생일 케이크였는데, 제이지도 극찬할 만큼 맛있었어요.\n· so ~ that ... = 너무 ~해서 .... rave about = 극찬하다.",
           tags: ["셀럽", "인터뷰", "일화"], level: "B2"
         },
         {
-          id: "pack-celeb-34", videoId: "XnbCSboujF4", start: 205, end: 213,
+          id: "pack-celeb-34", videoId: "XnbCSboujF4", start: 204.52, end: 210.78,
           sentence: "Maybe like, coming up with slogans and concepts is the same as hooks and songs.",
           meaning: "아마 슬로건이나 콘셉트를 짜는 건 훅이나 노래를 만드는 것과 비슷할 거예요.\n· come up with = 생각해 내다. like는 말을 잇는 filler로 자연스럽게 넣습니다.",
           tags: ["셀럽", "인터뷰", "진로"], level: "B2"
         },
         {
-          id: "pack-celeb-35", videoId: "XnbCSboujF4", start: 241, end: 249,
+          id: "pack-celeb-35", videoId: "XnbCSboujF4", start: 241.2, end: 246.92,
           sentence: "My boyfriend planted an olive tree in my yard for Christmas.",
           meaning: "남자친구가 크리스마스 선물로 마당에 올리브 나무를 심어 줬어요.\n· plant a tree = 나무를 심다. 선물 이야기를 할 때 그대로 쓰는 문장입니다.",
           tags: ["셀럽", "인터뷰", "선물"], level: "B1"
         },
         {
-          id: "pack-celeb-36", videoId: "XnbCSboujF4", start: 277, end: 284,
+          id: "pack-celeb-36", videoId: "XnbCSboujF4", start: 278.64, end: 289.68,
           sentence: "Creativity is getting inspiration and having that lightning bolt idea moment, and then having the hard work ethic to sit down at the desk and write it down.",
           meaning: "창의성은 영감을 얻어 번쩍하는 아이디어의 순간을 맞는 것, 그리고 책상에 앉아 끝까지 써 내려가는 근면함입니다.\n· lightning bolt = 번쩍이는 번개. work ethic = 근면성.",
           tags: ["셀럽", "인터뷰", "창의성"], level: "B2"
         },
         {
-          id: "pack-celeb-37", videoId: "XnbCSboujF4", start: 314, end: 321,
+          id: "pack-celeb-37", videoId: "XnbCSboujF4", start: 316.2, end: 326.3,
           sentence: "I'll be driving down the street and I'll see a kid walking down the street with my shirt on from my tour and I'll just stop my car and be like, \"Hey. Nice shirt.\"",
           meaning: "길을 운전하다가 투어 셔츠를 입은 아이를 보면 차를 세우고 '안녕, 셔츠 좋네'라고 말해요.\n· be like = (말로) ~라고 하다. will be ~ing로 장면을 그리듯 이야기합니다.",
           tags: ["셀럽", "인터뷰", "팬"], level: "B2"
@@ -3307,7 +3480,7 @@ kbd {
       cards: [
         {
           id: "pack-talk-1",
-          videoId: "IRG-YubP1rw", start: 27, end: 34,
+          videoId: "IRG-YubP1rw", start: 26.88, end: 34.73,
           sentence: "It's like a tennis match, where I've got to lob something over to the person or people I'm talking to, and I hope it lands and goes well.",
           meaning: "테니스 경기처럼, 말하는 상대에게 뭔가를 넘겨주고 그게 잘 받아지길 바라는 거죠.\n· lob something over = (공을) 넘겨주다. 대화를 주고받는 느낌을 비유로 설명할 때 씁니다.",
           tags: ["일상", "스몰토크", "비유"], level: "B2"
@@ -3321,14 +3494,14 @@ kbd {
         },
         {
           id: "pack-talk-3",
-          videoId: "IRG-YubP1rw", start: 271, end: 275,
+          videoId: "IRG-YubP1rw", start: 271.04, end: 275.67,
           sentence: "Spontaneous communication is about connection, not perfection.",
           meaning: "즉석 대화에서 중요한 건 완벽함이 아니라 연결입니다.\n· A is about B, not C — 핵심을 대비로 강조하는 짧은 문장입니다.",
           tags: ["일상", "스몰토크", "태도"], level: "B1"
         },
         {
           id: "pack-talk-4",
-          videoId: "IRG-YubP1rw", start: 343, end: 349,
+          videoId: "IRG-YubP1rw", start: 343.48, end: 349.56,
           sentence: "I know she didn't create it, but it's tell me the time, don't build me the clock.",
           meaning: "그 말을 어머니가 만든 건 아니지만, '시각만 알려주고 시계를 만들지는 마라'는 뜻이에요.\n· tell me the time, don't build me the clock = 요점만 말하라는 관용적 표현.",
           tags: ["일상", "스몰토크", "표현"], level: "B2"
@@ -3342,7 +3515,7 @@ kbd {
         },
         {
           id: "pack-talk-6",
-          videoId: "IRG-YubP1rw", start: 591, end: 594,
+          videoId: "IRG-YubP1rw", start: 591.69, end: 595.28,
           sentence: "I need to get going because there's some friends over there I need to meet.",
           meaning: "저쪽에 만나야 할 친구들이 있어서 이만 가봐야 해요.\n· I need to get going = 이만 가봐야겠다. 대화를 자연스럽게 끝낼 때 쓰는 표현입니다.",
           tags: ["일상", "스몰토크", "마무리"], level: "B1"
@@ -3370,7 +3543,7 @@ kbd {
         },
         {
           id: "pack-talk-10",
-          videoId: "rPgykzyHg6I", start: 378, end: 384.3,
+          videoId: "rPgykzyHg6I", start: 378.28, end: 381.92,
           sentence: "And if you're from another country, I'd ask them, where they're from.",
           meaning: "그리고 상대가 다른 나라에서 왔다면, 어디서 왔는지 물어볼 거예요.\n· I'd = I would. where they're from = 그들이 어디 출신인지(간접의문문). 상대 배경을 자연스럽게 여는 질문입니다.",
           tags: ["일상", "스몰토크", "질문"], level: "B1"
@@ -3384,7 +3557,7 @@ kbd {
         },
         {
           id: "pack-talk-12",
-          videoId: "IRG-YubP1rw", start: 71, end: 80.3,
+          videoId: "IRG-YubP1rw", start: 70.9, end: 80.97,
           sentence: "Rachel Greenwald, a matchmaker and an academic, has this wonderful saying. Your goal is to be interested, not interesting.",
           meaning: "중매인 겸 학자인 레이철 그린월드는 이런 멋진 말을 했어요. 목표는 '흥미로운 사람'이 아니라 '흥미를 보이는 사람'이 되는 거라고요.\n· be interested, not interesting — 형용사 하나 차이로 핵심을 강조하는 대구입니다. 대화가 어색할 때 떠올려 볼 만한 문장.",
           tags: ["일상", "스몰토크", "태도"], level: "B2"
@@ -3405,7 +3578,7 @@ kbd {
         },
         {
           id: "pack-talk-15",
-          videoId: "IRG-YubP1rw", start: 485, end: 491.3,
+          videoId: "IRG-YubP1rw", start: 485.26, end: 491.83,
           sentence: "These are simple, reflexive ways to get started, but they actually don't take you very far.",
           meaning: "이런 말들은 시작하기엔 간단하고 습관적인 방식이지만, 사실 대화를 그렇게 멀리 데려가 주진 못해요.\n· reflexive = 반사적인·습관적인. take someone far = (대화를) 멀리 이끌다. 'How are you?' 같은 인사가 왜 금방 끝나는지 설명하는 문장입니다.",
           tags: ["일상", "스몰토크", "시작"], level: "B2"
@@ -3423,31 +3596,31 @@ kbd {
           tags: ["일상", "스몰토크", "목표"], level: "B2"
         },
         {
-          id: "pack-talk-18", videoId: "IRG-YubP1rw", start: 135, end: 142,
+          id: "pack-talk-18", videoId: "IRG-YubP1rw", start: 135.22, end: 143.32,
           sentence: "We have all said something we didn't mean to say because it wasn't clear, or it wasn't appropriate. Pausing helps reduce that likelihood.",
           meaning: "말이 명확하지 않거나 적절하지 않아서 의도와 다르게 말해 버린 적이 우리 모두 있어요. 잠깐 멈추면 그럴 가능성이 줄어듭니다.\n· didn't mean to say = 말할 생각이 아니었던. likelihood = 가능성.",
           tags: ["일상", "스몰토크", "침묵"], level: "B2"
         },
         {
-          id: "pack-talk-19", videoId: "IRG-YubP1rw", start: 231, end: 234,
+          id: "pack-talk-19", videoId: "IRG-YubP1rw", start: 228.05, end: 231.61,
           sentence: "She would pause for a moment, and she would say, tell me more.",
           meaning: "그분은 잠깐 멈췄다가 '더 이야기해 주세요'라고 했어요.\n· would = 과거의 습관. tell me more = 더 말해 달라, 대화를 이어 가는 가장 쉬운 질문입니다.",
           tags: ["일상", "스몰토크", "질문"], level: "B1"
         },
         {
-          id: "pack-talk-20", videoId: "IRG-YubP1rw", start: 363, end: 371,
+          id: "pack-talk-20", videoId: "IRG-YubP1rw", start: 365.83, end: 371.71,
           sentence: "One of the best ways to be concise and clear is to leverage structure.",
           meaning: "간결하고 명확하게 말하는 가장 좋은 방법 중 하나는 구조를 활용하는 것입니다.\n· leverage = 활용하다. concise = 간결한.",
           tags: ["일상", "스몰토크", "구조"], level: "B2"
         },
         {
-          id: "pack-talk-21", videoId: "IRG-YubP1rw", start: 390, end: 395,
+          id: "pack-talk-21", videoId: "IRG-YubP1rw", start: 389.81, end: 395.5,
           sentence: "If you enjoy jazz music, jazz music isn't just random playing.",
           meaning: "재즈를 좋아한다면 아시겠지만, 재즈는 그냥 아무렇게나 연주하는 게 아니에요.\n· random = 무작위의. 구조가 자유로움을 만든다는 점을 비유로 설명합니다.",
           tags: ["일상", "스몰토크", "비유"], level: "B1"
         },
         {
-          id: "pack-talk-22", videoId: "IRG-YubP1rw", start: 400, end: 406,
+          id: "pack-talk-22", videoId: "IRG-YubP1rw", start: 400.43, end: 406.79,
           sentence: "So we can leverage structure to help our communication be tighter and clearer.",
           meaning: "그래서 구조를 활용하면 말이 더 짜임새 있고 명확해집니다.\n· tighter = 더 짜임새 있는. help A be B = A가 B가 되도록 돕다.",
           tags: ["일상", "스몰토크", "구조"], level: "B2"
@@ -3465,7 +3638,7 @@ kbd {
           tags: ["일상", "스몰토크", "시작"], level: "B2"
         },
         {
-          id: "pack-talk-25", videoId: "IRG-YubP1rw", start: 535, end: 538,
+          id: "pack-talk-25", videoId: "IRG-YubP1rw", start: 535.06, end: 539.09,
           sentence: "Well, now I'm back to where I started, and it's even more awkward, right?",
           meaning: "그러면 다시 원점이고, 오히려 더 어색해지죠?\n· back to where I started = 원점으로 돌아가다. right?로 듣는 사람의 공감을 청합니다.",
           tags: ["일상", "스몰토크", "리액션"], level: "B2"
@@ -3528,7 +3701,7 @@ kbd {
         },
         {
           id: "pack-talk-34",
-          videoId: "JNp1v-_aCkI", start: 17.28, end: 21.88,
+          videoId: "JNp1v-_aCkI", start: 18.32, end: 21.46,
           sentence: "You won’t believe my day.",
           meaning: "오늘 내 하루 진짜 말도 안 돼.\n· You won’t believe ~ = ~을 믿지 못할걸. 하루 이야기를 꺼내는 스몰토크 첫 마디입니다.",
           tags: ["일상", "스몰토크", "근황"], level: "B1"
@@ -3549,7 +3722,7 @@ kbd {
         },
         {
           id: "pack-talk-37",
-          videoId: "JNp1v-_aCkI", start: 86.48, end: 90.88,
+          videoId: "JNp1v-_aCkI", start: 86.48, end: 89.69,
           sentence: "Seeing a patient recover makes it all worth it.",
           meaning: "환자가 회복하는 걸 보면 모든 게 다 보상받는 기분이에요.\n· Seeing ~ makes it worth it = ~을 보면 그만한 가치가 있다. 동명사 주어 문장입니다.",
           tags: ["일상", "스몰토크", "직업"], level: "B1"
@@ -3623,7 +3796,7 @@ kbd {
         },
         {
           id: "pack-de-a1-5",
-          videoId: "h5085YiFRnI", start: 80.2, end: 83.6,
+          videoId: "h5085YiFRnI", start: 80.13, end: 82.68,
           sentence: "Ich möchte einen Orangensaft.",
           meaning: "오렌지 주스 하나 주세요.\n· Ich möchte ~ = ~을 원합니다. 카페·식당에서 바로 쓰는 주문 표현입니다.",
           tags: ["독일어", "A1", "주문"], level: "A1"
@@ -3637,21 +3810,21 @@ kbd {
         },
         {
           id: "pack-de-a1-7",
-          videoId: "Yaelm87PTvg", start: 143, end: 151,
+          videoId: "Yaelm87PTvg", start: 142.91, end: 149.86,
           sentence: "Ich reise gerne und ich lese gerne und ich trinke gerne Kaffee.",
           meaning: "나는 여행하는 것도, 책 읽는 것도, 커피 마시는 것도 좋아해요.\n· gerne = 즐겨서. 동사 뒤에 붙이면 '~하는 걸 좋아한다'가 됩니다.",
           tags: ["독일어", "A1", "취미"], level: "A1"
         },
         {
           id: "pack-de-a1-8",
-          videoId: "Yaelm87PTvg", start: 191, end: 199,
+          videoId: "Yaelm87PTvg", start: 191.15, end: 199.59,
           sentence: "Schwimmen, lesen. Mein Hobby ist, sich mit Freunden zu treffen und das Leben zu genießen.",
           meaning: "수영, 독서요. 제 취미는 친구들을 만나고 삶을 즐기는 거예요.\n· 앞의 'Schwimmen, lesen'은 앞사람 대답이라 같이 들립니다. sich mit Freunden treffen = 친구들을 만나다.",
           tags: ["독일어", "A2", "취미"], level: "A2"
         },
         {
           id: "pack-de-a1-9",
-          videoId: "Yaelm87PTvg", start: 63, end: 65,
+          videoId: "Yaelm87PTvg", start: 62.04, end: 64.61,
           sentence: "Ich lebe in Zürich.",
           meaning: "나는 취리히에 살아요.\n· leben = 살다. wohnen과 거의 같지만 leben이 조금 더 넓은 의미(생활)입니다.",
           tags: ["독일어", "A1", "거주"], level: "A1"
@@ -3672,7 +3845,7 @@ kbd {
         },
         {
           id: "pack-de-a1-12",
-          videoId: "h5085YiFRnI", start: 21.1, end: 23.3,
+          videoId: "h5085YiFRnI", start: 20.34, end: 23.36,
           sentence: "Kann ich bitte ein Leitungswasser bekommen?",
           meaning: "수돗물 한 잔 받을 수 있을까요?\n· Kann ich bitte ~ bekommen? = 가장 무난한 정중한 요청. Leitungswasser = 수돗물.",
           tags: ["독일어", "A1", "주문"], level: "A1"
@@ -3708,7 +3881,7 @@ kbd {
           tags: ["독일어", "A1", "취미"], level: "A1"
         },
         {
-          id: "pack-de-a1-18", videoId: "Yaelm87PTvg", start: 168.8, end: 177,
+          id: "pack-de-a1-18", videoId: "Yaelm87PTvg", start: 168.4, end: 175.49,
           sentence: "Meine Hobbys sind Kochen, Musik machen, Reisen.",
           meaning: "제 취미는 요리, 음악 하기, 여행이에요.\n· 복수 Hobbys 뒤에 동사원형 명사(Kochen, Reisen)를 나열하는 구조입니다.",
           tags: ["독일어", "A1", "취미"], level: "A1"
@@ -3720,13 +3893,13 @@ kbd {
           tags: ["독일어", "A1", "가족"], level: "A1"
         },
         {
-          id: "pack-de-a1-20", videoId: "huwi-cjPPXU", start: 317.8, end: 323,
+          id: "pack-de-a1-20", videoId: "huwi-cjPPXU", start: 318.76, end: 323.97,
           sentence: "Meine Eltern wohnen in Baden-Württemberg.",
           meaning: "부모님은 바덴뷔르템베르크에 사세요.\n· Eltern = 부모님(복수). 지역 이름은 보통 관사 없이 씁니다.",
           tags: ["독일어", "A1", "가족"], level: "A1"
         },
         {
-          id: "pack-de-a1-21", videoId: "OFSHdj_2FQA", start: 301.8, end: 304,
+          id: "pack-de-a1-21", videoId: "OFSHdj_2FQA", start: 300.24, end: 303.43,
           sentence: "Ich sterbe vor Hunger.",
           meaning: "배고파 죽겠어요.\n· vor + 3격으로 원인을 강조하는 과장 표현. 정말 배고플 때 친구에게 쓰는 말투입니다.",
           tags: ["독일어", "A1", "식당"], level: "A1"
@@ -3865,7 +4038,7 @@ kbd {
         },
         {
           id: "pack-de-a1-41",
-          videoId: "dIw__YleGcQ", start: 140.48, end: 147.88,
+          videoId: "dIw__YleGcQ", start: 142.44, end: 146.78,
           sentence: "Schmeckt es sauer oder süß?",
           meaning: "사워 맛이에요, 단 맛이에요?\n· 맛을 고르는 두 형용사 sauer / süß. oder로 둘 중 하나를 묻는 기본 문장입니다.",
           tags: ["독일어", "A1", "음식"], level: "A1"
@@ -3886,14 +4059,14 @@ kbd {
         },
         {
           id: "pack-de-a2-2",
-          videoId: "OFSHdj_2FQA", start: 117.1, end: 119.1,
+          videoId: "OFSHdj_2FQA", start: 113.85, end: 119.45,
           sentence: "Und würden Sie gerne erst mal Getränke bestellen?",
           meaning: "그럼 먼저 음료를 주문하시겠어요?\n· würden Sie gerne ~? = 정중한 권유. erst mal = 우선.",
           tags: ["독일어", "A2", "식당"], level: "A2"
         },
         {
           id: "pack-de-a2-3",
-          videoId: "OFSHdj_2FQA", start: 131.6, end: 133.7,
+          videoId: "OFSHdj_2FQA", start: 131.22, end: 134.34,
           sentence: "Einmal groß oder klein für Sie?",
           meaning: "큰 걸로 드릴까요, 작은 걸로 드릴까요?\n· Einmal ~ = 하나요. groß/klein은 음료 사이즈를 묻는 말입니다.",
           tags: ["독일어", "A2", "식당"], level: "A2"
@@ -3907,28 +4080,28 @@ kbd {
         },
         {
           id: "pack-de-a2-5",
-          videoId: "OFSHdj_2FQA", start: 186.4, end: 190.6,
+          videoId: "OFSHdj_2FQA", start: 187.72, end: 190.89,
           sentence: "Wie wär's mit der Frühlingsrolle mit Nudeln?",
           meaning: "춘권에 국수 곁들인 건 어때요?\n· Wie wär's mit ~? = ~하는 게 어때요? 메뉴를 추천할 때 자주 쓰는 표현.",
           tags: ["독일어", "A2", "제안"], level: "A2"
         },
         {
           id: "pack-de-a2-6",
-          videoId: "OFSHdj_2FQA", start: 255.2, end: 259.3,
+          videoId: "OFSHdj_2FQA", start: 254.64, end: 258.35,
           sentence: "Ich hätte gerne die Nummer 74.",
           meaning: "74번으로 주세요.\n· Ich hätte gerne ~ = ~을 주세요(가장 공손한 주문). 메뉴판 번호로 주문할 때 씁니다.",
           tags: ["독일어", "A2", "주문"], level: "A2"
         },
         {
           id: "pack-de-a2-7",
-          videoId: "OFSHdj_2FQA", start: 259.4, end: 262.3,
+          videoId: "OFSHdj_2FQA", start: 258.66, end: 262.66,
           sentence: "Gibt es Milchprodukte in der Soße?",
           meaning: "소스에 유제품이 들어가나요?\n· Gibt es ~? = ~이 있나요? 알레르기·채식 여부를 확인하는 기본 질문입니다.",
           tags: ["독일어", "A2", "식당"], level: "A2"
         },
         {
           id: "pack-de-a2-8",
-          videoId: "OFSHdj_2FQA", start: 688.1, end: 690,
+          videoId: "OFSHdj_2FQA", start: 687.42, end: 689.79,
           sentence: "Können wir auch direkt zahlen?",
           meaning: "바로 계산해도 될까요?\n· direkt zahlen = 바로 계산하다. 식사 중간에 계산을 요청할 때 씁니다.",
           tags: ["독일어", "A2", "계산"], level: "A2"
@@ -3962,19 +4135,19 @@ kbd {
           tags: ["독일어", "A2", "일상"], level: "A2"
         },
         {
-          id: "pack-de-a2-13", videoId: "h5085YiFRnI", start: 17.6, end: 20.6,
+          id: "pack-de-a2-13", videoId: "h5085YiFRnI", start: 17.1, end: 20.6,
           sentence: "Ich hätte gern ein Glas Leitungswasser.",
           meaning: "수돗물 한 잔 주세요.\n· Ich hätte gern ~ = ~을 주시겠어요? 카페·식당에서 가장 무난한 주문 표현입니다.",
           tags: ["독일어", "A2", "음료"], level: "A2"
         },
         {
-          id: "pack-de-a2-14", videoId: "h5085YiFRnI", start: 45.9, end: 49.7,
+          id: "pack-de-a2-14", videoId: "h5085YiFRnI", start: 45.36, end: 49.78,
           sentence: "Ich möchte gern ein Glas Mineralwasser mit Kohlensäure.",
           meaning: "탄산 들어간 생수 한 잔 주세요.\n· mit Kohlensäure = 탄산 있는. 독일에서는 탄산 유무를 꼭 말해야 원하는 물이 나옵니다.",
           tags: ["독일어", "A2", "음료"], level: "A2"
         },
         {
-          id: "pack-de-a2-15", videoId: "h5085YiFRnI", start: 60.4, end: 63,
+          id: "pack-de-a2-15", videoId: "h5085YiFRnI", start: 59.91, end: 62.91,
           sentence: "Ein Sprudelwasser, bitte.",
           meaning: "탄산수 하나 주세요.\n· Sprudelwasser = 탄산수. 짧게 '~, bitte'만 붙여도 주문이 됩니다.",
           tags: ["독일어", "A2", "음료"], level: "A2"
@@ -3998,7 +4171,7 @@ kbd {
           tags: ["독일어", "A2", "음료"], level: "A2"
         },
         {
-          id: "pack-de-a2-19", videoId: "h5085YiFRnI", start: 134.3, end: 136.7,
+          id: "pack-de-a2-19", videoId: "h5085YiFRnI", start: 134.4, end: 136.9,
           sentence: "Bitte eine Tasse Kaffee.",
           meaning: "커피 한 잔 주세요.\n· eine Tasse Kaffee = 커피 한 잔. Tasse(컵)처럼 단위 명사까지 붙이면 더 자연스럽습니다.",
           tags: ["독일어", "A2", "음료"], level: "A2"
@@ -4016,7 +4189,7 @@ kbd {
           tags: ["독일어", "A2", "결제"], level: "A2"
         },
         {
-          id: "pack-de-a2-22", videoId: "OFSHdj_2FQA", start: 615.8, end: 617,
+          id: "pack-de-a2-22", videoId: "OFSHdj_2FQA", start: 618.34, end: 620.66,
           sentence: "Kannst du mir das bitte einpacken?",
           meaning: "이거 좀 싸 주시겠어요?\n· einpacken = 포장하다. 남은 음식을 싸 달라고 할 때 그대로 씁니다.",
           tags: ["독일어", "A2", "식당"], level: "A2"
@@ -4142,7 +4315,7 @@ kbd {
         },
         {
           id: "pack-de-a2-40",
-          videoId: "dIw__YleGcQ", start: 188.84, end: 192.96,
+          videoId: "dIw__YleGcQ", start: 188.84, end: 191.24,
           sentence: "Sind die Kartoffeln gewürzt?",
           meaning: "감자에 양념이 되어 있나요?\n· würzen = 양념하다 → 과거분사 gewürzt. 음식에 무엇이 들어갔는지 물을 때 씁니다.",
           tags: ["독일어", "A2", "음식"], level: "A2"
@@ -4175,7 +4348,7 @@ kbd {
       cards: [
         {
           id: "pack-travel-mom-1",
-          videoId: "DUqdQjkvElo", start: 321, end: 325.6,
+          videoId: "DUqdQjkvElo", start: 321.7, end: 326.92,
           sentence: "Excuse me, I'm really late for my flight, can I go to the front of the line?",
           meaning: "실례합니다, 비행기 시간이 정말 급해서요. 줄 맨 앞으로 가도 될까요?\n· 보안검색대 줄에서 늦었을 때 그대로 쓰는 문장. front of the line = 줄의 맨 앞.",
           tags: ["여행", "공항", "보안검색"], level: "A2"
@@ -4196,28 +4369,28 @@ kbd {
         },
         {
           id: "pack-travel-mom-4",
-          videoId: "DUqdQjkvElo", start: 651.9, end: 654.1,
+          videoId: "DUqdQjkvElo", start: 652.82, end: 655.66,
           sentence: "I'm just on holiday.",
           meaning: "그냥 휴가로 왔어요.\n· 입국심사 답변. I'm here on holiday / I'm on vacation도 같은 뜻이고, just를 넣으면 '그냥'의 느낌이 살아납니다.",
           tags: ["여행", "입국심사", "답변"], level: "A1"
         },
         {
           id: "pack-travel-mom-5",
-          videoId: "DUqdQjkvElo", start: 497, end: 500.2,
+          videoId: "DUqdQjkvElo", start: 496.83, end: 501.13,
           sentence: "Stow your luggage in the overhead locker or under the seat in front of you.",
           meaning: "짐은 머리 위 선반이나 앞좌석 밑에 넣어 주세요.\n· 기내 안내방송 표현. stow = (짐을) 넣어 두다, overhead locker = 머리 위 짐칸.",
           tags: ["여행", "기내", "안내방송"], level: "B1"
         },
         {
           id: "pack-travel-mom-6",
-          videoId: "FJrRiVjeOMc", start: 292, end: 295.6,
+          videoId: "FJrRiVjeOMc", start: 291.62, end: 296.09,
           sentence: "Hello, I have a reservation; the name's Sarah Banks.",
           meaning: "안녕하세요, 예약했는데요. 이름은 사라 뱅크스입니다.\n· 체크인 첫 문장. I have a reservation under the name of ~ 처럼 under the name으로도 말합니다.",
           tags: ["여행", "호텔", "체크인"], level: "A2"
         },
         {
           id: "pack-travel-mom-7",
-          videoId: "FJrRiVjeOMc", start: 373.6, end: 377.6,
+          videoId: "FJrRiVjeOMc", start: 375.34, end: 378.61,
           sentence: "I would like a wake-up call tomorrow, if possible.",
           meaning: "가능하면 내일 모닝콜을 받고 싶어요.\n· if possible을 붙이면 훨씬 공손해집니다. wake-up call = 모닝콜.",
           tags: ["여행", "호텔", "요청"], level: "B1"
@@ -4231,21 +4404,21 @@ kbd {
         },
         {
           id: "pack-travel-mom-9",
-          videoId: "FJrRiVjeOMc", start: 768, end: 770.4,
+          videoId: "FJrRiVjeOMc", start: 768.36, end: 771.44,
           sentence: "Hi, I'd like to check out please.",
           meaning: "안녕하세요, 체크아웃하고 싶어요.\n· check out = 체크아웃하다. 계산서를 받고 싶을 때도 이 한 문장으로 시작합니다.",
           tags: ["여행", "호텔", "체크아웃"], level: "A2"
         },
         {
           id: "pack-travel-mom-10",
-          videoId: "FJrRiVjeOMc", start: 817, end: 821.8,
+          videoId: "FJrRiVjeOMc", start: 817.04, end: 822.42,
           sentence: "The total seems higher than I expected; what exactly are these additional charges?",
           meaning: "총액이 예상보다 높은데요, 이 추가 요금은 정확히 뭔가요?\n· additional charges = 추가 요금. 호텔 미니바·전화 요금을 확인할 때 쓰는 정중한 이의 표현입니다.",
           tags: ["여행", "호텔", "계산"], level: "B1"
         },
         {
           id: "pack-travel-mom-11",
-          videoId: "SLC1Rdaxdj8", start: 140.4, end: 142.6,
+          videoId: "SLC1Rdaxdj8", start: 141.88, end: 144.61,
           sentence: "May I take your order?",
           meaning: "주문 받을까요?\n· 점원이 하는 말. What would you like? / What can I get you? 도 같은 뜻입니다.",
           tags: ["여행", "카페", "주문"], level: "B1"
@@ -4266,14 +4439,14 @@ kbd {
         },
         {
           id: "pack-travel-mom-14",
-          videoId: "SLC1Rdaxdj8", start: 257.4, end: 261.8,
+          videoId: "SLC1Rdaxdj8", start: 257.66, end: 263.15,
           sentence: "I'll have a small mocha with cream and a small cappuccino, for here.",
           meaning: "작은 모카 크림 올려서, 그리고 작은 카푸치노 하나요. 드시고 갈게요.\n· 한 번에 두 잔을 주문하는 틀: I'll have A and B, for here.",
           tags: ["여행", "카페", "주문"], level: "A2"
         },
         {
           id: "pack-travel-mom-15",
-          videoId: "SLC1Rdaxdj8", start: 264, end: 266.3,
+          videoId: "SLC1Rdaxdj8", start: 264.44, end: 267.52,
           sentence: "Yes, I'd also like an espresso.",
           meaning: "네, 에스프레소도 하나 주세요.\n· also = 추가로. 주문을 덧붙일 때 I'd also like ~ / Could I also get ~?를 씁니다.",
           tags: ["여행", "카페", "주문"], level: "A2"
@@ -4287,63 +4460,63 @@ kbd {
         },
         {
           id: "pack-travel-mom-17",
-          videoId: "5otanR_Jg2M", start: 231.7, end: 234,
+          videoId: "5otanR_Jg2M", start: 232.38, end: 235.19,
           sentence: "Can you tell me how much they are?",
           meaning: "이거 얼마인지 알려 주시겠어요?\n· 가격표가 없을 때. 단수는 how much it is. How much are these?보다 공손합니다.",
           tags: ["여행", "쇼핑", "가격"], level: "A2"
         },
         {
           id: "pack-travel-mom-18",
-          videoId: "5otanR_Jg2M", start: 484.6, end: 487,
+          videoId: "5otanR_Jg2M", start: 485.2, end: 487.8,
           sentence: "Do you offer a delivery service?",
           meaning: "배송 서비스도 하세요?\n· 큰 물건을 샀을 때. Can I have this delivered? / Can you deliver this to my house? 도 같은 뜻.",
           tags: ["여행", "쇼핑", "배송"], level: "B1"
         },
         {
           id: "pack-travel-mom-19",
-          videoId: "5otanR_Jg2M", start: 648.4, end: 652,
+          videoId: "5otanR_Jg2M", start: 648.46, end: 653.5,
           sentence: "I bought these jeans last week, and I'd like to return them.",
           meaning: "지난주에 이 청바지를 샀는데 반품하고 싶어요.\n· return = 반품하다. 교환은 exchange, 환불은 get a refund.",
           tags: ["여행", "쇼핑", "반품"], level: "B1"
         },
         {
           id: "pack-travel-mom-20",
-          videoId: "5otanR_Jg2M", start: 670, end: 672.2,
+          videoId: "5otanR_Jg2M", start: 670.74, end: 673.09,
           sentence: "Is it possible to get a refund?",
           meaning: "환불받을 수 있을까요?\n· 가장 공손한 환불 요청. 보통은 카드로 결제한 수단으로만 환불해 줍니다.",
           tags: ["여행", "쇼핑", "환불"], level: "B1"
         },
         {
           id: "pack-travel-mom-21",
-          videoId: "SHXPpsIJTb0", start: 19, end: 21.4,
+          videoId: "SHXPpsIJTb0", start: 19.88, end: 22.14,
           sentence: "Where is the train station?",
           meaning: "기차역이 어디예요?\n· Where is the ~? 만으로 길을 묻는 기본 문장. Excuse me를 앞에 붙이면 더 좋습니다.",
           tags: ["여행", "길찾기", "질문"], level: "A1"
         },
         {
           id: "pack-travel-mom-22",
-          videoId: "SHXPpsIJTb0", start: 33, end: 37.2,
+          videoId: "SHXPpsIJTb0", start: 33.52, end: 41.26,
           sentence: "Go past the school, and turn left.",
           meaning: "학교를 지나서 왼쪽으로 도세요.\n· go past = ~을 지나서 가다, turn left/right = 좌회전/우회전.",
           tags: ["여행", "길찾기", "방향"], level: "A2"
         },
         {
           id: "pack-travel-mom-23",
-          videoId: "SHXPpsIJTb0", start: 109, end: 112.2,
+          videoId: "SHXPpsIJTb0", start: 69.1, end: 72.25,
           sentence: "Where is the supermarket?",
           meaning: "슈퍼마켓이 어디예요?\n· I'm lost.(길을 잃었어요)에 이어 쓰면 자연스럽습니다.",
           tags: ["여행", "길찾기", "질문"], level: "A1"
         },
         {
           id: "pack-travel-mom-24",
-          videoId: "SHXPpsIJTb0", start: 139, end: 141.6,
+          videoId: "SHXPpsIJTb0", start: 139.32, end: 142.46,
           sentence: "It's opposite the hotel.",
           meaning: "호텔 맞은편에 있어요.\n· opposite = 맞은편. next to(~옆), behind(~뒤), in front of(~앞)와 함께 익혀 두세요.",
           tags: ["여행", "길찾기", "위치"], level: "A2"
         },
         {
           id: "pack-travel-mom-25",
-          videoId: "SHXPpsIJTb0", start: 187, end: 189.4,
+          videoId: "SHXPpsIJTb0", start: 187.72, end: 189.9,
           sentence: "Go past the park.",
           meaning: "공원을 지나서 가세요.\n· go straight(직진), go past(지나서), turn left(좌회전) 세 가지면 대부분의 길 안내가 됩니다.",
           tags: ["여행", "길찾기", "방향"], level: "A1"
@@ -4364,14 +4537,14 @@ kbd {
         },
         {
           id: "pack-travel-mom-28",
-          videoId: "RaB5Bydz8rE", start: 149.2, end: 152.2,
+          videoId: "RaB5Bydz8rE", start: 147.75, end: 150.8,
           sentence: "I've been having really bad headaches.",
           meaning: "계속 심한 두통이 있어요.\n· 증상이 반복될 때는 I've been having ~ (현재완료진행). 한 번 아팠으면 I have a headache.",
           tags: ["여행", "병원", "증상"], level: "B1"
         },
         {
           id: "pack-travel-mom-29",
-          videoId: "RaB5Bydz8rE", start: 209, end: 211.2,
+          videoId: "RaB5Bydz8rE", start: 209.16, end: 212.4,
           sentence: "Are you taking any medication currently?",
           meaning: "지금 드시는 약이 있나요?\n· medication = (처방)약. 약국·진료에서 꼭 확인하는 질문입니다.",
           tags: ["여행", "병원", "약"], level: "B1"
@@ -4384,7 +4557,7 @@ kbd {
           tags: ["여행", "약국", "처방전"], level: "B1"
         },
         {
-          id: "pack-travel-mom-31", videoId: "FJrRiVjeOMc", start: 124, end: 133,
+          id: "pack-travel-mom-31", videoId: "FJrRiVjeOMc", start: 127.39, end: 133.69,
           sentence: "I'd like to make a reservation for the 3rd of November, for three nights, please.",
           meaning: "11월 3일부터 3박으로 예약하고 싶습니다.\n· I'd like to make a reservation for + 날짜, for + 숙박 수. 전화 예약의 기본 문장입니다.",
           tags: ["여행", "호텔", "예약"], level: "B1"
@@ -4396,25 +4569,25 @@ kbd {
           tags: ["여행", "호텔", "예약"], level: "B2"
         },
         {
-          id: "pack-travel-mom-33", videoId: "FJrRiVjeOMc", start: 386, end: 394,
+          id: "pack-travel-mom-33", videoId: "FJrRiVjeOMc", start: 390.08, end: 394.82,
           sentence: "Also I need to go to the airport on Wednesday morning. Do you offer a shuttle service?",
           meaning: "수요일 아침에 공항에 가야 하는데, 셔틀 서비스가 있나요?\n· Do you offer ~? = ~ 서비스를 제공하나요? 호텔 시설을 물을 때 쓰는 틀입니다.",
           tags: ["여행", "호텔", "시설"], level: "B2"
         },
         {
-          id: "pack-travel-mom-34", videoId: "FJrRiVjeOMc", start: 559, end: 566,
+          id: "pack-travel-mom-34", videoId: "FJrRiVjeOMc", start: 560.62, end: 566.57,
           sentence: "I wanted to ask: is it possible to check out one hour late?",
           meaning: "여쭤보고 싶은데, 한 시간 늦게 체크아웃할 수 있을까요?\n· I wanted to ask = 여쭤보고 싶은데(공손한 도입). is it possible to ~? = ~이 가능한가요?",
           tags: ["여행", "호텔", "요청"], level: "B2"
         },
         {
-          id: "pack-travel-mom-35", videoId: "FJrRiVjeOMc", start: 675, end: 684,
+          id: "pack-travel-mom-35", videoId: "FJrRiVjeOMc", start: 674.9, end: 685.21,
           sentence: "I have to say this is unacceptable. If I'm paying this much money, the least I should be able to expect is clean bedding.",
           meaning: "이건 받아들일 수 없다고 말씀드려야겠네요. 이만큼 돈을 내는데 최소한 깨끗한 침구는 기대할 수 있어야죠.\n· the least I should be able to expect = 최소한 기대할 수 있는 것. 강하게 항의하되 무례하지 않은 표현입니다.",
           tags: ["여행", "호텔", "불만"], level: "B2"
         },
         {
-          id: "pack-travel-mom-36", videoId: "DUqdQjkvElo", start: 165, end: 173,
+          id: "pack-travel-mom-36", videoId: "DUqdQjkvElo", start: 164.84, end: 170.76,
           sentence: "I'm sorry ma'am, but this bag is overweight. The limit is 23 kilos.",
           meaning: "죄송하지만 이 가방은 무게가 초과됐습니다. 한도는 23킬로입니다.\n· overweight = 무게 초과. the limit is ~ = 한도는 ~입니다.",
           tags: ["여행", "공항", "수하물"], level: "B1"
@@ -4426,19 +4599,19 @@ kbd {
           tags: ["여행", "공항", "수하물"], level: "B2"
         },
         {
-          id: "pack-travel-mom-38", videoId: "DUqdQjkvElo", start: 484, end: 490,
+          id: "pack-travel-mom-38", videoId: "DUqdQjkvElo", start: 484.25, end: 488.22,
           sentence: "Move your seat back to the upright position.",
           meaning: "좌석 등받이를 세워 주세요.\n· upright position = (등받이를) 세운 자세. 이륙·착륙 때 나오는 기내 안내 방송입니다.",
           tags: ["여행", "기내", "안내"], level: "A2"
         },
         {
-          id: "pack-travel-mom-39", videoId: "DUqdQjkvElo", start: 608, end: 616,
+          id: "pack-travel-mom-39", videoId: "DUqdQjkvElo", start: 609.93, end: 613.46,
           sentence: "What is the purpose of your visit? I have a business meeting.",
           meaning: "방문 목적이 무엇인가요? — 업무 회의가 있습니다.\n· purpose of your visit = 방문 목적. 입국심사에서 가장 먼저 듣는 질문입니다.",
           tags: ["여행", "입국심사", "질문"], level: "A2"
         },
         {
-          id: "pack-travel-mom-40", videoId: "DUqdQjkvElo", start: 657, end: 668,
+          id: "pack-travel-mom-40", videoId: "DUqdQjkvElo", start: 656.71, end: 665.55,
           sentence: "It is possible that they might ask you for some extra information about why you are here and what your plans are.",
           meaning: "입국심사관이 왜 왔는지, 계획이 무엇인지 추가로 물을 수 있습니다.\n· It is possible that ~ = ~할 수 있습니다. might ask you for = ~을 물어볼 수 있습니다.",
           tags: ["여행", "입국심사", "대비"], level: "B1"
@@ -4556,6 +4729,137 @@ kbd {
           tags: ["여행", "쇼핑", "티켓"], level: "A2"
         }
       ]
+    },
+    {
+      id: "ai",
+      lang: "en",
+      emoji: "🤖",
+      name: "AI·테크 트렌드 영어",
+      level: "B1 → B2",
+      sub: "TED · Harvard Business Review · AI 전환·제품·전략 20문장",
+      desc: "AI 전환을 설명하고, 제품과 전략을 제안하고, 숫자로 현황을 보여주는 20문장. Andrew Ng·Mustafa Suleyman·Jessica Apotheker·Sasha Luccioni의 TED 강연과 HBR IdeaCast(Ethan Mollick)에서 회의·발표·테크 토론에 바로 쓰는 문장만 골랐습니다.",
+      cards: [
+        {
+          id: "pack-ai-1", videoId: "reUZRyXxUs4", start: 196.79, end: 206.66,
+          sentence: "But contrary to the hype, AI can often work just fine even on modest amounts of data, such as the data generated by a single pizza store.",
+          meaning: "하지만 과장된 기대와 달리, AI는 한 피자 가게에서 나온 정도의 적은 데이터로도 충분히 잘 작동할 수 있습니다.\n· contrary to the hype = 과장된 통념과 달리. modest = (양이) 많지 않은, 적당한. even on ~ = ~로도.",
+          tags: ["AI", "테크", "발표"], level: "B2"
+        },
+        {
+          id: "pack-ai-2", videoId: "reUZRyXxUs4", start: 210.54, end: 219.26,
+          sentence: "The real problem is that the small pizza store could never serve enough customers to justify the cost of hiring an AI team.",
+          meaning: "진짜 문제는 그 작은 피자 가게가 AI 팀을 고용할 비용을 정당화할 만큼 손님을 감당할 수 없다는 점입니다.\n· justify the cost = 비용을 정당화하다. 예산·투자 회의에서 '이 비용을 왜 써야 하는가'를 설명할 때 쓰는 동사입니다.",
+          tags: ["AI", "비즈니스", "예산"], level: "B2"
+        },
+        {
+          id: "pack-ai-3", videoId: "reUZRyXxUs4", start: 530.1, end: 536.3,
+          sentence: "By adjusting the data you give to the AI, you can help the AI get smarter.",
+          meaning: "AI에 주는 데이터를 조정하면 AI를 더 똑똑하게 만들 수 있습니다.\n· By -ing, you can ~ = ~함으로써 ~할 수 있다. 제품 개선 방법을 한 문장으로 설명할 때 가장 단순한 틀입니다.",
+          tags: ["AI", "제품", "개선"], level: "B1"
+        },
+        {
+          id: "pack-ai-4", videoId: "reUZRyXxUs4", start: 654.65, end: 661.1,
+          sentence: "Building AI systems has been out of reach for most people, but that does not have to be the case.",
+          meaning: "AI 시스템을 만드는 일은 대부분의 사람에게 손이 닿지 않는 일이었지만, 꼭 그럴 필요는 없습니다.\n· out of reach = 손이 닿지 않는. that does not have to be the case = 꼭 그럴 필요는 없다. 현황을 인정한 뒤 반전을 주는 발표 문장입니다.",
+          tags: ["AI", "발표", "전환"], level: "B2"
+        },
+        {
+          id: "pack-ai-5", videoId: "KKNCiRWd_j0", start: 189.21, end: 194.47,
+          sentence: "It will be a tool that will augment us and make us smarter and more productive.",
+          meaning: "그것은 우리를 증강시켜 더 똑똑하고 생산적으로 만들어 줄 도구가 될 것입니다.\n· augment = (능력을) 키우다, 증강하다. AI를 말할 때 replace(대체하다) 대신 쓰는 핵심 동사입니다.",
+          tags: ["AI", "테크", "정의"], level: "B2"
+        },
+        {
+          id: "pack-ai-6", videoId: "KKNCiRWd_j0", start: 240.51, end: 245.43,
+          sentence: "It is clear that we are at an inflection point in the history of humanity.",
+          meaning: "우리가 인류 역사의 변곡점에 서 있다는 것은 분명합니다.\n· inflection point = 변곡점. It is clear that ~ = ~은 분명하다. 트렌드 발표의 첫 문장으로 쓰기 좋습니다.",
+          tags: ["AI", "발표", "트렌드"], level: "B2"
+        },
+        {
+          id: "pack-ai-7", videoId: "KKNCiRWd_j0", start: 436.5, end: 441.38,
+          sentence: "In just 18 months, over a billion people have used large language models.",
+          meaning: "불과 18개월 만에 10억 명이 넘는 사람이 대규모 언어 모델을 사용했습니다.\n· In just + 기간 = 불과 ~ 만에. over + 숫자 = ~ 이상. 큰 변화를 숫자 하나로 보여주는 문장입니다.",
+          tags: ["AI", "테크", "통계"], level: "B1"
+        },
+        {
+          id: "pack-ai-8", videoId: "KKNCiRWd_j0", start: 817.72, end: 821.84,
+          sentence: "It's true, but it completely misses the point.",
+          meaning: "사실이긴 한데, 핵심을 완전히 놓친 말이에요.\n· miss the point = 핵심을 놓치다. 상대 말이 틀리진 않지만 논점에서 벗어났을 때 쓰는 짧은 반박입니다.",
+          tags: ["AI", "회의", "반박"], level: "B1"
+        },
+        {
+          id: "pack-ai-9", videoId: "3MwMII8n1qM", start: 15.95, end: 22.36,
+          sentence: "And the whole economic world is bracing for the next big productivity revolution.",
+          meaning: "그리고 경제계 전체가 다음 큰 생산성 혁명을 맞을 준비를 하고 있습니다.\n· brace for = (곧 닥칠 일을) 대비하다. 긴장하며 준비하는 뉘앙스가 있습니다.",
+          tags: ["AI", "비즈니스", "전략"], level: "B2"
+        },
+        {
+          id: "pack-ai-10", videoId: "3MwMII8n1qM", start: 69.99, end: 77.32,
+          sentence: "Well, generative AI is coming, and it's coming to be embedded in the core of our organizations and the way we work.",
+          meaning: "생성형 AI가 오고 있고, 그것은 우리 조직과 일하는 방식의 핵심에 자리 잡게 될 것입니다.\n· be embedded in = ~에 깊이 자리 잡다, 내장되다. the core of ~ = ~의 핵심.",
+          tags: ["AI", "조직", "전환"], level: "B2"
+        },
+        {
+          id: "pack-ai-11", videoId: "3MwMII8n1qM", start: 81.55, end: 90.24,
+          sentence: "So the question becomes: how do we set ourselves up to actually seize this productivity opportunity?",
+          meaning: "그래서 질문은 이렇게 됩니다. 이 생산성 기회를 실제로 잡으려면 우리가 어떻게 준비해야 할까요?\n· set ourselves up to = ~할 수 있게 스스로를 준비시키다. seize an opportunity = 기회를 잡다.",
+          tags: ["AI", "회의", "질문"], level: "B2"
+        },
+        {
+          id: "pack-ai-12", videoId: "9f3qnX6aiIE", start: 172.92, end: 178.68,
+          sentence: "And one of the first effects they see of AI, and we saw this also in our research, is that jobs start to blur.",
+          meaning: "그리고 그들이 AI에서 가장 먼저 보는 효과 중 하나는, 우리 연구에서도 확인했는데, 직무의 경계가 흐려지기 시작한다는 점입니다.\n· blur = 흐려지다. jobs start to blur = 직무 경계가 흐려지다.",
+          tags: ["AI", "조직", "직무"], level: "B2"
+        },
+        {
+          id: "pack-ai-13", videoId: "9f3qnX6aiIE", start: 399.88, end: 402.52,
+          sentence: "And AI skills look like management skills.",
+          meaning: "AI를 다루는 능력은 관리 능력과 비슷합니다.\n· look like = ~처럼 보이다. 회의에서 'AI는 결국 관리다'라고 주장할 때 바로 쓸 수 있는 짧은 문장입니다.",
+          tags: ["AI", "관리", "회의"], level: "B1"
+        },
+        {
+          id: "pack-ai-14", videoId: "9f3qnX6aiIE", start: 438.12, end: 446.57,
+          sentence: "Leaders need to be building companies that blend AI and human work together with process and with culture in ways that accomplish things that neither could do alone.",
+          meaning: "리더는 AI와 사람의 일을 프로세스·문화와 함께 엮어, 어느 한쪽만으로는 못 할 일을 해내는 회사를 만들어야 합니다.\n· blend A and B together = A와 B를 함께 섞다. in ways that ~ = ~하는 방식으로. neither could do alone = 어느 쪽도 혼자서는 못 할.",
+          tags: ["AI", "전략", "리더십"], level: "B2"
+        },
+        {
+          id: "pack-ai-15", videoId: "9f3qnX6aiIE", start: 426.92, end: 428.36,
+          sentence: "I think it's a recipe for disaster.",
+          meaning: "그건 재앙을 부르는 방법이라고 생각합니다.\n· a recipe for disaster = 재앙의 지름길, 파국을 부르는 조합. 반대 의견을 강하게 표현할 때 씁니다.",
+          tags: ["AI", "회의", "반대"], level: "B1"
+        },
+        {
+          id: "pack-ai-16", videoId: "9f3qnX6aiIE", start: 639.06, end: 642.38,
+          sentence: "The question for you is, where do you want to make decisions, and where not?",
+          meaning: "여러분에게 주어진 질문은 이것입니다. 어디서 결정을 내리고, 어디서는 내리지 않을 것인가?\n· where ~ and where not = 어디서 ~하고 어디서는 안 하는지. 의사결정 범위를 정할 때 쓰는 문장입니다.",
+          tags: ["AI", "회의", "의사결정"], level: "B1"
+        },
+        {
+          id: "pack-ai-17", videoId: "eXdVDhOGqoE", start: 67.8, end: 75.43,
+          sentence: "But what I do know is that there's some pretty nasty things going on right now, because AI doesn't exist in a vacuum.",
+          meaning: "하지만 제가 확실히 아는 것은, 지금 꽤 심각한 일들이 벌어지고 있다는 것입니다. AI는 진공 속에 존재하지 않기 때문입니다.\n· not exist in a vacuum = 진공 속에 존재하지 않다, 즉 사회와 떼어놓고 볼 수 없다는 뜻. What I do know is that ~ = 제가 확실히 아는 것은 ~.",
+          tags: ["AI", "리스크", "발표"], level: "B2"
+        },
+        {
+          id: "pack-ai-18", videoId: "eXdVDhOGqoE", start: 172.16, end: 176.2,
+          sentence: "And so this is probably only the tip of the iceberg, even if it is a melting one.",
+          meaning: "그래서 이것은 아마 빙산의 일각일 뿐입니다. 녹고 있는 빙산이긴 하지만요.\n· the tip of the iceberg = 빙산의 일각. even if it is a melting one = 녹고 있는 빙산이라 해도 — 농담 섞인 강조입니다.",
+          tags: ["AI", "리스크", "표현"], level: "B2"
+        },
+        {
+          id: "pack-ai-19", videoId: "eXdVDhOGqoE", start: 412.14, end: 420.48,
+          sentence: "But sadly, these systems are black boxes, and even their creators can't say exactly why they work the way they do.",
+          meaning: "안타깝게도 이런 시스템은 블랙박스여서, 만든 사람조차 왜 그렇게 작동하는지 정확히 말할 수 없습니다.\n· black box = 속을 알 수 없는 시스템. work the way they do = 그런 식으로 작동하다.",
+          tags: ["AI", "테크", "설명"], level: "B2"
+        },
+        {
+          id: "pack-ai-20", videoId: "eXdVDhOGqoE", start: 608.76, end: 615.05,
+          sentence: "We're building the road as we walk it, and we can collectively decide what direction we want to go in together.",
+          meaning: "우리는 걸으면서 길을 만들고 있고, 어느 방향으로 갈지는 함께 정할 수 있습니다.\n· build the road as we walk it = 걸으면서 길을 닦다, 즉 해 나가면서 만들어 간다. 마무리 발표 문장으로 좋습니다.",
+          tags: ["AI", "발표", "마무리"], level: "B2"
+        }
+      ]
     }
   ];
 
@@ -4601,7 +4905,12 @@ kbd {
     "zDyh-H7AAcg": "The truth about carbon neutral fuels | DW Planet A",
     "_DfmauOCSJ4": "Emma Stone Breaks Down 18 Looks From Her Career | Life in Looks | Vogue",
     wZFblGM42Mw: "Anne Hathaway Breaks Down 11 Looks From Her Career | Life in Looks | Vogue",
-    rPgykzyHg6I: "Brits Give SMALL TALK Advice | Easy English 128"
+    rPgykzyHg6I: "Brits Give SMALL TALK Advice | Easy English 128",
+    reUZRyXxUs4: "How AI Could Empower Any Business | Andrew Ng | TED",
+    KKNCiRWd_j0: "What Is an AI Anyway? | Mustafa Suleyman | TED",
+    "3MwMII8n1qM": "What Will Happen to Marketing in the Age of AI? | Jessica Apotheker | TED",
+    "9f3qnX6aiIE": "How AI Is Changing Strategy—and 4 Skills Leaders Need Next",
+    eXdVDhOGqoE: "AI Is Dangerous, but Not for the Reasons You Think | Sasha Luccioni | TED"
   };
 
   /* =========================================================
@@ -4728,6 +5037,7 @@ kbd {
     renderStudyLog();
     try { updatePackReviewBtn(); } catch (e) {}
     try { updateBackupStatus(); } catch (e) {}
+    try { updateWordBadge(); } catch (e) {}
   }
 
   /* =========================================================
@@ -4757,6 +5067,7 @@ kbd {
       p.classList.toggle("active", p.id === "tab-" + name);
     });
     if (name === "library") renderLibrary();
+    if (name === "words") renderVocab();
     if (name === "packs") {
       renderPacks();
       if (packState.active) showPackSentence(true);
@@ -5709,7 +6020,7 @@ kbd {
   /* =========================================================
      pack controller (추천 팩 · 원클릭 저장)
      ========================================================= */
-  var packState = { active: null, idx: 0, player: null, lock: false, listY: null };
+  var packState = { active: null, idx: 0, player: null, lock: false, listY: null, q: "" };
 
   function packCardId(pack, idx) {
     var item = pack && pack.cards ? pack.cards[idx] : null;
@@ -5860,6 +6171,8 @@ kbd {
     el("packHome").hidden = true;
     el("packStage").hidden = false;
     el("packTitle").textContent = pack.name;
+    el("packSearch").value = "";
+    packState.q = "";
     showPackSentence(true);
     updatePackReviewBtn();
     if (!alreadyOpen) historyPushView("pack", { packId: pack.id });
@@ -5956,10 +6269,17 @@ kbd {
     var now = Date.now();
     var saved = 0;
     var html = "";
+    var q = String(packState.q || "").trim().toLowerCase();
+    var shown = 0;
     for (var i = 0; i < pack.cards.length; i++) {
       var item = pack.cards[i];
       var st = packRowState(packDeckCard(pack, i), now);
       if (st) saved++;
+      if (q) {
+        var hay = (item.sentence + " " + (item.meaning || "") + " " + (item.tags || []).join(" ")).toLowerCase();
+        if (hay.indexOf(q) < 0) continue;
+      }
+      shown++;
       html += '<button type="button" class="plm-row' + (i === packState.idx ? " on" : "") + (st ? " done" : "") + '"' +
         ' data-jump="' + i + '"' + (i === packState.idx ? ' aria-current="true"' : "") + '>' +
         '<span class="n">' + (i + 1) + "</span>" +
@@ -5971,8 +6291,11 @@ kbd {
       "</button>";
     }
     box.innerHTML = html;
+    if (!shown && q) {
+      html = '<div class="empty" style="padding:14px 4px"><b>검색 결과가 없어요</b>다른 단어로 찾아보세요.</div>';
+    }
     var meta = el("packListMeta");
-    if (meta) meta.textContent = "전체 " + pack.cards.length + " · 저장 " + saved;
+    if (meta) meta.textContent = (q ? "검색 " + shown + " / " + pack.cards.length : "전체 " + pack.cards.length) + " · 저장 " + saved;
     keepPackRowVisible(box);
   }
 
@@ -6511,7 +6834,10 @@ kbd {
       exportedAt: new Date().toISOString(),
       settings: state.settings,
       cards: state.cards,
-      dailyLog: state.dailyLog
+      dailyLog: state.dailyLog,
+      words: state.words,
+      wordLog: state.wordLog,
+      wordsSeeded: !!state.wordsSeeded
     };
     var blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
     var url = URL.createObjectURL(blob);
@@ -6544,7 +6870,8 @@ kbd {
       var incomingLog = (!Array.isArray(data) && data.dailyLog) ? data.dailyLog : null;
       var hasLog = !!(incomingLog && typeof incomingLog === "object" && !Array.isArray(incomingLog) &&
         Object.keys(incomingLog).length);
-      if (!arr.length && !hasLog) return toast("이 파일에는 카드가 없어요.");
+      var hasWords = (!Array.isArray(data) && Array.isArray(data.words) && data.words.length > 0);
+      if (!arr.length && !hasLog && !hasWords) return toast("이 파일에는 카드가 없어요.");
 
       var added = 0, updated = 0, skipped = 0;
       for (var i = 0; i < arr.length; i++) {
@@ -6569,11 +6896,30 @@ kbd {
       }
       // 학습 기록은 합쳐 넣는다(같은 날 같은 문장은 한 번만). 지금 기록이 지워지지 않는다.
       var logRes = mergeDailyLog(incomingLog);
+
+      // 단어장도 같은 방식으로 합친다(같은 id는 갱신, 새 단어는 추가).
+      var incomingWords = (!Array.isArray(data) && Array.isArray(data.words)) ? data.words : [];
+      var wAdded = 0, wUpdated = 0;
+      for (var wi2 = 0; wi2 < incomingWords.length; wi2++) {
+        var iw = normalizeWord(incomingWords[wi2]);
+        if (!iw) continue;
+        var cur = findWord(iw.id);
+        if (cur) {
+          cur.word = iw.word; cur.meaning = iw.meaning; cur.example = iw.example;
+          cur.exampleKo = iw.exampleKo; cur.lang = iw.lang; cur.deck = iw.deck;
+          cur.tags = iw.tags; wUpdated++;
+        } else {
+          state.words.push(iw); wAdded++;
+        }
+      }
+      var wlog = (!Array.isArray(data) && data.wordLog) ? mergeWordLog(data.wordLog) : { added: 0 };
       saveStore();
       renderLibrary();
       renderStudyLog();
+      try { renderVocab(); } catch (e) {}
       toast("가져오기 완료 · 새 카드 " + added + "장, 갱신 " + updated + "장" +
         (logRes.added ? ", 학습 기록 " + logRes.added + "문장" : "") +
+        ((wAdded || wUpdated) ? ", 단어 " + wAdded + "개 추가·" + wUpdated + "개 갱신" : "") +
         (skipped ? ", 건너뜀 " + skipped + "장" : ""));
     };
     reader.onerror = function () { toast("파일을 읽지 못했어요."); };
@@ -7051,6 +7397,10 @@ kbd {
       lib.q = el("libSearch").value;
       renderLibrary();
     });
+    el("packSearch").addEventListener("input", function () {
+      packState.q = el("packSearch").value;
+      renderPackMini();
+    });
     el("libSort").addEventListener("change", function () {
       lib.sort = el("libSort").value;
       renderLibrary();
@@ -7225,6 +7575,982 @@ kbd {
     el("sentenceInput").focus();
   }
 
+/* =========================================================
+   단어장 (Anki-style 단어 카드 · 🇺🇸/🇬🇧/🇩🇪 발음 · SM-2)
+   ========================================================= */
+  var WORD_DECKS = [
+    { id: "biz", name: "비즈니스·학회", emoji: "💼", lang: "en" },
+    { id: "energy", name: "에너지·화학공학", emoji: "⚗️", lang: "en" },
+    { id: "ai", name: "AI·테크", emoji: "🤖", lang: "en" },
+    { id: "de", name: "독일어 기초", emoji: "🇩🇪", lang: "de" }
+  ];
+
+  var STARTER_WORDS = [
+    {
+      id: "word-biz-1", deck: "biz", lang: "en", level: "B1",
+      word: "agenda",
+      meaning: "안건, 의제",
+      example: "Let's move on to the next item on the agenda.",
+      exampleKo: "다음 안건으로 넘어가시죠.",
+      tags: ["회의"]
+    },
+    {
+      id: "word-biz-2", deck: "biz", lang: "en", level: "A2",
+      word: "deadline",
+      meaning: "마감 기한",
+      example: "Can we meet the deadline without adding more people?",
+      exampleKo: "인원을 더 늘리지 않고 마감을 맞출 수 있을까요?",
+      tags: ["회의", "일정"]
+    },
+    {
+      id: "word-biz-3", deck: "biz", lang: "en", level: "B2",
+      word: "stakeholder",
+      meaning: "이해관계자",
+      example: "We should align the stakeholders before the launch.",
+      exampleKo: "출시 전에 이해관계자들의 의견을 맞춰야 합니다.",
+      tags: ["회의"]
+    },
+    {
+      id: "word-biz-4", deck: "biz", lang: "en", level: "B2",
+      word: "deliverable",
+      meaning: "산출물, 결과물",
+      example: "The main deliverable for this phase is a validation report.",
+      exampleKo: "이번 단계의 핵심 산출물은 검증 보고서입니다.",
+      tags: ["프로젝트"]
+    },
+    {
+      id: "word-biz-5", deck: "biz", lang: "en", level: "B1",
+      word: "prioritize",
+      meaning: "우선순위를 정하다",
+      example: "We need to prioritize the tasks that reduce risk.",
+      exampleKo: "위험을 줄이는 작업부터 우선순위를 정해야 합니다.",
+      tags: ["회의"]
+    },
+    {
+      id: "word-biz-6", deck: "biz", lang: "en", level: "B1",
+      word: "clarify",
+      meaning: "명확히 하다",
+      example: "Could you clarify what success looks like for this project?",
+      exampleKo: "이 프로젝트의 성공 기준을 명확히 설명해 주시겠어요?",
+      tags: ["Q&A"]
+    },
+    {
+      id: "word-biz-7", deck: "biz", lang: "en", level: "B2",
+      word: "feasible",
+      meaning: "실행 가능한",
+      example: "Is it feasible to finish the pilot by March?",
+      exampleKo: "3월까지 파일럿을 끝내는 게 실행 가능한가요?",
+      tags: ["회의"]
+    },
+    {
+      id: "word-biz-8", deck: "biz", lang: "en", level: "B1",
+      word: "milestone",
+      meaning: "중간 목표, 마일스톤",
+      example: "We hit the first milestone two weeks early.",
+      exampleKo: "첫 번째 마일스톤을 2주 앞당겨 달성했습니다.",
+      tags: ["프로젝트"]
+    },
+    {
+      id: "word-biz-9", deck: "biz", lang: "en", level: "B2",
+      word: "consensus",
+      meaning: "합의",
+      example: "We reached a consensus after a short discussion.",
+      exampleKo: "짧은 논의 끝에 합의에 이르렀습니다.",
+      tags: ["회의"]
+    },
+    {
+      id: "word-biz-10", deck: "biz", lang: "en", level: "A2",
+      word: "follow up",
+      meaning: "후속 조치하다",
+      example: "I'll follow up with the lab about the test results.",
+      exampleKo: "시험 결과에 대해 실험실에 후속 연락을 하겠습니다.",
+      tags: ["이메일"]
+    },
+    {
+      id: "word-biz-11", deck: "biz", lang: "en", level: "B2",
+      word: "preliminary",
+      meaning: "예비의, 사전의",
+      example: "These are preliminary results, not the final numbers.",
+      exampleKo: "이것은 최종 수치가 아니라 예비 결과입니다.",
+      tags: ["발표"]
+    },
+    {
+      id: "word-biz-12", deck: "biz", lang: "en", level: "B1",
+      word: "objection",
+      meaning: "반대 의견",
+      example: "Does anyone have an objection to this plan?",
+      exampleKo: "이 계획에 반대 의견 있으신가요?",
+      tags: ["회의"]
+    },
+    {
+      id: "word-biz-13", deck: "biz", lang: "en", level: "B2",
+      word: "takeaway",
+      meaning: "핵심 요점",
+      example: "My main takeaway is that data quality matters most.",
+      exampleKo: "제 핵심 요점은 데이터 품질이 가장 중요하다는 것입니다.",
+      tags: ["발표"]
+    },
+    {
+      id: "word-biz-14", deck: "biz", lang: "en", level: "B2",
+      word: "scope",
+      meaning: "범위",
+      example: "That request is outside the scope of this project.",
+      exampleKo: "그 요청은 이 프로젝트의 범위를 벗어납니다.",
+      tags: ["프로젝트"]
+    },
+    {
+      id: "word-energy-1", deck: "energy", lang: "en", level: "B1",
+      word: "renewable",
+      meaning: "재생 가능한",
+      example: "Renewable power now covers a third of the grid.",
+      exampleKo: "이제 재생에너지가 전력망의 3분의 1을 담당합니다.",
+      tags: ["에너지"]
+    },
+    {
+      id: "word-energy-2", deck: "energy", lang: "en", level: "B1",
+      word: "emission",
+      meaning: "배출(량)",
+      example: "We cut carbon emissions by forty percent last year.",
+      exampleKo: "작년에 탄소 배출을 40퍼센트 줄였습니다.",
+      tags: ["환경"]
+    },
+    {
+      id: "word-energy-3", deck: "energy", lang: "en", level: "B1",
+      word: "efficiency",
+      meaning: "효율",
+      example: "Higher efficiency means less waste heat.",
+      exampleKo: "효율이 높아지면 폐열이 줄어듭니다.",
+      tags: ["공정"]
+    },
+    {
+      id: "word-energy-4", deck: "energy", lang: "en", level: "B2",
+      word: "catalyst",
+      meaning: "촉매",
+      example: "The catalyst lowers the reaction temperature.",
+      exampleKo: "촉매가 반응 온도를 낮춰 줍니다.",
+      tags: ["화학"]
+    },
+    {
+      id: "word-energy-5", deck: "energy", lang: "en", level: "B2",
+      word: "combustion",
+      meaning: "연소",
+      example: "Combustion produces both heat and carbon dioxide.",
+      exampleKo: "연소는 열과 이산화탄소를 함께 만들어 냅니다.",
+      tags: ["화학"]
+    },
+    {
+      id: "word-energy-6", deck: "energy", lang: "en", level: "B2",
+      word: "electrolysis",
+      meaning: "전기분해",
+      example: "Green hydrogen is made by electrolysis of water.",
+      exampleKo: "그린 수소는 물의 전기분해로 만들어집니다.",
+      tags: ["수소"]
+    },
+    {
+      id: "word-energy-7", deck: "energy", lang: "en", level: "B2",
+      word: "feedstock",
+      meaning: "원료",
+      example: "Cheaper feedstock is the key to lowering the cost.",
+      exampleKo: "원료를 싸게 구하는 것이 원가를 낮추는 열쇠입니다.",
+      tags: ["공정"]
+    },
+    {
+      id: "word-energy-8", deck: "energy", lang: "en", level: "B2",
+      word: "viscosity",
+      meaning: "점도",
+      example: "Viscosity rises sharply as the mixture cools.",
+      exampleKo: "혼합물이 식으면서 점도가 급격히 올라갑니다.",
+      tags: ["물성"]
+    },
+    {
+      id: "word-energy-9", deck: "energy", lang: "en", level: "B2",
+      word: "corrosion",
+      meaning: "부식",
+      example: "Salt water accelerates corrosion in the pipeline.",
+      exampleKo: "염수는 배관 부식을 촉진합니다.",
+      tags: ["설비"]
+    },
+    {
+      id: "word-energy-10", deck: "energy", lang: "en", level: "B2",
+      word: "distillation",
+      meaning: "증류",
+      example: "The separation step uses fractional distillation.",
+      exampleKo: "분리 공정에서는 분별 증류를 사용합니다.",
+      tags: ["공정"]
+    },
+    {
+      id: "word-energy-11", deck: "energy", lang: "en", level: "B1",
+      word: "capacity",
+      meaning: "용량, 수용력",
+      example: "The plant runs at eighty percent of its capacity.",
+      exampleKo: "그 플랜트는 설비 용량의 80퍼센트로 가동됩니다.",
+      tags: ["설비"]
+    },
+    {
+      id: "word-energy-12", deck: "energy", lang: "en", level: "B1",
+      word: "grid",
+      meaning: "전력망",
+      example: "Storage helps balance the grid when the wind drops.",
+      exampleKo: "바람이 잦아들 때 저장 장치가 전력망 균형을 잡아 줍니다.",
+      tags: ["에너지"]
+    },
+    {
+      id: "word-energy-13", deck: "energy", lang: "en", level: "B2",
+      word: "decarbonize",
+      meaning: "탈탄소화하다",
+      example: "Heavy industry is the hardest sector to decarbonize.",
+      exampleKo: "중공업은 탈탄소화가 가장 어려운 분야입니다.",
+      tags: ["환경"]
+    },
+    {
+      id: "word-energy-14", deck: "energy", lang: "en", level: "B2",
+      word: "yield",
+      meaning: "수율, 생산량",
+      example: "The new reactor improved the yield by twelve percent.",
+      exampleKo: "새 반응기는 수율을 12퍼센트 높였습니다.",
+      tags: ["공정"]
+    },
+    {
+      id: "word-ai-1", deck: "ai", lang: "en", level: "B1",
+      word: "model",
+      meaning: "모델",
+      example: "We trained the model on two years of sensor data.",
+      exampleKo: "2년치 센서 데이터로 모델을 학습시켰습니다.",
+      tags: ["AI"]
+    },
+    {
+      id: "word-ai-2", deck: "ai", lang: "en", level: "B1",
+      word: "prompt",
+      meaning: "프롬프트",
+      example: "A clearer prompt usually gives a better answer.",
+      exampleKo: "프롬프트를 더 분명히 쓰면 보통 더 좋은 답이 나옵니다.",
+      tags: ["AI"]
+    },
+    {
+      id: "word-ai-3", deck: "ai", lang: "en", level: "B2",
+      word: "inference",
+      meaning: "추론",
+      example: "Inference costs more than training at this scale.",
+      exampleKo: "이 규모에서는 학습보다 추론 비용이 더 큽니다.",
+      tags: ["AI"]
+    },
+    {
+      id: "word-ai-4", deck: "ai", lang: "en", level: "B1",
+      word: "training data",
+      meaning: "학습 데이터",
+      example: "The training data decides what the model can learn.",
+      exampleKo: "학습 데이터가 모델이 배울 수 있는 것을 결정합니다.",
+      tags: ["AI"]
+    },
+    {
+      id: "word-ai-5", deck: "ai", lang: "en", level: "B1",
+      word: "deploy",
+      meaning: "배포하다",
+      example: "We deploy a new version every two weeks.",
+      exampleKo: "2주마다 새 버전을 배포합니다.",
+      tags: ["개발"]
+    },
+    {
+      id: "word-ai-6", deck: "ai", lang: "en", level: "B2",
+      word: "hallucination",
+      meaning: "환각(사실과 다른 생성)",
+      example: "A hallucination looks fluent but is simply wrong.",
+      exampleKo: "환각은 유창해 보이지만 그냥 틀린 답입니다.",
+      tags: ["AI"]
+    },
+    {
+      id: "word-ai-7", deck: "ai", lang: "en", level: "B2",
+      word: "benchmark",
+      meaning: "벤치마크",
+      example: "The benchmark does not reflect real user questions.",
+      exampleKo: "그 벤치마크는 실제 사용자 질문을 반영하지 못합니다.",
+      tags: ["평가"]
+    },
+    {
+      id: "word-ai-8", deck: "ai", lang: "en", level: "B2",
+      word: "fine-tune",
+      meaning: "미세 조정하다",
+      example: "We fine-tuned the model on our own documents.",
+      exampleKo: "우리 문서로 모델을 미세 조정했습니다.",
+      tags: ["AI"]
+    },
+    {
+      id: "word-ai-9", deck: "ai", lang: "en", level: "B2",
+      word: "pipeline",
+      meaning: "파이프라인",
+      example: "The data pipeline breaks whenever a format changes.",
+      exampleKo: "형식이 바뀔 때마다 데이터 파이프라인이 깨집니다.",
+      tags: ["개발"]
+    },
+    {
+      id: "word-ai-10", deck: "ai", lang: "en", level: "B2",
+      word: "latency",
+      meaning: "지연 시간",
+      example: "Users notice latency above three hundred milliseconds.",
+      exampleKo: "사용자는 300밀리초가 넘는 지연을 느낍니다.",
+      tags: ["개발"]
+    },
+    {
+      id: "word-ai-11", deck: "ai", lang: "en", level: "B2",
+      word: "scalable",
+      meaning: "확장 가능한",
+      example: "Is this design scalable to a million users?",
+      exampleKo: "이 설계는 사용자 100만 명까지 확장 가능한가요?",
+      tags: ["개발"]
+    },
+    {
+      id: "word-ai-12", deck: "ai", lang: "en", level: "B2",
+      word: "governance",
+      meaning: "거버넌스, 관리 체계",
+      example: "AI governance is now a board-level topic.",
+      exampleKo: "AI 거버넌스는 이제 이사회 의제입니다.",
+      tags: ["정책"]
+    },
+    {
+      id: "word-de-1", deck: "de", lang: "de", level: "A1",
+      word: "die Rechnung",
+      meaning: "계산서",
+      example: "Die Rechnung, bitte.",
+      exampleKo: "계산서 주세요.",
+      tags: ["식당"]
+    },
+    {
+      id: "word-de-2", deck: "de", lang: "de", level: "A1",
+      word: "bestellen",
+      meaning: "주문하다",
+      example: "Ich möchte etwas bestellen.",
+      exampleKo: "주문하고 싶어요.",
+      tags: ["식당"]
+    },
+    {
+      id: "word-de-3", deck: "de", lang: "de", level: "A1",
+      word: "bitte",
+      meaning: "부디, 제발(정중하게)",
+      example: "Ein Wasser, bitte.",
+      exampleKo: "물 한 잔 주세요.",
+      tags: ["기초"]
+    },
+    {
+      id: "word-de-4", deck: "de", lang: "de", level: "A1",
+      word: "die Entschuldigung",
+      meaning: "실례합니다, 사과",
+      example: "Entschuldigung, wo ist der Bahnhof?",
+      exampleKo: "실례합니다, 기차역이 어디예요?",
+      tags: ["기초"]
+    },
+    {
+      id: "word-de-5", deck: "de", lang: "de", level: "A1",
+      word: "der Termin",
+      meaning: "약속, 일정",
+      example: "Ich habe morgen einen Termin.",
+      exampleKo: "내일 약속이 있어요.",
+      tags: ["일정"]
+    },
+    {
+      id: "word-de-6", deck: "de", lang: "de", level: "A2",
+      word: "die Besprechung",
+      meaning: "회의",
+      example: "Die Besprechung beginnt um neun Uhr.",
+      exampleKo: "회의는 9시에 시작합니다.",
+      tags: ["회의"]
+    },
+    {
+      id: "word-de-7", deck: "de", lang: "de", level: "A2",
+      word: "der Antrag",
+      meaning: "신청서",
+      example: "Ich fülle den Antrag aus.",
+      exampleKo: "신청서를 작성합니다.",
+      tags: ["행정"]
+    },
+    {
+      id: "word-de-8", deck: "de", lang: "de", level: "B1",
+      word: "die Zulassung",
+      meaning: "승인, 허가",
+      example: "Die Zulassung dauert vier Wochen.",
+      exampleKo: "승인에는 4주가 걸립니다.",
+      tags: ["행정"]
+    },
+    {
+      id: "word-de-9", deck: "de", lang: "de", level: "B1",
+      word: "nachhaltig",
+      meaning: "지속 가능한",
+      example: "Nachhaltige Energie ist unser Ziel.",
+      exampleKo: "지속 가능한 에너지가 우리의 목표입니다.",
+      tags: ["환경"]
+    },
+    {
+      id: "word-de-10", deck: "de", lang: "de", level: "B2",
+      word: "der Wirkungsgrad",
+      meaning: "효율",
+      example: "Der Wirkungsgrad liegt bei achtzig Prozent.",
+      exampleKo: "효율은 80퍼센트입니다.",
+      tags: ["공학"]
+    },
+    {
+      id: "word-de-11", deck: "de", lang: "de", level: "A2",
+      word: "die Probe",
+      meaning: "시료, 시험",
+      example: "Wir schicken die Probe ins Labor.",
+      exampleKo: "시료를 실험실로 보냅니다.",
+      tags: ["실험"]
+    },
+    {
+      id: "word-de-12", deck: "de", lang: "de", level: "A1",
+      word: "viel Erfolg",
+      meaning: "행운을 빌어요",
+      example: "Viel Erfolg bei der Präsentation!",
+      exampleKo: "발표에서 좋은 결과 있기를 바라요!",
+      tags: ["기초"]
+    }
+  ];
+
+  var DECK_NAMES = { biz: "비즈니스·학회", energy: "에너지·화학공학", ai: "AI·테크", de: "독일어 기초", custom: "내 단어" };
+  var DECK_EMOJI = { biz: "💼", energy: "⚗️", ai: "🤖", de: "🇩🇪", custom: "✍️" };
+
+  var vw = { deck: "all", q: "", idx: 0, flipped: false, queue: [], voiceWarn: {} };
+
+  function normalizeWord(raw) {
+    if (!raw || typeof raw !== "object") return null;
+    var word = String(raw.word || "").trim();
+    if (!word) return null;
+    var lang = raw.lang === "de" ? "de" : "en";
+    var deck = String(raw.deck || (lang === "de" ? "de" : "custom"));
+    var now = Date.now();
+    return {
+      id: raw.id ? String(raw.id) : "word-" + uid(),
+      deck: deck,
+      lang: lang,
+      word: word,
+      meaning: String(raw.meaning || ""),
+      example: String(raw.example || ""),
+      exampleKo: String(raw.exampleKo || ""),
+      level: String(raw.level || ""),
+      tags: parseTags(raw.tags).slice(0, 8),
+      reps: Math.max(0, Math.floor(Number(raw.reps) || 0)),
+      interval: Math.max(0, Number(raw.interval) || 0),
+      ef: clamp(Number(raw.ef) || 2.5, 1.3, 3.2),
+      lapses: Math.max(0, Math.floor(Number(raw.lapses) || 0)),
+      due: isFinite(Number(raw.due)) ? Number(raw.due) : now,
+      createdAt: isFinite(Number(raw.createdAt)) ? Number(raw.createdAt) : now,
+      lastReviewed: isFinite(Number(raw.lastReviewed)) ? Number(raw.lastReviewed) : 0,
+      mastered: !!raw.mastered,
+      custom: !!raw.custom || deck === "custom"
+    };
+  }
+
+  // 처음 열 때 기본 단어 묶음(52개)을 한 번만 채운다. 이후에는 사용자가 넣고 지운 그대로 둔다.
+  function seedWords() {
+    if (state.wordsSeeded) return;
+    if (!state.words.length) {
+      var now = Date.now();
+      for (var i = 0; i < STARTER_WORDS.length; i++) {
+        var s = STARTER_WORDS[i];
+        var n = normalizeWord({
+          id: s.id, deck: s.deck, lang: s.lang, level: s.level, word: s.word,
+          meaning: s.meaning, example: s.example, exampleKo: s.exampleKo, tags: s.tags,
+          due: now, createdAt: now - (STARTER_WORDS.length - i) * 1000
+        });
+        if (n) state.words.push(n);
+      }
+    }
+    // 처음 화면에서 곧바로 저장소를 건드리지 않는다(첫 실행은 빈 상태 그대로).
+    // 단어 학습·추가처럼 사용자가 실제로 뭔가 할 때 함께 저장된다.
+    state.wordsSeeded = true;
+  }
+
+  function findWord(id) {
+    for (var i = 0; i < state.words.length; i++) {
+      if (state.words[i].id === id) return state.words[i];
+    }
+    return null;
+  }
+
+  function logWordStudied(id, ts) {
+    var wid = String(id || "");
+    if (!wid) return false;
+    var k = dayKey(ts);
+    var list = state.wordLog[k];
+    if (!list) { list = []; state.wordLog[k] = list; }
+    if (list.indexOf(wid) >= 0) return false;
+    list.push(wid);
+    return true;
+  }
+
+  function mergeWordLog(raw) {
+    var incoming = sanitizeDailyLog(raw);
+    var days = 0, added = 0;
+    for (var k in incoming) {
+      if (!Object.prototype.hasOwnProperty.call(incoming, k)) continue;
+      var list = state.wordLog[k];
+      if (!list) { list = []; state.wordLog[k] = list; }
+      var hit = 0;
+      for (var i = 0; i < incoming[k].length; i++) {
+        if (list.indexOf(incoming[k][i]) < 0) { list.push(incoming[k][i]); hit++; }
+      }
+      days++;
+      added += hit;
+    }
+    return { days: days, added: added };
+  }
+
+  function wordDayCount(key) {
+    var list = state.wordLog[key];
+    return list && list.length ? list.length : 0;
+  }
+
+  function wordStreak(ts) {
+    var today = dayKey(ts);
+    var n = 0;
+    var start = wordDayCount(today) > 0 ? 0 : -1;
+    for (var i = start; i > -400; i--) {
+      if (wordDayCount(dayKeyOffset(i, ts)) <= 0) break;
+      n++;
+    }
+    return n;
+  }
+
+  function wordDueCount() {
+    var now = Date.now();
+    var n = 0;
+    for (var i = 0; i < state.words.length; i++) {
+      if (!state.words[i].mastered && state.words[i].due <= now) n++;
+    }
+    return n;
+  }
+
+  function updateWordBadge() {
+    var b = el("wordDueBadge");
+    if (!b) return;
+    var n = wordDueCount();
+    b.textContent = n > 99 ? "99+" : String(n);
+    b.classList.toggle("zero", n === 0);
+  }
+
+  function vwFiltered() {
+    var q = String(vw.q || "").trim().toLowerCase();
+    var out = [];
+    for (var i = 0; i < state.words.length; i++) {
+      var w = state.words[i];
+      if (vw.deck !== "all" && w.deck !== vw.deck) continue;
+      if (q) {
+        var hay = (w.word + " " + w.meaning + " " + w.example + " " + (w.tags || []).join(" ")).toLowerCase();
+        if (hay.indexOf(q) < 0) continue;
+      }
+      out.push(w);
+    }
+    out.sort(function (a, b) {
+      if (!!a.mastered !== !!b.mastered) return a.mastered ? 1 : -1;
+      if (a.due !== b.due) return a.due - b.due;
+      return a.createdAt - b.createdAt;
+    });
+    return out;
+  }
+
+  function vwBuildQueue() {
+    var list = vwFiltered();
+    vw.queue = [];
+    for (var i = 0; i < list.length; i++) vw.queue.push(list[i].id);
+    if (vw.idx >= vw.queue.length) vw.idx = 0;
+  }
+
+  function vwCurrent() {
+    var id = vw.queue[vw.idx];
+    return id ? findWord(id) : null;
+  }
+
+  function vwDeckLabel(w) {
+    if (!w) return "—";
+    return (DECK_EMOJI[w.deck] || "") + " " + (DECK_NAMES[w.deck] || "내 단어");
+  }
+
+  function vwSayButtonsHTML(w, withExample) {
+    if (!w) return "";
+    var tag = w.lang === "de" ? "de-DE" : "en-US";
+    var out = [];
+    if (w.lang === "de") {
+      out.push('<button type="button" class="vw-saybtn" data-say="word" data-lang="de-DE">🇩🇪 독일어 발음</button>');
+    } else {
+      out.push('<button type="button" class="vw-saybtn" data-say="word" data-lang="en-US">🇺🇸 미국식</button>');
+      out.push('<button type="button" class="vw-saybtn" data-say="word" data-lang="en-GB">🇬🇧 영국식</button>');
+    }
+    if (withExample && w.example) {
+      out.push('<button type="button" class="vw-saybtn" data-say="example" data-lang="' + tag + '">🔊 예문 듣기</button>');
+    }
+    return out.join("");
+  }
+
+  function renderVocab(rebuild) {
+    var words = vwFiltered();
+    if (rebuild) { vwBuildQueue(); }
+    if (!vw.queue.length) vwBuildQueue();
+    if (vw.idx >= vw.queue.length) vw.idx = Math.max(0, vw.queue.length - 1);
+
+    if (el("vwTotal")) el("vwTotal").textContent = String(state.words.length);
+    if (el("vwDue")) el("vwDue").textContent = String(wordDueCount());
+    var now = Date.now();
+    if (el("vwToday")) el("vwToday").textContent = String(wordDayCount(dayKey(now)));
+    if (el("vwStreak")) el("vwStreak").textContent = String(wordStreak(now));
+
+    // 묶음 칩
+    var chips = ['<button type="button" class="vw-deck' + (vw.deck === "all" ? " on" : "") + '" data-wdeck="all">전체 ' + state.words.length + "</button>"];
+    var hasCustom = false;
+    for (var d = 0; d < WORD_DECKS.length; d++) {
+      var dk = WORD_DECKS[d];
+      var n = 0, due = 0;
+      for (var i = 0; i < state.words.length; i++) {
+        var wd = state.words[i];
+        if (wd.deck !== dk.id) continue;
+        n++;
+        if (!wd.mastered && wd.due <= now) due++;
+      }
+      if (!n) continue;
+      chips.push('<button type="button" class="vw-deck' + (vw.deck === dk.id ? " on" : "") + '" data-wdeck="' + dk.id + '">' +
+        dk.emoji + " " + esc(dk.name) + " " + n + "</button>");
+    }
+    for (var c = 0; c < state.words.length; c++) { if (state.words[c].deck === "custom") { hasCustom = true; break; } }
+    if (hasCustom) {
+      chips.push('<button type="button" class="vw-deck' + (vw.deck === "custom" ? " on" : "") + '" data-wdeck="custom">✍️ 내 단어</button>');
+    }
+    el("vwDecks").innerHTML = chips.join("");
+
+    // 카드
+    var cur = vwCurrent();
+    el("vwPos").textContent = vw.queue.length ? (vw.idx + 1) + " / " + vw.queue.length : "0 / 0";
+    el("vwDeckName").textContent = cur ? vwDeckLabel(cur) : (vw.deck === "all" ? "전체 단어" : (DECK_NAMES[vw.deck] || ""));
+    if (!cur) {
+      el("vwWord").textContent = state.words.length ? "이 묶음에 단어가 없어요" : "단어장이 비었어요";
+      el("vwMeta").textContent = state.words.length ? "다른 묶음을 골라보세요" : "+ 단어 추가로 첫 단어를 넣어보세요";
+      el("vwSayFront").innerHTML = "";
+      el("vwMeaning").textContent = "";
+      el("vwExample").textContent = "";
+      el("vwExKo").textContent = "";
+      el("vwSayBack").innerHTML = "";
+      el("vwFlipBtn").disabled = true;
+    } else {
+      el("vwFlipBtn").disabled = false;
+      el("vwWord").textContent = cur.word;
+      var meta = [];
+      if (cur.level) meta.push(cur.level);
+      if (cur.tags && cur.tags.length) meta.push("#" + cur.tags.join(" #"));
+      meta.push(cur.mastered ? "외움 완료" : (cur.due <= now ? "지금 복습" : "다음 복습 " + dueText(cur, now)));
+      el("vwMeta").textContent = meta.join(" · ");
+      el("vwSayFront").innerHTML = vwSayButtonsHTML(cur, false);
+      el("vwMeaning").textContent = cur.meaning || "(뜻을 적어 두지 않았어요)";
+      el("vwExample").textContent = cur.example || "";
+      el("vwExKo").textContent = cur.exampleKo || "";
+      // 뒷면에는 예문 버튼만 남긴다
+      el("vwSayBack").innerHTML = cur.example
+        ? '<button type="button" class="vw-saybtn" data-say="example" data-lang="' + (cur.lang === "de" ? "de-DE" : "en-US") + '">🔊 예문 듣기</button>'
+        : "";
+    }
+    vwUpdatePreviews(cur);
+
+    // 목록
+    var rows = [];
+    for (var r = 0; r < words.length; r++) {
+      var w = words[r];
+      var dueCls = w.mastered ? "done" : (w.due <= now ? "due" : "");
+      var dueLabel = w.mastered ? "외움" : dueText(w, now);
+      rows.push('<div class="vw-item' + (cur && cur.id === w.id ? " cur" : "") + '" data-wrow="' + esc(w.id) + '">' +
+        '<div class="tt"><b>' + esc(w.word) + "</b><span>" + esc(w.meaning) + "</span></div>" +
+        (dueCls ? '<span class="bdg ' + dueCls + '">' + esc(dueLabel) + "</span>" : "") +
+        '<div class="acts">' +
+          '<button type="button" data-wsay="' + esc(w.id) + '" aria-label="발음 듣기">🔊</button>' +
+          '<button type="button" data-wdel="' + esc(w.id) + '" aria-label="이 단어 지우기">✕</button>' +
+        "</div></div>");
+    }
+    el("vwList").innerHTML = rows.length ? rows.join("") :
+      '<div class="vw-empty">조건에 맞는 단어가 없어요. 검색어나 묶음을 바꿔보세요.</div>';
+    el("vwListMeta").textContent = "보기 " + words.length + " / " + state.words.length + "개";
+    updateWordBadge();
+  }
+
+  function vwUpdatePreviews(w) {
+    var box = el("vwRatings");
+    if (!box) return;
+    var card = w || { reps: 0, interval: 0, ef: 2.5, lapses: 0, due: 0, mastered: false };
+    qsa(".rate", box).forEach(function (b) {
+      var g = b.getAttribute("data-wgrade");
+      var small = b.querySelector(".pv");
+      if (!small) return;
+      if (g === "mastered") { small.textContent = "완료"; return; }
+      var res = computeNext(card, g);
+      small.textContent = res.label;
+    });
+  }
+
+  function vwSetFace(flipped, animate) {
+    var box = el("vwFlip");
+    var front = el("vwFront"), back = el("vwBack");
+    if (!box || !front || !back) return;
+    var apply = function () {
+      front.hidden = !!flipped;
+      back.hidden = !flipped;
+      vw.flipped = !!flipped;
+      el("vwFlipBtn").textContent = flipped ? "다시 가리기" : "뒤집기";
+      box.setAttribute("aria-label", flipped ? "카드를 눌러 단어로 돌아가기" : "카드를 눌러 뒤집기");
+    };
+    if (!animate) { apply(); return; }
+    box.classList.remove("flip-in");
+    box.classList.add("flip-out");
+    setTimeout(function () {
+      box.classList.remove("flip-out");
+      apply();
+      box.classList.add("flip-in");
+      setTimeout(function () { box.classList.remove("flip-in"); }, 240);
+    }, 140);
+  }
+
+  // ---- 발음 (speechSynthesis) ----
+  function vwVoices() {
+    try { return window.speechSynthesis ? (window.speechSynthesis.getVoices() || []) : []; } catch (e) { return []; }
+  }
+
+  function vwPickVoice(tag) {
+    var list = vwVoices();
+    var want = String(tag || "").toLowerCase().replace("_", "-");
+    var base = want.split("-")[0];
+    var exact = [], near = [];
+    for (var i = 0; i < list.length; i++) {
+      var lg = String(list[i].lang || "").toLowerCase().replace("_", "-");
+      if (lg === want) exact.push(list[i]);
+      else if (lg.split("-")[0] === base) near.push(list[i]);
+    }
+    if (exact.length) return { voice: exact[0], exact: true };
+    if (near.length) return { voice: near[0], exact: false };
+    return { voice: null, exact: false };
+  }
+
+  function vwSpeak(text, tag, btn) {
+    var s = String(text || "").trim();
+    if (!s) return;
+    if (!window.speechSynthesis || typeof window.SpeechSynthesisUtterance === "undefined") {
+      toast("이 브라우저는 발음 듣기(음성 합성)를 지원하지 않아요.");
+      return;
+    }
+    var p = vwPickVoice(tag);
+    var label = tag === "en-US" ? "미국식" : tag === "en-GB" ? "영국식" : "독일어";
+    if (!p.voice && tag.indexOf("de") === 0) {
+      toast("이 기기에는 독일어 음성이 없어요. 기기 설정에서 독일어 음성을 추가하면 들을 수 있어요.");
+      return;
+    }
+    try { window.speechSynthesis.cancel(); } catch (e) {}
+    var u = new SpeechSynthesisUtterance(s);
+    u.lang = p.voice ? (p.voice.lang || tag) : tag;
+    if (p.voice) u.voice = p.voice;
+    u.rate = 0.9;
+    u.pitch = 1;
+    if (!p.voice) {
+      if (!vw.voiceWarn["default|" + tag]) {
+        vw.voiceWarn["default|" + tag] = 1;
+        toast("이 기기의 기본 음성으로 읽어요. (" + label + " 전용 음성 없음)");
+      }
+    }
+    if (!p.exact && p.voice) {
+      var key = tag + "|" + (p.voice.lang || "");
+      if (!vw.voiceWarn[key]) {
+        vw.voiceWarn[key] = 1;
+        toast("이 기기에는 " + label + " 음성이 없어 " + p.voice.lang + " 음성으로 읽어요.");
+      }
+    }
+    if (btn) {
+      btn.classList.add("on");
+      var clearBtn = function () { btn.classList.remove("on"); };
+      u.onend = clearBtn;
+      u.onerror = clearBtn;
+    }
+    try { window.speechSynthesis.speak(u); } catch (e) {
+      toast("발음을 재생하지 못했어요.");
+    }
+  }
+
+  function vwGrade(grade) {
+    var w = vwCurrent();
+    if (!w) return;
+    var now = Date.now();
+    var label = applyPackGrade(w, grade, false, now);
+    logWordStudied(w.id, now);
+    saveStore();
+    updateWordBadge();
+    vwSetFace(false, false);
+    // 평가한 단어는 간격이 뒤로 밀리므로, 목록과 같은 순서로 다시 세우고 맨 앞(가장 급한 단어)으로 간다
+    vwBuildQueue();
+    vw.idx = 0;
+    renderVocab(false);
+    if (grade === "mastered") toast("외움 완료 · " + w.word);
+    else toast(label + " 뒤 다시 봐요 · " + w.word);
+    if (vw.queue.length <= 1) toast("이 묶음 단어를 끝까지 봤어요 🎉");
+    vwScrollCardIntoView();
+  }
+
+  function vwScrollCardIntoView() {
+    var box = el("vwFlip");
+    if (!box || typeof box.getBoundingClientRect !== "function") return;
+    var top = box.getBoundingClientRect().top + (window.pageYOffset || 0) - stickyTopHeight() - 10;
+    if (!isFinite(top) || top < 0) top = 0;
+    var vh = window.innerHeight || 0;
+    var r = box.getBoundingClientRect();
+    // 카드가 이미 화면 안에 있으면 스크롤하지 않는다
+    if (r.top > stickyTopHeight() && r.bottom < vh) return;
+    try { window.scrollTo({ top: top, behavior: "smooth" }); }
+    catch (e) { try { window.scrollTo(0, top); } catch (e2) {} }
+  }
+
+  function vwAddWord() {
+    var word = el("vwNewWord").value.trim();
+    var meaning = el("vwNewMeaning").value.trim();
+    var example = el("vwNewExample").value.trim();
+    var lang = el("vwNewLang").value === "de" ? "de" : "en";
+    if (!word) { toast("단어를 입력해 주세요."); el("vwNewWord").focus(); return; }
+    if (!meaning) { toast("뜻을 입력해 주세요."); el("vwNewMeaning").focus(); return; }
+    var now = Date.now();
+    var it = normalizeWord({
+      id: "word-custom-" + now + "-" + Math.floor(Math.random() * 1000),
+      deck: "custom", lang: lang, word: word, meaning: meaning, example: example,
+      tags: lang === "de" ? ["독일어"] : ["내단어"], due: now, createdAt: now, custom: true
+    });
+    if (!it) return;
+    state.words.unshift(it);
+    saveStore();
+    vw.deck = "custom";
+    renderVocab(true);
+    vw.idx = Math.max(0, vw.queue.indexOf(it.id));
+    renderVocab(false);
+    el("vwNewWord").value = "";
+    el("vwNewMeaning").value = "";
+    el("vwNewExample").value = "";
+    el("vwAddForm").hidden = true;
+    el("vwAddToggle").setAttribute("aria-expanded", "false");
+    toast("단어장에 넣었어요 · " + it.word);
+  }
+
+  function vwDeleteWord(id) {
+    var w = findWord(id);
+    if (!w) return;
+    var ok = window.confirm("이 단어를 단어장에서 지울까요?\n\n" + w.word + " · " + w.meaning);
+    if (!ok) return;
+    state.words = state.words.filter(function (x) { return x.id !== id; });
+    saveStore();
+    renderVocab(true);
+    toast("단어를 지웠어요.");
+  }
+
+  function bindVocab() {
+    var pane = el("tab-words");
+    if (!pane) return;
+
+    pane.addEventListener("click", function (e) {
+      var deckBtn = e.target.closest("[data-wdeck]");
+      if (deckBtn) {
+        vw.deck = deckBtn.getAttribute("data-wdeck");
+        vw.idx = 0;
+        vwSetFace(false, false);
+        renderVocab(true);
+        return;
+      }
+      var say = e.target.closest("[data-say]");
+      if (say) {
+        var cur = vwCurrent();
+        if (!cur) return;
+        var what = say.getAttribute("data-say");
+        var tag = say.getAttribute("data-lang") || (cur.lang === "de" ? "de-DE" : "en-US");
+        vwSpeak(what === "example" ? cur.example : cur.word, tag, say);
+        return;
+      }
+      var rowSay = e.target.closest("[data-wsay]");
+      if (rowSay) {
+        var w1 = findWord(rowSay.getAttribute("data-wsay"));
+        if (w1) vwSpeak(w1.word, w1.lang === "de" ? "de-DE" : "en-US", rowSay);
+        return;
+      }
+      var del = e.target.closest("[data-wdel]");
+      if (del) { vwDeleteWord(del.getAttribute("data-wdel")); return; }
+      var row = e.target.closest("[data-wrow]");
+      if (row) {
+        var id = row.getAttribute("data-wrow");
+        var pos = vw.queue.indexOf(id);
+        if (pos < 0) { vwBuildQueue(); pos = vw.queue.indexOf(id); }
+        if (pos >= 0) {
+          vw.idx = pos;
+          vwSetFace(false, false);
+          renderVocab(false);
+          vwScrollCardIntoView();
+        }
+        return;
+      }
+      var flip = e.target.closest("#vwFlip");
+      if (flip) { vwSetFace(!vw.flipped, true); return; }
+    });
+
+    el("vwFlipBtn").addEventListener("click", function () { vwSetFace(!vw.flipped, true); });
+    el("vwPrevBtn").addEventListener("click", function () {
+      if (!vw.queue.length) return;
+      vw.idx = vw.idx <= 0 ? vw.queue.length - 1 : vw.idx - 1;
+      vwSetFace(false, false);
+      renderVocab(false);
+    });
+    el("vwNextBtn").addEventListener("click", function () {
+      if (!vw.queue.length) return;
+      vw.idx = vw.idx >= vw.queue.length - 1 ? 0 : vw.idx + 1;
+      vwSetFace(false, false);
+      renderVocab(false);
+    });
+    el("vwRatings").addEventListener("click", function (e) {
+      var b = e.target.closest("[data-wgrade]");
+      if (!b) return;
+      vwGrade(b.getAttribute("data-wgrade"));
+    });
+    el("vwSearch").addEventListener("input", function () {
+      vw.q = el("vwSearch").value;
+      vw.idx = 0;
+      vwSetFace(false, false);
+      renderVocab(true);
+    });
+    el("vwAddToggle").addEventListener("click", function () {
+      var open = !el("vwAddForm").hidden;
+      el("vwAddForm").hidden = open;
+      el("vwAddToggle").setAttribute("aria-expanded", open ? "false" : "true");
+      if (!open) el("vwNewWord").focus();
+    });
+    el("vwAddCancel").addEventListener("click", function () {
+      el("vwAddForm").hidden = true;
+      el("vwAddToggle").setAttribute("aria-expanded", "false");
+    });
+    el("vwAddSave").addEventListener("click", vwAddWord);
+    el("vwNewExample").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { e.preventDefault(); vwAddWord(); }
+    });
+    el("vwFlip").addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.code === "Space" || e.key === " ") {
+        e.preventDefault();
+        vwSetFace(!vw.flipped, true);
+      }
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (currentTab !== "words") return;
+      if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+      if (!el("editModal").hidden) return;
+      if (e.code === "Space" || e.key === " ") {
+        e.preventDefault();
+        vwSetFace(!vw.flipped, true);
+        return;
+      }
+      if (/^[1-4]$/.test(e.key)) {
+        var map = { "1": "hard", "2": "good", "3": "easy", "4": "mastered" };
+        vwGrade(map[e.key]);
+      }
+    });
+
+    // 음성 목록은 브라우저마다 늦게 채워진다 — 미리 한 번 깨워 둔다
+    try {
+      if (window.speechSynthesis) {
+        vwVoices();
+        window.speechSynthesis.addEventListener("voiceschanged", function () { vwVoices(); });
+      }
+    } catch (e) {}
+  }
+
   /* =========================================================
      init
      ========================================================= */
@@ -7237,8 +8563,11 @@ kbd {
     loadStore();
     applySettings();
     bind();
+    bindVocab();
+    seedWords();
     renderPacks();
     renderLibrary();
+    renderVocab();
     updateDueBadge();
     refreshReviewStart();
     syncPlayButton();
