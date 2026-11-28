@@ -582,29 +582,6 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.5; }
 .transport { display: flex; gap: 8px; margin-top: 4px; }
 .transport .btn { flex: 1 1 auto; }
 
-/* ---------------- recorder ---------------- */
-.rec-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-.rec-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-.rec-dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--again);
-  box-shadow: 0 0 0 0 rgba(255, 107, 127, 0.6);
-}
-.rec-btn.recording .rec-dot { animation: pulse 1.15s infinite; }
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(255, 107, 127, 0.6); }
-  70% { box-shadow: 0 0 0 10px rgba(255, 107, 127, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(255, 107, 127, 0); }
-}
-.rec-time { font-family: var(--mono); font-size: 12.5px; color: var(--muted); min-width: 44px; }
-.rec-audio { width: 100%; margin-top: 10px; height: 38px; }
-
 /* ---------------- chips ---------------- */
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .chip {
@@ -1764,7 +1741,7 @@ kbd {
       <div class="pack-head">
         <button class="btn sm ghost" id="packBackBtn">← 팩 목록</button>
         <span class="pack-title" id="packTitle">팩</span>
-        <button class="btn sm due" id="packReviewOnlyBtn" hidden title="이 팩에서 오늘 복습할 카드만 모아서 시작">오늘 복습 <b id="packReviewOnlyN">0</b>장</button>
+        <button class="btn sm due" id="packReviewOnlyBtn" hidden title="이 팩에서 오늘 복습할 카드만 모아서 시작">남은 문장 <b id="packReviewOnlyN">0</b> / <b id="packReviewOnlyTotal">0</b></button>
         <span class="pack-count" id="packCount">1 / 6</span>
       </div>
 
@@ -1864,17 +1841,6 @@ kbd {
           </details>
         </div>
 
-        <div class="card">
-          <div class="card-title"><span class="dot"></span> 내 발음 녹음 <span class="right">선택</span></div>
-          <div class="rec-row">
-            <button class="btn rec-btn" id="recBtn"><span class="rec-dot"></span><span id="recLabel">녹음 시작</span></button>
-            <span class="rec-time" id="recTime">0:00</span>
-            <button class="btn ghost sm" id="recDelete" hidden>지우기</button>
-            <a class="btn ghost sm" id="recDownload" hidden download="shadow-recording.webm">저장</a>
-          </div>
-          <audio class="rec-audio" id="recAudio" controls hidden></audio>
-          <div class="hint" id="recHint">마이크 권한을 허용하면 구간을 따라 말한 내 목소리를 바로 들어볼 수 있어요.</div>
-        </div>
       </div>
 
       <div class="stack">
@@ -2691,11 +2657,20 @@ kbd {
 
   // 오늘 했으면 오늘까지, 아직이면 어제까지의 연속 일수
   function studyStreak(ts) {
+    return appStreak(ts);
+  }
+
+  // 연속 일수는 앱 전체에서 하나 — 쉐도잉·단어장·문법 중 하나라도 한 날은 '공부한 날'
+  function studiedDayTotal(key) {
+    return (dayCount(key) > 0 ? 1 : 0) + (wordDayCount(key) > 0 ? 1 : 0) + (grammarDayCount(key) > 0 ? 1 : 0);
+  }
+
+  function appStreak(ts) {
     var today = dayKey(ts);
     var n = 0;
-    var start = dayCount(today) > 0 ? 0 : -1;
+    var start = studiedDayTotal(today) > 0 ? 0 : -1;
     for (var i = start; i > -400; i--) {
-      if (dayCount(dayKeyOffset(i, ts)) <= 0) break;
+      if (studiedDayTotal(dayKeyOffset(i, ts)) <= 0) break;
       n++;
     }
     return n;
@@ -5748,21 +5723,24 @@ kbd {
     var now = Date.now();
     var n = 0;
     for (var i = 0; i < state.cards.length; i++) {
-      if (!state.cards[i].mastered && state.cards[i].due <= now) n++;
+      if (isDueBy(state.cards[i], now)) n++;
     }
     return n;
   }
 
   function updateDueBadge() {
-    var n = dueCount();
+    var n = dueCount();                                      // 지금 복습 시점이 지난 문장 카드
+    var leftSent = n;
+    var total = n;
+    try { leftSent = leftTodaySentences(); } catch (e) { leftSent = n; }
+    try { total = leftTodaySentences() + leftTodayWords() + leftTodayGrammar(); } catch (e) { total = leftSent; }
     var b = el("dueBadge");
-    var rn = n;
-    try { rn = rvRemainingTotal(); } catch (e) { rn = n; }
-    b.textContent = rn > 99 ? "99+" : String(rn);
-    b.classList.toggle("zero", rn === 0);
-    el("rsDue").textContent = String(n);
+    // 상단 '복습 N' = 오늘 남은 문장 + 단어 + 문법(각 탭 머리말과 같은 함수)
+    b.textContent = total > 999 ? "999+" : String(total);
+    b.classList.toggle("zero", total === 0);
+    el("rsDue").textContent = String(leftSent);
     el("statTotal").textContent = String(state.cards.length);
-    el("statDue").textContent = String(n);
+    el("statDue").textContent = String(leftSent);
     var fresh = 0;
     var mastered = 0;
     for (var i = 0; i < state.cards.length; i++) {
@@ -5771,12 +5749,12 @@ kbd {
     }
     el("statNew").textContent = String(fresh);
     if (el("statMastered")) el("statMastered").textContent = String(mastered);
-    el("rsHint").textContent = n === 0
+    el("rsHint").textContent = leftSent === 0
       ? "지금은 복습할 카드가 없어요. 쉐도잉 탭에서 새 문장을 골라보세요."
       : "망각곡선(SM-2)이 오늘 다시 보라고 알려준 카드예요. 영상 구간이 자동으로 반복 재생됩니다.";
-    el("reviewStartBtn").disabled = n === 0;
-    el("reviewStartBtn").hidden = n === 0;
-    el("reviewGoPacks").hidden = n > 0;
+    el("reviewStartBtn").disabled = leftSent === 0;
+    el("reviewStartBtn").hidden = leftSent === 0;
+    el("reviewGoPacks").hidden = leftSent > 0;
     el("reviewGoLib").hidden = state.cards.length === 0;
     renderStudyLog();
     try { updatePackReviewBtn(); } catch (e) {}
@@ -6268,15 +6246,28 @@ kbd {
       }
       return;
     }
-    if (this.creating) return;
+    if (this.creating) {
+      // 유튜브 API가 느리게 올 때: 지금 만드는 중이면 마지막 요청만 기억했다가
+      // 준비되는 순간 그 영상부터 시작한다(먼저 요청한 낡은 영상이 뜨지 않게)
+      this.pendingRequest = { videoId: videoId, startAt: startAt, lang: wantLang, autoplay: autoplay };
+      this.markPending();
+      return;
+    }
     this.creating = true;
     this.videoId = videoId;
     this.loadedId = videoId;
     this.ccLang = wantLang;
     this.pendingStart = startAt;
+    this.pendingRequest = null;
     this.markPending();
 
     loadYT().then(function () {
+      var req = self.pendingRequest || { videoId: videoId, startAt: startAt, lang: wantLang };
+      self.pendingRequest = null;
+      self.videoId = req.videoId;
+      self.loadedId = req.videoId;
+      self.ccLang = req.lang;
+      self.pendingStart = req.startAt;
       var mount = document.createElement("div");
       mount.style.width = "100%";
       mount.style.height = "100%";
@@ -6286,7 +6277,7 @@ kbd {
       self.player = new YT.Player(mount, {
         width: "100%",
         height: "100%",
-        videoId: videoId,
+        videoId: req.videoId,
         playerVars: {
           rel: 0,
           playsinline: 1,
@@ -6294,8 +6285,8 @@ kbd {
           controls: 1,
           fs: 1,
           iv_load_policy: 3,
-          cc_lang_pref: wantLang,   // 카드 언어의 자막만 뜨게 고정(독일어/영어 섞임 방지)
-          start: Math.floor(startAt)
+          cc_lang_pref: req.lang,   // 카드 언어의 자막만 뜨게 고정(독일어/영어 섞임 방지)
+          start: Math.floor(req.startAt)
         },
         events: {
           onReady: function () { self.onReady(); },
@@ -6891,7 +6882,7 @@ kbd {
       if (!c) continue;
       saved++;
       if (c.mastered) mastered++;
-      else if (c.due <= now) dueNow++;
+      else if (isDueBy(c, now)) dueNow++;
     }
     return { saved: saved, mastered: mastered, dueNow: dueNow, total: pack.cards.length };
   }
@@ -6903,21 +6894,36 @@ kbd {
     if (!pack) return out;
     for (var i = 0; i < pack.cards.length; i++) {
       var c = packDeckCard(pack, i);
-      if (c && !c.mastered && c.due <= now) out.push(c);
+      if (isDueBy(c, now)) out.push(c);
     }
     return out;
   }
 
-  // 팩 화면 머리의 '오늘 복습 N장' 버튼
+  // 팩 화면 머리의 '남은 문장 N / 전체 M' 배지(누르면 이 팩에서 오늘 복습할 카드만)
+  function packLeftCount(pack) {
+    if (!pack || !pack.cards) return 0;
+    var n = 0;
+    for (var i = 0; i < pack.cards.length; i++) {
+      var c = packDeckCard(pack, i);
+      if (!c || !c.mastered) n++;
+    }
+    return n;
+  }
+
   function updatePackReviewBtn() {
     var btn = el("packReviewOnlyBtn");
     if (!btn) return;
     var pack = (typeof packState !== "undefined" && packState) ? packState.active : null;
-    var n = packDueCards(pack).length;
-    var num = el("packReviewOnlyN");
-    if (num) num.textContent = String(n);
-    btn.hidden = n === 0;
-    if (n) btn.setAttribute("aria-label", "이 팩에서 오늘 복습할 카드 " + n + "장만 복습");
+    if (!pack) { btn.hidden = true; return; }
+    var due = packDueCards(pack).length;
+    var total = pack.cards.length;
+    var left = packLeftCount(pack);
+    if (el("packReviewOnlyN")) el("packReviewOnlyN").textContent = String(left);
+    if (el("packReviewOnlyTotal")) el("packReviewOnlyTotal").textContent = String(total);
+    btn.hidden = false;
+    btn.classList.toggle("zero", due === 0);
+    btn.setAttribute("aria-label", "이 팩 남은 문장 " + left + " / " + total +
+      (due ? " · 오늘 복습할 카드 " + due + "장" : " · 오늘 복습할 카드 없음"));
   }
 
   // 팩 하나만 골라서 복습 시작
@@ -7002,6 +7008,8 @@ kbd {
     if (!alreadyOpen) packState.listY = (window.pageYOffset || window.scrollY || 0);
     packState.active = pack;
     packState.idx = 0;
+    packState.againPlan = [];
+    packState.againSeen = {};
     for (var i = 0; i < pack.cards.length; i++) {
       if (!packDeckCard(pack, i)) { packState.idx = i; break; }
     }
@@ -7162,6 +7170,8 @@ kbd {
     if (i < 0 || i > pack.cards.length - 1) return false;
     packState.idx = i;
     packState.lock = false;
+    packState.againPlan = [];
+    packState.againSeen = {};
     showPackSentence(true);
     scrollPackPlayerIntoView();
     return true;
@@ -7267,11 +7277,22 @@ kbd {
   function ratePackCurrent(grade) {
     var pack = packState.active;
     if (!pack || packState.lock) return;
+    if (rateLocked()) return;
     var idx = packState.idx;
     hideHintOffer();
     var undoSnapNow = undoCaptureFor("pack", packCardId(pack, idx));
     var res = savePackCard(pack, idx, grade);
     if (!res) return;
+    // '모름'은 이번 판에서 3~5자리 뒤에 한 번 더 보여 준다(카드당 한 번만)
+    if (grade === "hard") {
+      packState.againPlan = packState.againPlan || [];
+      packState.againSeen = packState.againSeen || {};
+      var againId = packCardId(pack, idx);
+      if (!packState.againSeen[againId]) {
+        packState.againSeen[againId] = 1;
+        packState.againPlan.push({ idx: idx, at: Math.min(idx + 4, pack.cards.length - 1) });
+      }
+    }
     packGradeSeq++;
     var seq = packGradeSeq;
     packState.lock = true;
@@ -7285,6 +7306,7 @@ kbd {
       badge.classList.remove("mastered");
       badge.textContent = "복습 예정: " + res.label;
     }
+    try { refreshTodayCounts(); } catch (e) {}
     renderPackMini();
     renderPacks();
     toast(grade === "mastered" ? "외움 완료로 저장했어요." : "저장 완료 · " + res.label + " 복습");
@@ -7294,119 +7316,22 @@ kbd {
     setTimeout(function () {
       if (!packState.active || seq !== packGradeSeq) return;
       if (packState.idx !== idx) return;
-      if (packState.idx < pack.cards.length - 1) {
-        packState.idx++;
+      var next = packState.idx + 1;
+      var plan = packState.againPlan || [];
+      for (var pi = 0; pi < plan.length; pi++) {
+        if (plan[pi].at <= next) { next = plan[pi].idx; plan.splice(pi, 1); break; }
+      }
+      if (next > pack.cards.length - 1) {
+        if (plan.length) next = plan.shift().idx;
+      }
+      if (next <= pack.cards.length - 1) {
+        packState.idx = next;
         showPackSentence(true);
       } else {
         packState.lock = false;
         toast("팩의 마지막 문장까지 왔어요 🎉");
       }
     }, 850);
-  }
-
-  /* =========================================================
-     recorder
-     ========================================================= */
-  var rec = {
-    mr: null,
-    stream: null,
-    chunks: [],
-    url: null,
-    startedAt: 0,
-    timer: null
-  };
-
-  function pickMime() {
-    if (!window.MediaRecorder || !MediaRecorder.isTypeSupported) return "";
-    var list = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg;codecs=opus"];
-    for (var i = 0; i < list.length; i++) {
-      if (MediaRecorder.isTypeSupported(list[i])) return list[i];
-    }
-    return "";
-  }
-
-  function stopStream() {
-    if (rec.stream) {
-      rec.stream.getTracks().forEach(function (t) { try { t.stop(); } catch (e) {} });
-      rec.stream = null;
-    }
-  }
-
-  function setRecordingUI(on) {
-    var btn = el("recBtn");
-    btn.classList.toggle("recording", on);
-    el("recLabel").textContent = on ? "녹음 중지" : "녹음 시작";
-  }
-
-  function startRecording() {
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      el("recHint").textContent = "이 브라우저에서는 녹음을 지원하지 않아요. Chrome 최신 버전을 써보세요.";
-      return;
-    }
-    if (!window.MediaRecorder) {
-      el("recHint").textContent = "이 브라우저에서는 녹음을 지원하지 않아요.";
-      return;
-    }
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
-      rec.stream = stream;
-      rec.chunks = [];
-      var mime = pickMime();
-      try {
-        rec.mr = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
-      } catch (e) {
-        rec.mr = new MediaRecorder(stream);
-      }
-      rec.mr.ondataavailable = function (e) {
-        if (e.data && e.data.size) rec.chunks.push(e.data);
-      };
-      rec.mr.onstop = function () {
-        var type = (rec.mr && rec.mr.mimeType) || "audio/webm";
-        var blob = new Blob(rec.chunks, { type: type });
-        if (rec.url) URL.revokeObjectURL(rec.url);
-        rec.url = URL.createObjectURL(blob);
-        var audio = el("recAudio");
-        audio.src = rec.url;
-        audio.hidden = false;
-        el("recDelete").hidden = false;
-        var dl = el("recDownload");
-        dl.href = rec.url;
-        dl.download = "shadow-" + Date.now() + (type.indexOf("mp4") >= 0 ? ".m4a" : ".webm");
-        dl.hidden = false;
-        stopStream();
-        setRecordingUI(false);
-        clearInterval(rec.timer);
-        rec.timer = null;
-        el("recHint").textContent = "방금 따라 말한 녹음이에요. 원본과 번갈아 들으며 비교해 보세요.";
-      };
-      rec.mr.start();
-      rec.startedAt = Date.now();
-      el("recTime").textContent = "0:00";
-      setRecordingUI(true);
-      el("recHint").textContent = "녹음 중… 문장이 끝나면 [녹음 중지]를 누르세요.";
-      clearInterval(rec.timer);
-      rec.timer = setInterval(function () {
-        var s = Math.floor((Date.now() - rec.startedAt) / 1000);
-        el("recTime").textContent = Math.floor(s / 60) + ":" + (s % 60 < 10 ? "0" : "") + (s % 60);
-      }, 200);
-    }).then(null, function (err) {
-      stopStream();
-      rec.mr = null;
-      var name = err && err.name ? err.name : "";
-      if (name === "NotAllowedError" || name === "SecurityError") {
-        el("recHint").textContent = "마이크 권한이 거부됐어요. 주소창의 자물쇠 아이콘에서 마이크를 허용한 뒤 다시 시도해 주세요.";
-      } else if (name === "NotFoundError" || name === "DevicesNotFoundError") {
-        el("recHint").textContent = "마이크를 찾지 못했어요. 기기에 마이크가 연결돼 있는지 확인해 주세요.";
-      } else {
-        el("recHint").textContent = "녹음을 시작하지 못했어요. HTTPS 또는 localhost에서 열면 마이크를 쓸 수 있어요.";
-      }
-      setRecordingUI(false);
-    });
-  }
-
-  function stopRecording() {
-    if (rec.mr && rec.mr.state === "recording") {
-      try { rec.mr.stop(); } catch (e) {}
-    }
   }
 
   /* =========================================================
@@ -7711,6 +7636,30 @@ kbd {
       (days ? " · 학습 기록 " + days + "일" : "") + "을 " + name + "으로 내보냈어요.");
   }
 
+  // 백업 불러오기: 같은 id가 양쪽에 있으면 '더 많이 학습한 기록'을 남긴다.
+  // (오래된 백업이 지금 진도를 되돌리지 않도록, 그리고 백업의 진도도 잃지 않도록)
+  function mergeSM2Into(dst, src) {
+    if (!dst || !src) return false;
+    var dLast = Number(dst.lastReviewed) || 0;
+    var sLast = Number(src.lastReviewed) || 0;
+    var dReps = Number(dst.reps) || 0;
+    var sReps = Number(src.reps) || 0;
+    var useSrc = (sLast > dLast) || (sLast === dLast && sReps > dReps);
+    if (useSrc) {
+      dst.reps = sReps;
+      dst.interval = Number(src.interval) || 0;
+      dst.ef = clamp(Number(src.ef) || 2.5, 1.3, 3.2);
+      dst.due = Number(src.due) || dst.due;
+      dst.lapses = Math.max(0, Math.floor(Number(src.lapses) || 0));
+      dst.lastReviewed = sLast;
+    }
+    dst.mastered = !!(dst.mastered || src.mastered);
+    // 다른 판에서 쓰는 상태 필드도 있으면 같이 살린다
+    if (src.known !== undefined && dst.known === undefined) dst.known = src.known;
+    if (src.status !== undefined && dst.status === undefined) dst.status = src.status;
+    return useSrc;
+  }
+
   function importJSON(file) {
     var reader = new FileReader();
     reader.onload = function () {
@@ -7739,7 +7688,7 @@ kbd {
           existing.title = c.title || existing.title;
           existing.tags = c.tags;
           existing.sample = c.sample;
-          existing.mastered = c.mastered;
+          mergeSM2Into(existing, c);
           updated++;
         } else {
           state.cards.push(c);
@@ -7759,7 +7708,7 @@ kbd {
         if (cur) {
           cur.word = iw.word; cur.meaning = iw.meaning; cur.example = iw.example;
           cur.exampleKo = iw.exampleKo; cur.lang = iw.lang; cur.deck = iw.deck;
-          cur.tags = iw.tags; wUpdated++;
+          cur.tags = iw.tags; mergeSM2Into(cur, iw); wUpdated++;
         } else {
           state.words.push(iw); wAdded++;
         }
@@ -7776,9 +7725,8 @@ kbd {
         if (curQ) {
           curQ.prompt = gq2.prompt; curQ.options = gq2.options; curQ.answer = gq2.answer;
           curQ.full = gq2.full; curQ.ko = gq2.ko; curQ.kr = gq2.kr; curQ.unit = gq2.unit;
-          curQ.reps = gq2.reps; curQ.interval = gq2.interval; curQ.ef = gq2.ef;
-          curQ.lapses = gq2.lapses; curQ.due = gq2.due; curQ.mastered = gq2.mastered;
-          curQ.missed = gq2.missed; curQ.lastReviewed = gq2.lastReviewed;
+          mergeSM2Into(curQ, gq2);
+          curQ.missed = !!(curQ.missed || gq2.missed);
           gUpdated++;
         } else {
           state.grammar.push(gq2); gAdded++;
@@ -7944,9 +7892,9 @@ kbd {
 
   function startReview(only) {
     if (typeof rvSetSub === "function" && rvSub !== "sentences") { try { rvSetSub("sentences"); } catch (e) {} }
-    var now = Date.now();
+    var end = endOfToday();
     var queue = only ? only.slice() : state.cards.filter(function (c) {
-      return !c.mastered && c.due <= now && (typeof rvLangOk !== "function" || rvLangOk(cardLang(c)));
+      return isDueBy(c, end) && (typeof rvLangOk !== "function" || rvLangOk(cardLang(c)));
     });
     queue.sort(typeof rvSmartSort === "function" ? rvSmartSort : function (a, b) { return a.due - b.due; });
     // 오늘 한 판은 20장까지 — 남은 카드는 완료 화면의 '20개 더 복습하기'로 이어서 본다
@@ -8025,8 +7973,18 @@ kbd {
     ensureRatingsVisible();
   }
 
+  // 빠른 연속 탭이 한 카드를 두 번 평가하지 않도록 300ms 잠금(다음 카드가 그려질 때까지)
+  var rateLockUntil = 0;
+  function rateLocked() {
+    var now = Date.now();
+    if (now < rateLockUntil) return true;
+    rateLockUntil = now + 300;
+    return false;
+  }
+
   function grade(g) {
     if (!rv.active || !rv.revealed || !rv.current) return;
+    if (rateLocked()) return;
     var c = rv.current;
     hideHintOffer();
     var undoSnapNow = undoCaptureFor("review-sentences", c.id);
@@ -8039,13 +7997,13 @@ kbd {
       rv.mastered++;
     } else {
       var res = gradeCardData(c, g, Date.now());
-      // 10분 뒤 다시 봐야 하는 카드는 이번 복습 세션 끝에 한 번 더 보여 준다
-      // (마지막 카드면 10분 뒤 '오늘 복습'에 다시 뜨니 바로 반복하지 않는다)
-      if (res && res.label === "10분" && rv.idx < rv.queue.length - 1) {
+      // '모름' 카드는 3~5자리 뒤에 다시 넣어 이번 판에서 한 번 더 본다
+      if (res && res.label === "10분") {
         rv.rq = rv.rq || {};
         if (!rv.rq[c.id]) {
           rv.rq[c.id] = true;
-          rv.queue.push(c);
+          var at = Math.min(rv.idx + 4, rv.queue.length);
+          rv.queue.splice(at, 0, c);
         }
       }
     }
@@ -8053,7 +8011,7 @@ kbd {
     noteReviewDone("sentences");
     logStudied(c.id, Date.now());
     saveStore();
-    updateDueBadge();
+    try { refreshTodayCounts(); } catch (e) {}
     rv.idx++;
     showCard();
     undoOffer(undoSnapNow);
@@ -8260,23 +8218,6 @@ kbd {
       var p = shadow.player;
       if (!p || !p.ready) return;
       p.playRange();
-    });
-
-    // recorder
-    el("recBtn").addEventListener("click", function () {
-      if (rec.mr && rec.mr.state === "recording") stopRecording();
-      else startRecording();
-    });
-    el("recDelete").addEventListener("click", function () {
-      if (rec.url) URL.revokeObjectURL(rec.url);
-      rec.url = null;
-      var audio = el("recAudio");
-      audio.removeAttribute("src");
-      audio.hidden = true;
-      el("recDelete").hidden = true;
-      el("recDownload").hidden = true;
-      el("recTime").textContent = "0:00";
-      el("recHint").textContent = "녹음을 지웠어요.";
     });
 
     // tag suggestions
@@ -9445,14 +9386,7 @@ kbd {
   }
 
   function wordStreak(ts) {
-    var today = dayKey(ts);
-    var n = 0;
-    var start = wordDayCount(today) > 0 ? 0 : -1;
-    for (var i = start; i > -400; i--) {
-      if (wordDayCount(dayKeyOffset(i, ts)) <= 0) break;
-      n++;
-    }
-    return n;
+    return appStreak(ts);
   }
 
   // 복습 대상은 '한 번이라도 단어장에서 평가한' 단어만 (새 단어는 복습이 아니라 학습)
@@ -9460,10 +9394,74 @@ kbd {
     var now = Date.now();
     var n = 0;
     for (var i = 0; i < state.words.length; i++) {
-      var w = state.words[i];
-      if (!w.mastered && studiedOnce(w) && w.due <= now) n++;
+      if (studiedOnce(state.words[i]) && isDueBy(state.words[i], now)) n++;
     }
     return n;
+  }
+
+  // 오늘 자정(23:59:59.999, 로컬) 전에 복습 시점이 오는지 — '오늘 남은 N'의 공통 기준
+  function endOfToday(ts) {
+    var d = new Date(Number(ts) || Date.now());
+    d.setHours(23, 59, 59, 999);
+    return d.getTime();
+  }
+
+  // 외움(mastered)과 due가 없는 항목은 절대 '복습 대상'이 아니다.
+  // (due가 null이면 예전에는 1970년처럼 0으로 계산돼 영원히 밀린 카드로 잡혔다)
+  function isDueBy(x, end) {
+    if (!x || x.mastered) return false;
+    var d = Number(x.due);
+    if (!isFinite(d) || d <= 0) return false;
+    return d <= end;
+  }
+
+  // 단어장 머리말·복습 배지·복습 큐가 모두 이 함수 하나를 쓴다:
+  // 아직 외우지 않았고, 오늘 안에 복습 시점이 오는 단어(새 단어·'모름' 10분 포함)
+  function leftTodayWords() {
+    var end = endOfToday();
+    var n = 0;
+    for (var i = 0; i < state.words.length; i++) {
+      if (isDueBy(state.words[i], end)) n++;
+    }
+    return n;
+  }
+
+  function leftTodayGrammar() {
+    var end = endOfToday();
+    var n = 0;
+    for (var i = 0; i < state.grammar.length; i++) {
+      if (isDueBy(state.grammar[i], end)) n++;
+    }
+    return n;
+  }
+
+  function leftTodaySentences() {
+    var end = endOfToday();
+    var n = 0;
+    for (var i = 0; i < state.cards.length; i++) {
+      if (isDueBy(state.cards[i], end)) n++;
+    }
+    return n;
+  }
+
+  function leftToday(cat) {
+    if (cat === "words") return leftTodayWords();
+    if (cat === "grammar") return leftTodayGrammar();
+    return leftTodaySentences();
+  }
+
+  // 머리말·배지·차트를 한 번에 다시 맞춘다(평가·되돌리기·날짜 바뀜 뒤)
+  function refreshTodayCounts() {
+    var now = Date.now();
+    try { if (el("vwDue")) el("vwDue").textContent = String(leftTodayWords()); } catch (e) {}
+    try { if (el("vwStreak")) el("vwStreak").textContent = String(wordStreak(now)); } catch (e) {}
+    try { if (el("grDue")) el("grDue").textContent = String(leftTodayGrammar()); } catch (e) {}
+    try { if (el("grStreak")) el("grStreak").textContent = String(grammarStreak(now)); } catch (e) {}
+    try { renderStudyLog(now); } catch (e) {}
+    try { updateDueBadge(); } catch (e) {}
+    try { updateWordBadge(); } catch (e) {}
+    try { updateReviewSubCounts(); } catch (e) {}
+    try { updateBacklogNudge(); } catch (e) {}
   }
 
   function updateWordBadge() {
@@ -9534,7 +9532,7 @@ kbd {
     if (vw.idx >= vw.queue.length) vw.idx = Math.max(0, vw.queue.length - 1);
 
     if (el("vwTotal")) el("vwTotal").textContent = String(state.words.length);
-    if (el("vwDue")) el("vwDue").textContent = String(wordDueCount());
+    if (el("vwDue")) el("vwDue").textContent = String(leftTodayWords());
     var now = Date.now();
     if (el("vwToday")) el("vwToday").textContent = String(wordDayCount(dayKey(now)));
     if (el("vwStreak")) el("vwStreak").textContent = String(wordStreak(now));
@@ -9549,7 +9547,7 @@ kbd {
         var wd = state.words[i];
         if (wd.deck !== dk.id) continue;
         n++;
-        if (!wd.mastered && wd.due <= now) due++;
+        if (isDueBy(wd, now)) due++;
       }
       if (!n) continue;
       chips.push('<button type="button" class="vw-deck' + (vw.deck === dk.id ? " on" : "") + '" data-wdeck="' + dk.id + '">' +
@@ -9582,7 +9580,7 @@ kbd {
       var meta = [];
       if (cur.level) meta.push(cur.level);
       if (cur.tags && cur.tags.length) meta.push("#" + cur.tags.join(" #"));
-      meta.push(cur.mastered ? "외움 완료" : (cur.due <= now ? "지금 복습" : "다음 복습 " + dueText(cur, now)));
+      meta.push(cur.mastered ? "외움 완료" : (!cur.reps ? "새 단어" : (cur.due <= now ? "지금 복습" : "다음 복습 " + dueText(cur, now))));
       el("vwMeta").textContent = meta.join(" · ");
       el("vwSayFront").innerHTML = vwSayButtonsHTML(cur, false);
       var hp = hintPillHTML(cur.id);
@@ -9801,6 +9799,7 @@ kbd {
   function vwGrade(grade) {
     var w = vwCurrent();
     if (!w) return;
+    if (rateLocked()) return;
     var now = Date.now();
     hideHintOffer();
     var undoSnapNow = undoCaptureFor("words", w.id);
@@ -9808,6 +9807,7 @@ kbd {
     logWordStudied(w.id, now);
     saveStore();
     updateWordBadge();
+    try { refreshTodayCounts(); } catch (e) {}
     vwSetFace(false, false);
     // 평가한 단어는 간격이 뒤로 밀리므로, 목록과 같은 순서로 다시 세우고 맨 앞(가장 급한 단어)으로 간다
     vwBuildQueue();
@@ -10663,14 +10663,7 @@ kbd {
   }
 
   function grammarStreak(ts) {
-    var today = dayKey(ts);
-    var n = 0;
-    var start = grammarDayCount(today) > 0 ? 0 : -1;
-    for (var i = start; i > -400; i--) {
-      if (grammarDayCount(dayKeyOffset(i, ts)) <= 0) break;
-      n++;
-    }
-    return n;
+    return appStreak(ts);
   }
 
   function grInUnit(q) {
@@ -10695,15 +10688,9 @@ kbd {
     return n;
   }
 
-  // 복습 대상은 '문법 탭에서 한 번이라도 푼' 문제만 (새 문제는 복습이 아니라 학습)
+  // 복습 배지·오늘 목표는 '오늘 남은' 공통 기준(새 항목 포함)을 쓴다 — 머리말 숫자와 항상 같게
   function grDueAllCount() {
-    var now = Date.now();
-    var n = 0;
-    for (var i = 0; i < state.grammar.length; i++) {
-      var q = state.grammar[i];
-      if (!q.mastered && studiedOnce(q) && q.due <= now) n++;
-    }
-    return n;
+    return leftTodayGrammar();
   }
 
   function grDueCount() {
@@ -10712,7 +10699,7 @@ kbd {
     for (var i = 0; i < state.grammar.length; i++) {
       var q = state.grammar[i];
       if (!grInUnit(q)) continue;
-      if (!q.mastered && q.due <= now) n++;
+      if (isDueBy(q, now)) n++;
     }
     return n;
   }
@@ -10743,7 +10730,7 @@ kbd {
   }
 
   function grList() {
-    var now = Date.now();
+    var end = endOfToday();
     var out = [];
     for (var i = 0; i < state.grammar.length; i++) {
       var q = state.grammar[i];
@@ -10753,19 +10740,19 @@ kbd {
         continue;
       }
       if (gr.forceAll) { out.push(q); continue; }
-      if (!q.mastered && q.due <= now) out.push(q);
+      if (isDueBy(q, end)) out.push(q);
     }
     out.sort(grSort);
     return out;
   }
 
   function grReviewList() {
-    var now = Date.now();
+    var end = endOfToday();
     var out = [];
     if (rvLang === "de") return out;
     for (var i = 0; i < state.grammar.length; i++) {
       var q = state.grammar[i];
-      if (!q.mastered && studiedOnce(q) && q.due <= now) out.push(q);
+      if (isDueBy(q, end)) out.push(q);
     }
     out.sort(rvSmartSort);
     return out;
@@ -10824,39 +10811,21 @@ kbd {
   }
 
   function rvWordDue() {
-    var now = Date.now(), n = 0;
-    for (var i = 0; i < state.words.length; i++) {
-      var w = state.words[i];
-      if (w.mastered || !studiedOnce(w) || w.due > now) continue;
-      if (!rvLangOk(w.lang)) continue;
-      n++;
-    }
-    return n;
+    return leftTodayWords();
   }
 
   function rvSentenceDue() {
-    var now = Date.now(), n = 0;
-    for (var i = 0; i < state.cards.length; i++) {
-      var c = state.cards[i];
-      if (c.mastered || c.due > now) continue;
-      if (!rvLangOk(cardLang(c))) continue;
-      n++;
-    }
-    return n;
+    return leftTodaySentences();
   }
 
-  // 필터를 적용한 오늘 복습할 개수(복습 탭의 배지·한 판 큐)
+  // 필터를 적용한 오늘 복습할 개수(복습 탭의 배지·한 판 큐) — 머리말 숫자와 같은 기준을 쓴다
   function rvDueOf(cat) {
-    if (cat === "words") return rvWordDue();
-    if (cat === "grammar") return rvLang === "de" ? 0 : grDueAllCount();
-    return rvSentenceDue();
+    return leftToday(cat);
   }
 
   // 필터와 무관한 전체 개수(오늘 목표 판정·상단 복습 배지)
   function rvDueRaw(cat) {
-    if (cat === "words") return wordDueCount();
-    if (cat === "grammar") return grDueAllCount();
-    return dueCount();
+    return leftToday(cat);
   }
 
   function rvRemainingFor(cat) {
@@ -10923,6 +10892,7 @@ kbd {
 
   GRSession.prototype.build = function () {
     var list = this.listFn();
+    this.againIds = {};
     if (this.kind === "review") list = list.slice(0, RV_CAP);
     this.queue = [];
     for (var i = 0; i < list.length; i++) this.queue.push(list[i].id);
@@ -10935,6 +10905,7 @@ kbd {
     this.idx = 0;
     this.doneCount = 0;
     this.finished = false;
+    this.againIds = {};
     this.prepare();
   };
 
@@ -11034,6 +11005,7 @@ kbd {
   GRSession.prototype.pick = function (i) {
     var q = this.current();
     if (!q || this.answered) return;
+    if (rateLocked()) return;
     var shown = Math.round(Number(i));
     if (!(shown >= 0 && shown < 4)) return;
     var real = this.order[shown];
@@ -11048,9 +11020,21 @@ kbd {
     q.missed = !this.correct;
     logGrammarStudied(q.id, now);
     noteReviewDone("grammar");
+    // '모름'은 이번 판에서 지우지 않고 3~5자리 뒤에 한 번 더 넣는다(문제당 한 번만)
+    if (!this.correct) {
+      this.againIds = this.againIds || {};
+      if (!this.againIds[q.id]) {
+        this.againIds[q.id] = 1;
+        var againAt = Math.min(this.idx + 4, this.queue.length);
+        this.queue.splice(againAt, 0, q.id);
+      }
+    }
     saveStore();
+    try { refreshTodayCounts(); } catch (e) {}
     this.render(false);
     grScrollIntoView();
+    // 발음은 '보기를 고른 직후' 한 번만 — 문제가 새로 뜰 때(다음/건너뛰기/이전)는 읽지 않는다
+    try { autoSpeak(q.full || q.prompt, lastSayTag); } catch (e) {}
     undoOffer(undoSnapNow);
     if (!this.correct) hintOfferAfter(q.id);
   };
@@ -11071,14 +11055,12 @@ kbd {
       this.prepare();
       this.render(false);
       grScrollIntoView();
-      grAutoSpeak(this);
       return;
     }
     this.idx = (this.idx + 1) % this.queue.length;
     this.prepare();
     this.render(false);
     grScrollIntoView();
-    grAutoSpeak(this);
   };
 
   GRSession.prototype.step = function (n) {
@@ -11088,7 +11070,6 @@ kbd {
     this.prepare();
     this.render(false);
     grScrollIntoView();
-    if (n > 0) grAutoSpeak(this);
   };
 
   // 문제가 넘어가면 원문 문장을 한 번 먼저 읽어 준다(터치 안에서만 호출됨)
@@ -11131,17 +11112,17 @@ kbd {
 
   /* ---------- 복습 탭 > 단어 (한 판 20개) ---------- */
   function rwList() {
-    var now = Date.now();
+    var end = endOfToday();
     var out = [];
     for (var i = 0; i < state.words.length; i++) {
       var w = state.words[i];
-      if (!w.mastered && studiedOnce(w) && w.due <= now && rvLangOk(w.lang)) out.push(w);
+      if (isDueBy(w, end) && rvLangOk(w.lang)) out.push(w);
     }
     out.sort(rvSmartSort);
     return out;
   }
 
-  var rws = { queue: [], idx: 0, flipped: false, doneCount: 0, finished: false };
+  var rws = { queue: [], idx: 0, flipped: false, doneCount: 0, finished: false, againIds: {} };
 
   function rwStartSession() {
     var list = rwList().slice(0, RV_CAP);
@@ -11151,6 +11132,7 @@ kbd {
     rws.doneCount = 0;
     rws.flipped = false;
     rws.finished = false;
+    rws.againIds = {};
   }
 
   function rwCurrent() {
@@ -11232,6 +11214,7 @@ kbd {
   function rwGrade(g) {
     var w = rwCurrent();
     if (!w) return;
+    if (rateLocked()) return;
     var grade = (g === "hard" || g === "again") ? "hard" : (g === "mastered" ? "mastered" : "good");
     var now = Date.now();
     hideHintOffer();
@@ -11240,9 +11223,14 @@ kbd {
     logWordStudied(w.id, now);
     noteReviewDone("words");
     saveStore();
+    try { refreshTodayCounts(); } catch (e) {}
     rws.flipped = false;
     rws.doneCount++;
+    // '모름'은 세션에서 지우지 않는다 — 3~5자리 뒤에 다시 넣어 이번 판에서 한 번 더 본다
+    var againId = (grade === "hard" && !rws.againIds[w.id]) ? w.id : null;
+    if (againId) rws.againIds[againId] = 1;
     rws.queue.splice(rws.idx, 1);
+    if (againId) rws.queue.splice(Math.min(rws.idx + 4, rws.queue.length), 0, againId);
     if (!rws.queue.length) {
       rws.finished = true;
       rws.idx = 0;
@@ -11537,9 +11525,7 @@ kbd {
     state.reviewDay = s.reviewDay ? JSON.parse(JSON.stringify(s.reviewDay)) : null;
     saveStore();
     undoRestoreView(s);
-    try { updateDueBadge(); } catch (e) {}
-    try { updateWordBadge(); } catch (e) {}
-    try { updateReviewSubCounts(); } catch (e) {}
+    refreshTodayCounts();
     toast("평가를 되돌렸어요 · 카드를 다시 보여드릴게요.");
   }
 
@@ -11549,15 +11535,15 @@ kbd {
     var now = Date.now(), n = 0;
     for (var i = 0; i < state.cards.length; i++) {
       var c = state.cards[i];
-      if (!c.mastered && studiedOnce(c) && c.due <= now) n++;
+      if (studiedOnce(c) && isDueBy(c, now)) n++;
     }
     for (var j = 0; j < state.words.length; j++) {
       var w = state.words[j];
-      if (!w.mastered && studiedOnce(w) && w.due <= now) n++;
+      if (studiedOnce(w) && isDueBy(w, now)) n++;
     }
     for (var k = 0; k < state.grammar.length; k++) {
       var q = state.grammar[k];
-      if (!q.mastered && studiedOnce(q) && q.due <= now) n++;
+      if (studiedOnce(q) && isDueBy(q, now)) n++;
     }
     return n;
   }
@@ -11575,6 +11561,32 @@ kbd {
     }
   }
 
+  function rvLangCount(lang) {
+    var end = endOfToday();
+    var n = 0;
+    if (rvSub === "grammar") {
+      if (lang === "de") return 0;
+      for (var i = 0; i < state.grammar.length; i++) if (isDueBy(state.grammar[i], end)) n++;
+      return n;
+    }
+    if (rvSub === "sentences") {
+      for (var j = 0; j < state.cards.length; j++) {
+        var c = state.cards[j];
+        if (!isDueBy(c, end)) continue;
+        if (lang !== "all" && cardLang(c) !== lang) continue;
+        n++;
+      }
+      return n;
+    }
+    for (var k = 0; k < state.words.length; k++) {
+      var w = state.words[k];
+      if (!isDueBy(w, end)) continue;
+      if (lang !== "all" && (w.lang === "de" ? "de" : "en") !== lang) continue;
+      n++;
+    }
+    return n;
+  }
+
   function updateReviewSubCounts() {
     var counts = { words: rvDueOf("words"), grammar: rvDueOf("grammar"), sentences: rvDueOf("sentences") };
     var ids = { words: "rvSubWords", grammar: "rvSubGr", sentences: "rvSubSent" };
@@ -11583,11 +11595,22 @@ kbd {
       var b = el(ids[cat]);
       if (!b) continue;
       var n = counts[cat];
-      b.textContent = n > RV_CAP ? RV_CAP + "+" : String(n);
+      // 머리말 숫자와 똑같이 보여 준다(20+ 같은 반올림 없음)
+      b.textContent = String(n);
       var pill = b.parentNode;
       if (pill && pill.classList) pill.classList.toggle("done", rvCatGoalMet(cat));
     }
     var w = counts.words, g = counts.grammar, s = counts.sentences;
+    // 언어 필터 칩에도 지금 영역의 실제 개수를 보여 준다(전체 12 · 영어 10 · 독일어 2)
+    try {
+      var langBtns = document.querySelectorAll("#rvLangBar [data-rvlang]");
+      for (var li = 0; li < langBtns.length; li++) {
+        var lg = langBtns[li].getAttribute("data-rvlang");
+        var lb = lg === "all" ? "전체" : (lg === "en" ? "영어" : "독일어");
+        var txt = lb + " " + rvLangCount(lg);
+        if (langBtns[li].textContent !== txt) langBtns[li].textContent = txt;
+      }
+    } catch (e) {}
     if (el("rvwNote")) {
       el("rvwNote").textContent = w
         ? "오늘 복습할 단어 " + w + "개 · 한 판에 " + Math.min(w, RV_CAP) + "개씩 봐요"
@@ -11600,9 +11623,9 @@ kbd {
     }
     if (el("rvAllClear")) el("rvAllClear").hidden = !rvAllClear();
     if (el("dueBadge")) {
-      var rn = rvRemainingTotal();
-      el("dueBadge").textContent = rn > 99 ? "99+" : String(rn);
-      el("dueBadge").classList.toggle("zero", rn === 0);
+      var tot3 = leftTodaySentences() + leftTodayWords() + leftTodayGrammar();
+      el("dueBadge").textContent = tot3 > 999 ? "999+" : String(tot3);
+      el("dueBadge").classList.toggle("zero", tot3 === 0);
     }
     updateBacklogNudge();
     qsa("#rvSubBar [data-rvsub]").forEach(function (b) {
@@ -11660,9 +11683,9 @@ kbd {
     var now = Date.now();
     if (el("grToday")) el("grToday").textContent = String(grammarDayCount(dayKey(now)));
     if (el("grStreak")) el("grStreak").textContent = String(grammarStreak(now));
-    if (el("grDue")) el("grDue").textContent = String(grDueCount());
+    if (el("grDue")) el("grDue").textContent = String(leftTodayGrammar());
     if (el("grTotal")) el("grTotal").textContent = String(state.grammar.length);
-    if (el("grModeTodayN")) el("grModeTodayN").textContent = String(grDueCount());
+    if (el("grModeTodayN")) el("grModeTodayN").textContent = String(leftTodayGrammar());
     if (el("grModeWrongN")) el("grModeWrongN").textContent = String(grWrongCount());
     if (el("grModeToday")) {
       el("grModeToday").classList.toggle("on", gr.mode === "today");
@@ -11965,6 +11988,43 @@ kbd {
   /* =========================================================
      init
      ========================================================= */
+  // 탭이 다시 보일 때 날짜(로컬 자정)가 바뀌었으면 오늘 큐·숫자·차트를 새로 맞춘다
+  var activeDayKey = dayKey(Date.now());
+  function refreshAfterDayChange() {
+    activeDayKey = dayKey(Date.now());
+    try { reviewDayState(); } catch (e) {}
+    try { if (el("grModeTodayN")) el("grModeTodayN").textContent = String(leftTodayGrammar()); } catch (e) {}
+    try { grs.build(); grs.idx = 0; grs.prepare(); grs.render(false); } catch (e) {}
+    try { grr.build(); grr.idx = 0; grr.prepare(); grr.render(false); } catch (e) {}
+    try { rwStartSession(); renderReviewWords(false); } catch (e) {}
+    try { renderVocab(true); } catch (e) {}
+    try { renderGrammarTab(false); } catch (e) {}
+    try { renderPacks(); } catch (e) {}
+    try { updatePackReviewBtn(); } catch (e) {}
+    refreshTodayCounts();
+    try { refreshReviewStart(); } catch (e) {}
+  }
+
+  function checkDayRollover() {
+    if (document.hidden) return;
+    if (dayKey(Date.now()) === activeDayKey) return;
+    refreshAfterDayChange();
+    toast("날짜가 바뀌었어요 · 오늘 복습 목록을 새로 맞췄습니다.");
+  }
+
+  function bindDayRollover() {
+    activeDayKey = dayKey(Date.now());
+    rvLang = "all";   // 다시 열면 언어 필터는 항상 '전체'에서 시작한다(빈 화면 혼동 방지)
+    if (document.__dayRolloverBound) return;
+    document.__dayRolloverBound = true;
+    document.addEventListener("visibilitychange", checkDayRollover);
+    window.addEventListener("focus", checkDayRollover);
+    setInterval(function () {
+      if (document.hidden) return;
+      if (dayKey(Date.now()) !== activeDayKey) refreshAfterDayChange();
+    }, 60000);
+  }
+
   function init() {
     hideHintOffer();
     undoHide();
@@ -11977,6 +12037,7 @@ kbd {
     } catch (e) {}
     // 음성 목록을 미리 깨워 둔다 — 모바일 첫 발음이 씹히지 않게
     try { vwInitVoices(); } catch (e) {}
+    bindDayRollover();
 
     // 처음 연 화면은 카드 0장에서 시작한다(기본 샘플 카드 없음).
     loadStore();
