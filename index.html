@@ -5796,23 +5796,26 @@ body { overflow-x: clip; }
     return !!x && (Number(x.reps) > 0 || Number(x.lastReviewed) > 0);
   }
 
+  // '지금 복습 시점이 지난' 문장 카드 — 학습한 카드만(새로 만든 카드는 복습이 아니라 학습)
   function dueCount() {
     var now = Date.now();
     var n = 0;
     for (var i = 0; i < state.cards.length; i++) {
-      if (isDueBy(state.cards[i], now)) n++;
+      if (studiedOnce(state.cards[i]) && isDueBy(state.cards[i], now)) n++;
     }
     return n;
   }
 
   function updateDueBadge() {
+    // 복습 탭·상단 '복습 N' = 한 번이라도 학습했고 오늘 안에 복습 시점이 오는 항목만
+    // (새 단어 100·새 문법 60 같은 '아직 안 배운' 항목은 여기에 절대 들어가지 않는다)
     var n = dueCount();                                      // 지금 복습 시점이 지난 문장 카드
     var leftSent = n;
     var total = n;
-    try { leftSent = leftTodaySentences(); } catch (e) { leftSent = n; }
-    try { total = leftTodaySentences() + leftTodayWords() + leftTodayGrammar(); } catch (e) { total = leftSent; }
+    try { leftSent = reviewDueSentences(); } catch (e) { leftSent = n; }
+    try { total = reviewDueSentences() + reviewDueWords() + reviewDueGrammar(); } catch (e) { total = leftSent; }
     var b = el("dueBadge");
-    // 상단 '복습 N' = 오늘 남은 문장 + 단어 + 문법(각 탭 머리말과 같은 함수)
+    // 상단 '복습 N' = 이미 학습한 문장 + 단어 + 문법 중 오늘 복습할 것(새 항목 제외)
     b.textContent = total > 999 ? "999+" : String(total);
     b.classList.toggle("zero", total === 0);
     el("rsDue").textContent = String(leftSent);
@@ -8011,7 +8014,7 @@ body { overflow-x: clip; }
     if (typeof rvSetSub === "function" && rvSub !== "sentences") { try { rvSetSub("sentences"); } catch (e) {} }
     var end = endOfToday();
     var queue = only ? only.slice() : state.cards.filter(function (c) {
-      return isDueBy(c, end) && (typeof rvLangOk !== "function" || rvLangOk(cardLang(c)));
+      return studiedOnce(c) && isDueBy(c, end) && (typeof rvLangOk !== "function" || rvLangOk(cardLang(c)));
     });
     queue.sort(typeof rvSmartSort === "function" ? rvSmartSort : function (a, b) { return a.due - b.due; });
     // 오늘 한 판은 20장까지 — 남은 카드는 완료 화면의 '20개 더 복습하기'로 이어서 본다
@@ -8574,7 +8577,9 @@ body { overflow-x: clip; }
       lapses: 0,
       due: Date.now(),
       createdAt: Date.now(),
-      lastReviewed: 0,
+      // 직접 저장한 카드는 방금 구간을 듣고 문장을 적은 '학습한 카드'다 — 오늘 복습 목록에 바로 들어간다
+      // (학습 기록이 없으면 복습 탭은 새 항목으로 보고 넣지 않는다)
+      lastReviewed: Date.now(),
       sample: false,
       mastered: false
     };
@@ -9582,6 +9587,43 @@ body { overflow-x: clip; }
     if (cat === "words") return leftTodayWords();
     if (cat === "grammar") return leftTodayGrammar();
     return leftTodaySentences();
+  }
+
+  /* ---------- 복습 대상: '이미 학습한 것'만 (새 항목 제외) ----------
+     단어장·문법 탭의 '오늘 남은 N'은 새 항목까지 세지만(leftToday*),
+     복습 탭의 하위 배지·한 판 큐와 상단 '복습 N' 배지는 이미 학습(평가)한 항목만 센다.
+     '❌ 모름'은 10분 뒤가 되면 그대로 다시 복습 대상이 된다(학습했고 오늘 안에 기한이 옴). */
+  function reviewDueWords() {
+    var end = endOfToday();
+    var n = 0;
+    for (var i = 0; i < state.words.length; i++) {
+      if (studiedOnce(state.words[i]) && isDueBy(state.words[i], end)) n++;
+    }
+    return n;
+  }
+
+  function reviewDueGrammar() {
+    var end = endOfToday();
+    var n = 0;
+    for (var i = 0; i < state.grammar.length; i++) {
+      if (studiedOnce(state.grammar[i]) && isDueBy(state.grammar[i], end)) n++;
+    }
+    return n;
+  }
+
+  function reviewDueSentences() {
+    var end = endOfToday();
+    var n = 0;
+    for (var i = 0; i < state.cards.length; i++) {
+      if (studiedOnce(state.cards[i]) && isDueBy(state.cards[i], end)) n++;
+    }
+    return n;
+  }
+
+  function reviewDue(cat) {
+    if (cat === "words") return reviewDueWords();
+    if (cat === "grammar") return reviewDueGrammar();
+    return reviewDueSentences();
   }
 
   // 머리말·배지·차트를 한 번에 다시 맞춘다(평가·되돌리기·날짜 바뀜 뒤)
@@ -10825,7 +10867,7 @@ body { overflow-x: clip; }
     return n;
   }
 
-  // 복습 배지·오늘 목표는 '오늘 남은' 공통 기준(새 항목 포함)을 쓴다 — 머리말 숫자와 항상 같게
+  // 문법 탭 머리말의 '오늘 남은 문제' 기준(새 문제 포함) — 복습 탭은 reviewDueGrammar()를 쓴다
   function grDueAllCount() {
     return leftTodayGrammar();
   }
@@ -10889,7 +10931,8 @@ body { overflow-x: clip; }
     if (rvLang === "de") return out;
     for (var i = 0; i < state.grammar.length; i++) {
       var q = state.grammar[i];
-      if (isDueBy(q, end)) out.push(q);
+      // 이미 학습한 문제만 — 새 문제 60개는 문법 탭에서 먼저 푼다
+      if (studiedOnce(q) && isDueBy(q, end)) out.push(q);
     }
     out.sort(rvSmartSort);
     return out;
@@ -10948,21 +10991,21 @@ body { overflow-x: clip; }
   }
 
   function rvWordDue() {
-    return leftTodayWords();
+    return reviewDueWords();
   }
 
   function rvSentenceDue() {
-    return leftTodaySentences();
+    return reviewDueSentences();
   }
 
-  // 필터를 적용한 오늘 복습할 개수(복습 탭의 배지·한 판 큐) — 머리말 숫자와 같은 기준을 쓴다
+  // 필터를 적용한 오늘 복습할 개수(복습 탭의 배지·한 판 큐) — 이미 학습한 항목만 센다
   function rvDueOf(cat) {
-    return leftToday(cat);
+    return reviewDue(cat);
   }
 
   // 필터와 무관한 전체 개수(오늘 목표 판정·상단 복습 배지)
   function rvDueRaw(cat) {
-    return leftToday(cat);
+    return reviewDue(cat);
   }
 
   function rvRemainingFor(cat) {
@@ -11253,7 +11296,8 @@ body { overflow-x: clip; }
     var out = [];
     for (var i = 0; i < state.words.length; i++) {
       var w = state.words[i];
-      if (isDueBy(w, end) && rvLangOk(w.lang)) out.push(w);
+      // 이미 학습한 단어만 — 새 단어는 단어장 탭에서 먼저 본다
+      if (studiedOnce(w) && isDueBy(w, end) && rvLangOk(w.lang)) out.push(w);
     }
     out.sort(rvSmartSort);
     return out;
@@ -11272,6 +11316,7 @@ body { overflow-x: clip; }
       var id = rws.queue[i];
       var w = findWord(id);
       if (!w || w.mastered) continue;
+      if (!studiedOnce(w)) continue;
       if (!isDueBy(w, end)) continue;
       if (!rvLangOk(w.lang)) continue;
       keep.push(id);
@@ -11728,13 +11773,13 @@ body { overflow-x: clip; }
     var n = 0;
     if (rvSub === "grammar") {
       if (lang === "de") return 0;
-      for (var i = 0; i < state.grammar.length; i++) if (isDueBy(state.grammar[i], end)) n++;
+      for (var i = 0; i < state.grammar.length; i++) if (studiedOnce(state.grammar[i]) && isDueBy(state.grammar[i], end)) n++;
       return n;
     }
     if (rvSub === "sentences") {
       for (var j = 0; j < state.cards.length; j++) {
         var c = state.cards[j];
-        if (!isDueBy(c, end)) continue;
+        if (!studiedOnce(c) || !isDueBy(c, end)) continue;
         if (lang !== "all" && cardLang(c) !== lang) continue;
         n++;
       }
@@ -11742,7 +11787,7 @@ body { overflow-x: clip; }
     }
     for (var k = 0; k < state.words.length; k++) {
       var w = state.words[k];
-      if (!isDueBy(w, end)) continue;
+      if (!studiedOnce(w) || !isDueBy(w, end)) continue;
       if (lang !== "all" && (w.lang === "de" ? "de" : "en") !== lang) continue;
       n++;
     }
@@ -11785,7 +11830,7 @@ body { overflow-x: clip; }
     }
     if (el("rvAllClear")) el("rvAllClear").hidden = !rvAllClear();
     if (el("dueBadge")) {
-      var tot3 = leftTodaySentences() + leftTodayWords() + leftTodayGrammar();
+      var tot3 = reviewDueSentences() + reviewDueWords() + reviewDueGrammar();
       el("dueBadge").textContent = tot3 > 999 ? "999+" : String(tot3);
       el("dueBadge").classList.toggle("zero", tot3 === 0);
     }
