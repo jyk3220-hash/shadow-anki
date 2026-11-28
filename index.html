@@ -6028,15 +6028,18 @@ body { overflow-x: clip; }
     var n = dueCount();                                      // 지금 복습 시점이 지난 문장 카드
     var leftSent = n;
     var total = n;
+    var allSent = n;
     try { leftSent = rvDueOf("sentences"); } catch (e) { leftSent = n; }
+    try { allSent = rvDueLang("sentences", "all"); } catch (e) { allSent = leftSent; }
     try { total = rvDueBadgeTotal(); } catch (e) { total = leftSent; }
     var b = el("dueBadge");
-    // 상단 '복습 N' = 이미 학습한 문장 + 단어 + 문법 중 오늘 복습할 것(새 항목 제외)
+    // 상단 '복습 N' = 이미 학습한 문장 + 단어 + 문법 중 오늘 복습할 것(새 항목 제외, 언어 필터 무관)
     b.textContent = total > 999 ? "999+" : String(total);
     b.classList.toggle("zero", total === 0);
     el("rsDue").textContent = String(leftSent);
     el("statTotal").textContent = String(state.cards.length);
-    el("statDue").textContent = String(leftSent);
+    // 라이브러리 '오늘 복습'은 언어 필터와 무관한 전체 수(왼쪽 문장 배지와 같은 수)
+    el("statDue").textContent = String(allSent);
     var fresh = 0;
     var mastered = 0;
     for (var i = 0; i < state.cards.length; i++) {
@@ -6099,6 +6102,8 @@ body { overflow-x: clip; }
     }
     if (name === "review") {
       updateDueBadge();
+      // 다른 탭에서 평가·삭제한 사이에 낡은 큐가 남아 있으면 먼저 덜어낸다
+      try { rvSyncQueue(false); } catch (e) {}
       if (!rv.active) {
         el("reviewStage").hidden = true;
         el("reviewDone").hidden = true;
@@ -7173,27 +7178,27 @@ body { overflow-x: clip; }
 
   function packStats(pack) {
     var saved = 0, studied = 0, mastered = 0, dueNow = 0;
-    var now = Date.now();
+    var end = endOfToday();
     for (var i = 0; i < pack.cards.length; i++) {
       var c = packDeckCard(pack, i);
       if (!c) continue;
       saved++;
       if (studiedOnce(c)) studied++;
       if (c.mastered) mastered++;
-      // 팩 카드의 '오늘 복습 N' = 복습 탭 > 문장과 같은 기준(이미 학습한 카드만)
-      else if (studiedOnce(c) && isDueBy(c, now)) dueNow++;
+      // 팩 카드의 '오늘 복습 N' = 복습 탭 > 문장과 같은 기준(이미 학습한 카드만, 오늘 자정 전 기한)
+      else if (studiedOnce(c) && isDueBy(c, end)) dueNow++;
     }
     return { saved: saved, studied: studied, mastered: mastered, dueNow: dueNow, total: pack.cards.length };
   }
 
-  // 이 팩에서 지금 복습할 카드(저장됐고, 한 번 학습했고, 외우지 않았고, due가 온 것) — 복습 탭 > 문장과 같은 기준
+  // 이 팩에서 지금 복습할 카드(저장됐고, 한 번 학습했고, 외우지 않았고, 오늘 기한이 온 것) — 복습 탭 > 문장과 같은 기준
   function packDueCards(pack) {
-    var now = Date.now();
+    var end = endOfToday();
     var out = [];
     if (!pack) return out;
     for (var i = 0; i < pack.cards.length; i++) {
       var c = packDeckCard(pack, i);
-      if (c && studiedOnce(c) && isDueBy(c, now)) out.push(c);
+      if (c && studiedOnce(c) && isDueBy(c, end)) out.push(c);
     }
     return out;
   }
@@ -7575,7 +7580,8 @@ body { overflow-x: clip; }
     var label = applyPackGrade(card, grade, isNew, now);
     logStudied(card.id, now);
     saveStore();
-    updateDueBadge();
+    // 쉐도잉에서 평가해도 복습>문장 배지·칩·시작 카드·진행 중 큐가 함께 맞는다
+    try { refreshReviewCounts(false); } catch (e) {}
     maybeBackupNudge();
     return { card: card, label: label };
   }
@@ -7811,6 +7817,8 @@ body { overflow-x: clip; }
     if (!ok) return;
     state.cards = state.cards.filter(function (x) { return x.id !== id; });
     saveStore();
+    // 삭제한 카드가 이번 판 큐에 남아 있으면 숫자·진행 표시가 어긋난다
+    try { refreshReviewCounts(false); } catch (e) {}
     renderLibrary();
     toast("카드를 삭제했어요.");
   }
@@ -7869,6 +7877,7 @@ body { overflow-x: clip; }
     card.meaning = el("editMeaning").value.trim();
     card.tags = parseTags(el("editTags").value);
     saveStore();
+    try { refreshReviewCounts(false); } catch (e) {}
     renderLibrary();
     closeEdit();
     toast("카드를 수정했어요.");
@@ -8233,19 +8242,33 @@ body { overflow-x: clip; }
   }
 
   function reviewProgress() {
+    // '완료 / 남은'은 이번 판의 서로 다른 카드로 센다 — '모름' 재등장이나 20장 제한 때문에
+    // 배지 숫자와 앞뒤가 맞지 않아 보이던 문제를 없앤다.
     var total = rv.queue.length;
     var position = Math.min(rv.idx, total);
+    var end = endOfToday(), seenIds = {}, seenLeft = {}, all = 0, left = 0, i;
+    for (i = 0; i < total; i++) {
+      var q = rv.queue[i];
+      if (!q || seenIds[q.id]) continue;
+      seenIds[q.id] = 1; all++;
+    }
+    for (i = position; i < total; i++) {
+      var c = rv.queue[i];
+      var live = (c && findCard(c.id)) || c;
+      if (!live || !studiedOnce(live) || !isDueBy(live, end)) continue;
+      if (seenLeft[live.id]) continue;
+      seenLeft[live.id] = 1; left++;
+    }
+    var doneN = Math.max(0, all - left);
     var pct = total ? (position / total) * 100 : 0;
     el("reviewProgressBar").style.width = pct.toFixed(1) + "%";
-    el("reviewProgressText").textContent = (rv.done) + "장 완료 · 남은 " + Math.max(0, total - position) + "장";
+    el("reviewProgressText").textContent = doneN + "장 완료 · 이번 판 남은 " + left + "장";
   }
 
   function startReview(only) {
     if (typeof rvSetSub === "function" && rvSub !== "sentences") { try { rvSetSub("sentences"); } catch (e) {} }
-    var end = endOfToday();
-    var queue = only ? only.slice() : state.cards.filter(function (c) {
-      return studiedOnce(c) && isDueBy(c, end) && (typeof rvLangOk !== "function" || rvLangOk(cardLang(c)));
-    });
+    // 배지가 세는 목록과 똑같은 함수에서 큐를 만든다
+    var queue = only ? only.slice() : rvSentenceList(rvLang);
     queue.sort(typeof rvSmartSort === "function" ? rvSmartSort : function (a, b) { return a.due - b.due; });
     // 오늘 한 판은 20장까지 — 남은 카드는 완료 화면의 '20개 더 복습하기'로 이어서 본다
     if (!only && queue.length > RV_CAP) queue = queue.slice(0, RV_CAP);
@@ -8381,6 +8404,8 @@ body { overflow-x: clip; }
     logStudied(c.id, Date.now());
     saveStore();
     try { refreshTodayCounts(); } catch (e) {}
+    // 배지·문장 배지·언어 칩·시작 카드·라이브러리 '오늘 복습'을 같은 순간에 맞춘다
+    try { refreshReviewStart(); } catch (e) {}
     try { checkMilestones(); } catch (e) {}
     rv.idx++;
     showCard();
@@ -8652,15 +8677,15 @@ body { overflow-x: clip; }
         card.due = startOfDay(Date.now()) + 3650 * DAY;
         logStudied(card.id);
         saveStore();
+        try { refreshReviewCounts(false); } catch (e) {}
         renderLibrary();
-        updateDueBadge();
         toast("외움으로 표시했어요. 복습 목록에서 빠집니다.");
       } else if (act === "unmaster") {
         card.mastered = false;
         card.due = Date.now();
         saveStore();
+        try { refreshReviewCounts(false); } catch (e) {}
         renderLibrary();
-        updateDueBadge();
         toast("다시 복습 목록에 넣었어요.");
       }
     });
@@ -8819,6 +8844,8 @@ body { overflow-x: clip; }
     state.cards.unshift(card);
     logStudied(card.id);
     saveStore();
+    // 방금 저장한 카드는 오늘 복습 대상이다 — 배지·시작 카드에 바로 반영한다
+    try { refreshReviewCounts(false); } catch (e) {}
     renderLibrary();
     maybeBackupNudge();
 
@@ -11373,9 +11400,18 @@ body { overflow-x: clip; }
   }
 
   // 언어 필터: 복습 안에서 영어와 독일어를 섞지 않는다
-  function rvLangOk(lang) {
-    var l = String(lang || "en");
-    return rvLang === "all" || l === rvLang;
+  function rvLangMatch(lang, want) {
+    var l = normalizeLang(lang) || "en";
+    return !want || want === "all" || l === want;
+  }
+
+  function rvLangOk(lang) { return rvLangMatch(lang, rvLang); }
+
+  // 단어 언어도 카드와 같은 규칙 한 곳에서 정한다(저장값이 비었거나 de-DE처럼 와도 바로잡는다)
+  function wordLang(w) {
+    var l = normalizeLang(w && w.lang);
+    if (l) return l;
+    return String((w && w.deck) || "") === "de" ? "de" : "en";
   }
 
   function rvWordDue() {
@@ -11386,36 +11422,44 @@ body { overflow-x: clip; }
     return reviewDueSentences();
   }
 
+  // 복습 > 문장 한 판에 들어오는 카드 목록 — 개수(배지)와 실제 큐가 이 목록 하나를 같이 쓴다.
+  function rvSentenceList(want) {
+    var end = endOfToday();
+    var lang = (want === "en" || want === "de" || want === "all") ? want : rvLang;
+    return state.cards.filter(function (c) {
+      return studiedOnce(c) && isDueBy(c, end) && rvLangMatch(cardLang(c), lang);
+    });
+  }
+
   // 필터를 적용한 오늘 복습할 개수(복습 탭의 배지·한 판 큐) — 이미 학습한 항목만 센다.
-  // 각 하위 탭의 배지는 '그 탭에서 지금 시작하면 들어오는 큐'(언어 필터 포함)와 정확히 같아야 한다.
-  function rvDueOf(cat) {
+  // rvDueOf(cat) = 지금 필터, rvLangCount(lang) = 그 언어 칩 — 둘 다 이 함수 하나에서만 나온다.
+  function rvDueOf(cat) { return rvDueLang(cat, rvLang); }
+
+  function rvDueLang(cat, want) {
     var end = endOfToday();
     var i, n = 0;
+    var lang = (want === "en" || want === "de") ? want : "all";
     if (cat === "words") {
       for (i = 0; i < state.words.length; i++) {
         var w = state.words[i];
-        if (studiedOnce(w) && isDueBy(w, end) && rvLangOk(w.lang)) n++;
+        if (studiedOnce(w) && isDueBy(w, end) && rvLangMatch(wordLang(w), lang)) n++;
       }
       return n;
     }
     if (cat === "grammar") {
       // 복습 탭의 문법은 영어 문제만 있다 — 독일어 필터에서는 큐가 비어 있다
-      if (rvLang === "de") return 0;
+      if (lang === "de") return 0;
       for (i = 0; i < state.grammar.length; i++) {
         if (studiedOnce(state.grammar[i]) && isDueBy(state.grammar[i], end)) n++;
       }
       return n;
     }
-    for (i = 0; i < state.cards.length; i++) {
-      var c = state.cards[i];
-      if (studiedOnce(c) && isDueBy(c, end) && rvLangOk(c.lang)) n++;
-    }
-    return n;
+    return rvSentenceList(lang).length;
   }
 
-  // 상단 '복습 N' = 하위 세 배지(단어·문법·문장)의 합 — 항상 같은 함수로 센다
+  // 상단 '복습 N' = 하위 세 배지(단어·문법·문장)의 합 — 항상 언어 필터와 무관한 '전체' 기준
   function rvDueBadgeTotal() {
-    return rvDueOf("words") + rvDueOf("grammar") + rvDueOf("sentences");
+    return rvDueLang("words", "all") + rvDueLang("grammar", "all") + rvDueLang("sentences", "all");
   }
 
   // 필터와 무관한 전체 개수(오늘 목표 판정·상단 복습 배지)
@@ -11883,7 +11927,7 @@ body { overflow-x: clip; }
     }
     if (el("doneAllClear")) el("doneAllClear").hidden = !rvAllClear();
     if (!el("doneMoreBtn")) return;
-    var more = dueCount();
+    var more = rvDueOf("sentences");   // 시작 카드·배지와 같은 기준(언어 필터 포함)
     el("doneMoreBtn").textContent = more ? "20개 더 복습하기" : "남은 카드 더 보기";
     var chain = el("doneChainBtn");
     if (!chain) return;
@@ -12197,33 +12241,14 @@ body { overflow-x: clip; }
   }
 
   function rvLangCount(lang) {
-    var end = endOfToday();
-    var n = 0;
-    if (rvSub === "grammar") {
-      if (lang === "de") return 0;
-      for (var i = 0; i < state.grammar.length; i++) if (studiedOnce(state.grammar[i]) && isDueBy(state.grammar[i], end)) n++;
-      return n;
-    }
-    if (rvSub === "sentences") {
-      for (var j = 0; j < state.cards.length; j++) {
-        var c = state.cards[j];
-        if (!studiedOnce(c) || !isDueBy(c, end)) continue;
-        if (lang !== "all" && cardLang(c) !== lang) continue;
-        n++;
-      }
-      return n;
-    }
-    for (var k = 0; k < state.words.length; k++) {
-      var w = state.words[k];
-      if (!studiedOnce(w) || !isDueBy(w, end)) continue;
-      if (lang !== "all" && (w.lang === "de" ? "de" : "en") !== lang) continue;
-      n++;
-    }
-    return n;
+    // 언어 칩의 숫자도 배지·시작 카드와 같은 함수에서 나온다 — 규칙이 둘로 갈라지지 않게
+    return rvDueLang(rvSub, lang);
   }
 
   function updateReviewSubCounts() {
-    var counts = { words: rvDueOf("words"), grammar: rvDueOf("grammar"), sentences: rvDueOf("sentences") };
+    // 왼쪽 하위 배지는 언어 필터와 상관없이 그 영역의 '전체' 개수 — 오른쪽 '전체 N' 칩과 항상 같다.
+    // (오늘 복습할 카드·실제 큐는 지금 고른 언어를 따르고, 오른쪽 영어/독일어 칩이 그 수를 보여 준다)
+    var counts = { words: rvDueLang("words", "all"), grammar: rvDueLang("grammar", "all"), sentences: rvDueLang("sentences", "all") };
     var ids = { words: "rvSubWords", grammar: "rvSubGr", sentences: "rvSubSent" };
     for (var i = 0; i < RV_ORDER.length; i++) {
       var cat = RV_ORDER[i];
@@ -12235,7 +12260,8 @@ body { overflow-x: clip; }
       var pill = b.parentNode;
       if (pill && pill.classList) pill.classList.toggle("done", rvCatGoalMet(cat));
     }
-    var w = counts.words, g = counts.grammar, s = counts.sentences;
+    // 안내 문구는 지금 고른 언어의 실제 큐를 설명한다
+    var w = rvDueOf("words"), g = rvDueOf("grammar");
     // 언어 필터 칩에도 지금 영역의 실제 개수를 보여 준다(전체 12 · 영어 10 · 독일어 2)
     try {
       var langBtns = document.querySelectorAll("#rvLangBar [data-rvlang]");
@@ -12258,7 +12284,7 @@ body { overflow-x: clip; }
     }
     if (el("rvAllClear")) el("rvAllClear").hidden = !rvAllClear();
     if (el("dueBadge")) {
-      var tot3 = rvDueBadgeTotal();
+      var tot3 = counts.words + counts.grammar + counts.sentences;
       el("dueBadge").textContent = tot3 > 999 ? "999+" : String(tot3);
       el("dueBadge").classList.toggle("zero", tot3 === 0);
     }
@@ -12297,8 +12323,8 @@ body { overflow-x: clip; }
     grr.render(false);
     // 복습 > 문장이 진행 중이면 그 자리에서 큐를 새 언어로 다시 짠다(진행 중 필터가 안 먹던 버그)
     try { rvRebuildForLang(); } catch (e) {}
-    try { refreshReviewStart(); } catch (e) {}
-    updateReviewSubCounts();
+    // 상단 배지·라이브러리 '오늘 복습'·시작 카드·칩까지 필터가 바뀐 그 순간 한 번에 맞춘다
+    try { refreshReviewCounts(false); } catch (e) {}
     toast(rvLang === "all" ? "복습 언어: 전체" : (rvLang === "en" ? "복습 언어: 영어" : "복습 언어: 독일어"));
   }
 
@@ -12306,24 +12332,9 @@ body { overflow-x: clip; }
   //  - 시작 전: 개수·시작 버튼만 갱신(refreshReviewStart)
   //  - 진행 중: 같은 자리에서 새 언어 큐로 교체, 그 언어에 카드가 없으면 판을 접고 시작 패널로
   function rvRebuildForLang() {
-    var end = endOfToday();
-    var list = state.cards.filter(function (c) {
-      return studiedOnce(c) && isDueBy(c, end) && rvLangOk(cardLang(c));
-    });
+    var list = rvSentenceList(rvLang);
     if (!rv.active) return;
-    if (!list.length) {
-      rv.active = false;
-      rv.queue = [];
-      rv.idx = 0;
-      rv.current = null;
-      rv.revealed = false;
-      if (rv.player) { try { rv.player.pause(); } catch (e) {} }
-      historyDropSilent();
-      if (el("reviewStage")) el("reviewStage").hidden = true;
-      if (el("reviewDone")) el("reviewDone").hidden = true;
-      if (el("reviewStartPanel")) el("reviewStartPanel").hidden = false;
-      return;
-    }
+    if (!list.length) { rvExitToStart(); return; }
     list.sort(typeof rvSmartSort === "function" ? rvSmartSort : function (a, b) { return a.due - b.due; });
     if (list.length > RV_CAP) list = list.slice(0, RV_CAP);
     rv.queue = list;
@@ -12338,6 +12349,83 @@ body { overflow-x: clip; }
     showCard();
   }
 
+  // 판을 접고 시작 카드로 돌아간다(남은 카드가 없을 때)
+  function rvExitToStart() {
+    rv.active = false;
+    rv.queue = [];
+    rv.idx = 0;
+    rv.current = null;
+    rv.revealed = false;
+    if (rv.player) { try { rv.player.pause(); } catch (e) {} }
+    historyDropSilent();
+    if (el("reviewStage")) el("reviewStage").hidden = true;
+    if (el("reviewDone")) el("reviewDone").hidden = true;
+    if (el("reviewStartPanel")) el("reviewStartPanel").hidden = false;
+  }
+
+  // 진행 중인 판에서 지금 다시 볼 수 없는 카드(지운 카드·외움·내일로 밀린 카드·언어가 바뀐 카드)를 덜어낸다.
+  // 쉐도잉(팩)·라이브러리에서 평가하거나 되돌리기를 해도 복습>문장 숫자와 큐가 어긋나지 않는다.
+  // render=false: 숫자만 맞추고 화면·재생은 건드리지 않는다(다른 탭에서 부를 때).
+  function rvSyncQueue(render) {
+    if (!rv || !rv.active) return false;
+    var end = endOfToday();
+    var head = [], tail = [], seen = {}, i, c, live, changed = false;
+    var stop = Math.min(rv.idx, rv.queue.length);
+    for (i = 0; i < stop; i++) {
+      c = rv.queue[i]; live = findCard(c.id);
+      if (!live) { changed = true; continue; }
+      head.push(live);
+    }
+    for (i = stop; i < rv.queue.length; i++) {
+      c = rv.queue[i]; live = findCard(c.id);
+      if (!live || !studiedOnce(live) || !isDueBy(live, end) || !rvLangMatch(cardLang(live), rvLang)) { changed = true; continue; }
+      if (seen[live.id]) { changed = true; continue; }   // '모름'으로 다시 넣은 카드는 하나만 남긴다
+      seen[live.id] = 1;
+      tail.push(live);
+    }
+    if (changed || head.length !== stop) {
+      rv.queue = head.concat(tail);
+      rv.idx = head.length;
+    }
+    // 쉐도잉에서 새로 저장·평가해 오늘 기한이 된 카드는 이번 판 뒤에 붙인다 — '남은'과 문장 배지가 같아진다
+    var inQueue = {}, distinct = 0;
+    for (i = 0; i < rv.queue.length; i++) {
+      if (!inQueue[rv.queue[i].id]) { inQueue[rv.queue[i].id] = 1; distinct++; }
+    }
+    if (distinct < RV_CAP) {
+      var extra = rvSentenceList(rvLang);
+      extra.sort(typeof rvSmartSort === "function" ? rvSmartSort : function (a, b) { return a.due - b.due; });
+      for (i = 0; i < extra.length; i++) {
+        if (distinct >= RV_CAP) break;
+        if (inQueue[extra[i].id]) continue;
+        inQueue[extra[i].id] = 1; distinct++;
+        rv.queue.push(extra[i]);
+        changed = true;
+      }
+    }
+    if (rv.queue.length <= rv.idx) {
+      // 이번 판에 남은 카드가 없다 — 한 장이라도 봤으면 완료 화면, 아니면 시작 화면
+      if (rv.done > 0) finishReview(); else rvExitToStart();
+      return true;
+    }
+    if (!render) {
+      if (rv.current !== rv.queue[rv.idx]) rv.current = null;
+      return changed;
+    }
+    if (!rv.current || rv.current !== rv.queue[rv.idx]) showCard();
+    else reviewProgress();
+    return true;
+  }
+
+  // 복습 숫자(상단 배지 · 하위 배지 · 언어 칩 · 시작 카드 · 라이브러리 '오늘 복습')를 한 번에 맞춘다.
+  // 평가·저장·삭제·되돌리기·날짜 바뀜·탭 전환은 모두 이 함수를 거친다.
+  function refreshReviewCounts(render) {
+    try { updateDueBadge(); } catch (e) {}
+    try { rvSyncQueue(!!render); } catch (e) {}
+    try { refreshReviewStart(); } catch (e) {}
+    try { updateReviewSubCounts(); } catch (e) {}
+  }
+
   function rvSetSub(name) {
     if (name !== "sentences" && name !== "words" && name !== "grammar") return;
     rvSub = name;
@@ -12347,7 +12435,18 @@ body { overflow-x: clip; }
     if (name !== "sentences" && rv.player) { try { rv.player.pause(); } catch (e) {} }
     if (name === "words") renderReviewWords(true);
     if (name === "grammar") grr.render(true);
-    if (name === "sentences" && rv.active && rv.player) { try { rv.player.playRange(); } catch (e) {} }
+    if (name === "sentences") {
+      // 쉐도잉·라이브러리에서 평가/삭제해 둔 사이에 큐가 낡았으면 돌아온 지금 맞춘다
+      try { rvSyncQueue(false); } catch (e) {}
+      if (rv.active) {
+        if (!rv.current) showCard();
+        else {
+          if (rv.player) { try { rv.player.playRange(); } catch (e) {} }
+          reviewProgress();   // 쉐도잉에서 새 카드가 합류했으면 '남은 N장'도 바로 맞춘다
+        }
+      }
+    }
+    try { refreshReviewStart(); } catch (e) {}
     updateReviewSubCounts();
   }
 
@@ -12681,6 +12780,7 @@ body { overflow-x: clip; }
     try { renderPacks(); } catch (e) {}
     try { updatePackReviewBtn(); } catch (e) {}
     refreshTodayCounts();
+    try { rvSyncQueue(false); } catch (e) {}
     try { refreshReviewStart(); } catch (e) {}
   }
 
