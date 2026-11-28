@@ -6013,11 +6013,12 @@ body { overflow-x: clip; }
   }
 
   // '지금 복습 시점이 지난' 문장 카드 — 학습한 카드만(새로 만든 카드는 복습이 아니라 학습)
+  // 기준 시각은 '오늘 자정(endOfToday)' — 다른 복습 숫자와 같은 하루 기준을 쓴다.
   function dueCount() {
-    var now = Date.now();
+    var end = endOfToday();
     var n = 0;
     for (var i = 0; i < state.cards.length; i++) {
-      if (studiedOnce(state.cards[i]) && isDueBy(state.cards[i], now)) n++;
+      if (studiedOnce(state.cards[i]) && isDueBy(state.cards[i], end)) n++;
     }
     return n;
   }
@@ -8103,7 +8104,8 @@ body { overflow-x: clip; }
       try { renderGrammarTab(true); } catch (e) {}
       try { if (rvSub === "grammar") grr.render(true); } catch (e) {}
       try { if (rvSub === "words") rws.render(true); } catch (e) {}
-      try { updateReviewSubCounts(); } catch (e) {}
+      // 가져오기로 학습한 카드·단어·문법이 늘었으니 상단 배지·시작 카드까지 한 번에 맞춘다
+      try { updateDueBadge(); } catch (e) {}
       toast("가져오기 완료 · 새 카드 " + added + "장, 갱신 " + updated + "장" +
         (logRes.added ? ", 학습 기록 " + logRes.added + "문장" : "") +
         ((wAdded || wUpdated) ? ", 단어 " + wAdded + "개 추가·" + wUpdated + "개 갱신" : "") +
@@ -9789,11 +9791,12 @@ body { overflow-x: clip; }
   }
 
   // 복습 대상은 '한 번이라도 단어장에서 평가한' 단어만 (새 단어는 복습이 아니라 학습)
+  // 기준 시각은 dueCount()와 같은 '오늘 자정(endOfToday)' — 하루 기준을 하나로 맞춘다.
   function wordDueCount() {
-    var now = Date.now();
+    var end = endOfToday();
     var n = 0;
     for (var i = 0; i < state.words.length; i++) {
-      if (studiedOnce(state.words[i]) && isDueBy(state.words[i], now)) n++;
+      if (studiedOnce(state.words[i]) && isDueBy(state.words[i], end)) n++;
     }
     return n;
   }
@@ -9995,12 +9998,11 @@ body { overflow-x: clip; }
     var hasCustom = false;
     for (var d = 0; d < WORD_DECKS.length; d++) {
       var dk = WORD_DECKS[d];
-      var n = 0, due = 0;
+      var n = 0;
       for (var i = 0; i < state.words.length; i++) {
         var wd = state.words[i];
         if (wd.deck !== dk.id) continue;
         n++;
-        if (isDueBy(wd, now)) due++;
       }
       if (!n) continue;
       chips.push('<button type="button" class="vw-deck' + (vw.deck === dk.id ? " on" : "") + '" data-wdeck="' + dk.id + '">' +
@@ -12211,18 +12213,18 @@ body { overflow-x: clip; }
   /* ---------- 복습 탭 하위 전환 · 올클리어 ---------- */
   // 이미 한 번이라도 본 카드가 복습 대기로 40개를 넘으면 살짝 알려준다(새 사용자는 해당 없음)
   function startedDueCount() {
-    var now = Date.now(), n = 0;
+    var end = endOfToday(), n = 0;
     for (var i = 0; i < state.cards.length; i++) {
       var c = state.cards[i];
-      if (studiedOnce(c) && isDueBy(c, now)) n++;
+      if (studiedOnce(c) && isDueBy(c, end)) n++;
     }
     for (var j = 0; j < state.words.length; j++) {
       var w = state.words[j];
-      if (studiedOnce(w) && isDueBy(w, now)) n++;
+      if (studiedOnce(w) && isDueBy(w, end)) n++;
     }
     for (var k = 0; k < state.grammar.length; k++) {
       var q = state.grammar[k];
-      if (studiedOnce(q) && isDueBy(q, now)) n++;
+      if (studiedOnce(q) && isDueBy(q, end)) n++;
     }
     return n;
   }
@@ -12283,11 +12285,7 @@ body { overflow-x: clip; }
         : "오늘 복습할 문법 문제가 없어요. 문법 탭에서 유닛별로 더 풀 수 있어요.";
     }
     if (el("rvAllClear")) el("rvAllClear").hidden = !rvAllClear();
-    if (el("dueBadge")) {
-      var tot3 = counts.words + counts.grammar + counts.sentences;
-      el("dueBadge").textContent = tot3 > 999 ? "999+" : String(tot3);
-      el("dueBadge").classList.toggle("zero", tot3 === 0);
-    }
+    // 상단 '복습 N'은 여기서 쓰지 않는다 — #dueBadge는 updateDueBadge() 한 곳에서만 기록한다.
     updateBacklogNudge();
     qsa("#rvSubBar [data-rvsub]").forEach(function (b) {
       var on = b.getAttribute("data-rvsub") === rvSub;
