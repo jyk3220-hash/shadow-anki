@@ -1121,6 +1121,7 @@ kbd {
 .pack-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
 .pack-head .pack-title { font-weight: 800; font-size: 15px; letter-spacing: -0.02em; }
 .pack-head .pack-count { margin-left: auto; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.pack-head-meta { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-wrap: nowrap; min-width: 0; }
 
 /* 플레이어 아래 조작부: 재생·이전·다음·속도를 한 줄에 */
 .pack-ctl { display: flex; align-items: center; gap: 7px; margin-top: 10px; flex-wrap: nowrap; }
@@ -1310,14 +1311,17 @@ kbd {
 /* ---------------- 모바일 한 화면 맞춤 (팩·복습) ---------------- */
 @media (max-width: 560px) {
   /* 팩: 플레이어 · 문장 · 평가 버튼이 스크롤 없이 보이게 */
-  #packStage .pack-head { margin-bottom: 8px; gap: 8px; flex-wrap: nowrap; }
+  #packStage .pack-head { margin-bottom: 8px; gap: 8px; flex-wrap: wrap; }
+  #packStage .pack-head-meta { width: 100%; margin-left: 0; }
   #packStage .pack-head .btn { padding: 6px 9px; font-size: 12px; flex: 0 0 auto; }
   #packStage .pack-head .pack-title {
     font-size: 13px; flex: 1 1 auto; min-width: 0;
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   #packStage .pack-head .pack-count { font-size: 11.5px; flex: 0 0 auto; }
-  #packStage .pack-head #packReviewOnlyBtn { padding: 6px 8px; font-size: 11.5px; }
+  #packStage .pack-head .pack-progress { flex: 0 0 auto; font-size: 11.5px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+  #packStage .pack-head .pack-progress b { color: var(--text); font-weight: 800; font-variant-numeric: tabular-nums; }
+  #packStage .pack-head #packReviewOnlyBtn { padding: 6px 8px; font-size: 11.5px; white-space: nowrap; }
   #packStage .shadow-grid { gap: 10px; }
   #packStage .card { padding: 10px 9px; }
   #packStage #playerPackBox { margin: 0; max-width: 100%; }
@@ -1380,6 +1384,8 @@ kbd {
 .vw-decks { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
 .vw-deck { border: 1px solid var(--line); background: rgba(255, 255, 255, 0.03); color: var(--muted); border-radius: 999px; padding: 7px 12px; font-size: 12.5px; font-weight: 700; white-space: nowrap; }
 .vw-deck.on { color: #fff; background: linear-gradient(135deg, rgba(124, 140, 255, 0.95), rgba(169, 112, 255, 0.9)); border-color: transparent; }
+.vw-deck small { font-size: 0.9em; font-weight: 600; opacity: 0.8; }
+.vw-deck small b { font-weight: 800; font-variant-numeric: tabular-nums; }
 .vw-card { padding: 14px; }
 .vw-progress { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 11.5px; color: var(--muted-2); font-weight: 700; margin-bottom: 8px; }
 .vw-flip { position: relative; border-radius: 16px; border: 1px solid var(--line); background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.012)); padding: 22px 16px 18px; min-height: 196px; display: flex; flex-direction: column; justify-content: center; text-align: center; cursor: pointer; transform-origin: center; transition: transform 0.16s ease, opacity 0.16s ease; }
@@ -1491,11 +1497,16 @@ kbd {
 .hint-offer .hint-form[hidden] { display: none; }
 .hint-offer .hint-input { flex: 1 1 auto; min-width: 0; padding: 8px 10px; font-size: 13px; }
 /* ---- 방금 평가 되돌리기 (4초) ---- */
-.undo-toast { position: fixed; left: 50%; bottom: calc(10px + env(safe-area-inset-bottom)); transform: translate(-50%, 10px); z-index: 121; max-width: min(92vw, 460px); opacity: 0; pointer-events: none; transition: opacity 0.18s ease, transform 0.18s ease; }
+/* 평가 안내 + 되돌리기 = 한 장의 스낵바(메시지 왼쪽 · 버튼 오른쪽, 한 줄) */
+.undo-toast { position: fixed; left: 50%; bottom: calc(10px + env(safe-area-inset-bottom)); transform: translate(-50%, 10px); z-index: 121; display: flex; align-items: center; justify-content: space-between; gap: 10px; width: max-content; max-width: min(92vw, 460px); padding: 8px 8px 8px 14px; border-radius: 15px; border: 1px solid rgba(124, 140, 255, 0.42); background: rgba(24, 29, 42, 0.97); box-shadow: 0 18px 44px -18px #000; opacity: 0; pointer-events: none; transition: opacity 0.18s ease, transform 0.18s ease; }
 .undo-toast[hidden] { display: none; }
 .undo-toast.show { opacity: 1; transform: translate(-50%, 0); }
-.undo-toast .undo-btn { pointer-events: auto; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid rgba(124, 140, 255, 0.6); background: rgba(24, 29, 42, 0.97); color: #e6ecff; border-radius: 999px; padding: 11px 16px; font-size: 12.5px; font-weight: 800; letter-spacing: -0.01em; box-shadow: 0 16px 40px -18px #000; }
+.undo-toast .undo-msg { flex: 1 1 auto; min-width: 0; font-size: 12.5px; font-weight: 700; line-height: 1.36; letter-spacing: -0.01em; color: #e6ecff; overflow-wrap: anywhere; }
+.undo-toast .undo-msg:empty { display: none; }
+.undo-toast .undo-btn { pointer-events: auto; flex: 0 0 auto; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid rgba(124, 140, 255, 0.6); background: rgba(124, 140, 255, 0.2); color: #e6ecff; border-radius: 999px; padding: 10px 14px; font-size: 12.5px; font-weight: 800; letter-spacing: -0.01em; }
 .undo-toast .undo-btn:active { transform: scale(0.98); }
+/* 스낵바가 떠 있는 동안 일반 토스트는 그 위로 올라간다(겹침 0) */
+@media (min-width: 601px) { body.undo-open .toast { bottom: calc(84px + env(safe-area-inset-bottom)); } }
 .rv-subbtn.done b { background: rgba(61, 220, 151, 0.24); color: #b9ffe0; }
 .rv-subbtn.on.done b { background: rgba(0, 0, 0, 0.3); color: #b9ffe0; }
 .rv-done-card { text-align: center; padding: 20px 16px; }
@@ -1529,6 +1540,9 @@ kbd {
 .gr-result.ok { color: #8bf0c4; }
 .gr-result.no { color: #ffb4a3; }
 .gr-why { font-size: 13px; line-height: 1.62; color: var(--text); }
+.gr-pick { margin: 0 0 9px; padding: 9px 10px; border-radius: 10px; border: 1px solid rgba(255, 112, 112, 0.34); background: rgba(255, 112, 112, 0.10); line-height: 1.6; }
+.gr-pick b { color: #ffb4a3; font-weight: 800; }
+.gr-rule { display: block; line-height: 1.62; }
 .gr-full { margin-top: 8px; font-size: 14.5px; font-weight: 700; line-height: 1.5; }
 .gr-kr { margin-top: 4px; font-size: 12.5px; color: var(--muted-2); line-height: 1.5; }
 .gr-say { margin-top: 10px; justify-content: flex-start; }
@@ -1714,10 +1728,11 @@ kbd {
   /* 바에 가리지 않게 본문·카드 아래에 여백을 둔다 (가장 높은 바 = 단어장 103px) */
   body { padding-bottom: calc(122px + env(safe-area-inset-bottom, 0px)); }
   .sentence-card, .vw-card, .gr-card, .answer-card, .review-card { padding-bottom: 122px; }
-  /* 되돌리기 토스트는 하단 바 위, 일반 안내 토스트는 그보다 더 위 */
-  .undo-toast { bottom: calc(118px + env(safe-area-inset-bottom, 0px)); }
-  .undo-toast .undo-btn { min-height: 56px; padding: 14px 20px; font-size: 16px; }
-  .toast { bottom: calc(194px + env(safe-area-inset-bottom, 0px)); font-size: 15px; }
+  /* 평가 스낵바는 하단 바(2줄짜리 평가 바 포함) 위, 일반 안내 토스트는 그보다 더 위 */
+  .undo-toast { bottom: calc(136px + env(safe-area-inset-bottom, 0px)); padding: 8px 8px 8px 13px; gap: 8px; max-width: min(94vw, 460px); }
+  .undo-toast .undo-msg { font-size: 13.5px; }
+  .undo-toast .undo-btn { min-height: 46px; padding: 10px 15px; font-size: 14.5px; }
+  .toast { bottom: calc(198px + env(safe-area-inset-bottom, 0px)); font-size: 15px; }
 }
 
 /* 복습 서브탭 줄: 좁은 화면에서도 한 줄로 — 두 줄로 감기면 sticky 바가 너무 높아져
@@ -1823,8 +1838,11 @@ body { overflow-x: clip; }
       <div class="pack-head">
         <button class="btn sm ghost" id="packBackBtn">← 팩 목록</button>
         <span class="pack-title" id="packTitle">팩</span>
-        <button class="btn sm due" id="packReviewOnlyBtn" hidden title="이 팩에서 오늘 복습할 카드만 모아서 시작">남은 문장 <b id="packReviewOnlyN">0</b> / <b id="packReviewOnlyTotal">0</b></button>
-        <span class="pack-count" id="packCount">1 / 6</span>
+        <div class="pack-head-meta">
+          <span class="pack-progress" id="packProgress">학습 <b id="packReviewOnlyN">0</b> / <b id="packReviewOnlyTotal">0</b></span>
+          <button class="btn sm due" id="packReviewOnlyBtn" hidden title="이 팩에서 오늘 복습할 카드만 모아서 시작">오늘 복습 <b id="packDueN">0</b></button>
+          <span class="pack-count" id="packCount">1 / 6</span>
+        </div>
       </div>
 
       <div class="grid shadow-grid">
@@ -2227,9 +2245,9 @@ body { overflow-x: clip; }
         <div class="vw-sub">뜻을 가린 채 발음부터 듣고, 카드를 뒤집어 확인하세요.</div>
       </div>
       <div class="vw-stats">
-        <span class="vw-pill due">오늘 남은 단어 <b id="vwDue">0</b>개</span>
+        <span class="vw-pill">학습 완료 <b id="vwDue">0</b> / <b id="vwTotal">0</b></span>
         <span class="vw-pill">연속 <b id="vwStreak">0</b>일</span>
-        <span hidden style="display:none" aria-hidden="true"><b id="vwTotal">0</b><b id="vwToday">0</b></span>
+        <span hidden style="display:none" aria-hidden="true"><b id="vwToday">0</b></span>
       </div>
     </div>
 
@@ -2323,10 +2341,9 @@ body { overflow-x: clip; }
           <div class="vw-sub">12유닛 · 60문제 · 정답을 고르면 바로 채점(정답=앎, 오답=모름)되고 해설·발음이 나옵니다.</div>
         </div>
         <div class="vw-stats">
-          <span class="vw-pill due">오늘 남은 문제 <b id="grDue">0</b></span>
+          <span class="vw-pill">학습 완료 <b id="grDue">0</b> / <b id="grTotal">0</b></span>
           <span class="vw-pill">연속 <b id="grStreak">0</b>일</span>
           <span hidden style="display:none" id="grTodayPill" aria-hidden="true"><b id="grToday">0</b></span>
-          <span hidden style="display:none" aria-hidden="true"><b id="grTotal">0</b></span>
         </div>
       </div>
 
@@ -2339,7 +2356,7 @@ body { overflow-x: clip; }
       <div class="gr-units" id="grUnits" role="group" aria-label="유닛 선택"></div>
 
       <div class="gr-modes" role="group" aria-label="문제 고르기">
-        <button type="button" class="vw-deck on" id="grModeToday" data-grmode="today" aria-pressed="true">오늘 풀 문제 <b id="grModeTodayN">0</b></button>
+        <button type="button" class="vw-deck on" id="grModeToday" data-grmode="today" aria-pressed="true" title="아직 안 푼 문제부터 순서대로">전체 풀기 <small>(미학습 <b id="grModeTodayN">0</b>)</small></button>
         <button type="button" class="vw-deck" id="grModeWrong" data-grmode="wrong" aria-pressed="false">틀린 문제 다시 풀기 <b id="grModeWrongN">0</b></button>
       </div>
 
@@ -2411,7 +2428,8 @@ body { overflow-x: clip; }
 </div>
 
 <div class="undo-toast" id="undoToast" hidden aria-live="polite">
-  <button type="button" class="undo-btn" id="undoBtn">방금 평가 되돌리기 ↩</button>
+  <span class="undo-msg" id="undoMsg"></span>
+  <button type="button" class="undo-btn" id="undoBtn">되돌리기 ↩</button>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -6010,8 +6028,8 @@ body { overflow-x: clip; }
     var n = dueCount();                                      // 지금 복습 시점이 지난 문장 카드
     var leftSent = n;
     var total = n;
-    try { leftSent = reviewDueSentences(); } catch (e) { leftSent = n; }
-    try { total = reviewDueSentences() + reviewDueWords() + reviewDueGrammar(); } catch (e) { total = leftSent; }
+    try { leftSent = rvDueOf("sentences"); } catch (e) { leftSent = n; }
+    try { total = rvDueBadgeTotal(); } catch (e) { total = leftSent; }
     var b = el("dueBadge");
     // 상단 '복습 N' = 이미 학습한 문장 + 단어 + 문법 중 오늘 복습할 것(새 항목 제외)
     b.textContent = total > 999 ? "999+" : String(total);
@@ -7162,24 +7180,25 @@ body { overflow-x: clip; }
       saved++;
       if (studiedOnce(c)) studied++;
       if (c.mastered) mastered++;
-      else if (isDueBy(c, now)) dueNow++;
+      // 팩 카드의 '오늘 복습 N' = 복습 탭 > 문장과 같은 기준(이미 학습한 카드만)
+      else if (studiedOnce(c) && isDueBy(c, now)) dueNow++;
     }
     return { saved: saved, studied: studied, mastered: mastered, dueNow: dueNow, total: pack.cards.length };
   }
 
-  // 이 팩에서 지금 복습할 카드(저장됐고, 외우지 않았고, due가 지난 것)
+  // 이 팩에서 지금 복습할 카드(저장됐고, 한 번 학습했고, 외우지 않았고, due가 온 것) — 복습 탭 > 문장과 같은 기준
   function packDueCards(pack) {
     var now = Date.now();
     var out = [];
     if (!pack) return out;
     for (var i = 0; i < pack.cards.length; i++) {
       var c = packDeckCard(pack, i);
-      if (isDueBy(c, now)) out.push(c);
+      if (c && studiedOnce(c) && isDueBy(c, now)) out.push(c);
     }
     return out;
   }
 
-  // 팩 화면 머리의 '남은 문장 N / 전체 M' 배지(누르면 이 팩에서 오늘 복습할 카드만)
+  // 팩 화면 머리의 '학습 N / M' 진도와 '오늘 복습 N'(누르면 이 팩에서 복습할 카드만)
   function packLeftCount(pack) {
     if (!pack || !pack.cards) return 0;
     var n = 0;
@@ -7192,18 +7211,24 @@ body { overflow-x: clip; }
 
   function updatePackReviewBtn() {
     var btn = el("packReviewOnlyBtn");
-    if (!btn) return;
     var pack = (typeof packState !== "undefined" && packState) ? packState.active : null;
-    if (!pack) { btn.hidden = true; return; }
+    var prog = el("packProgress");
+    if (!pack) {
+      if (btn) btn.hidden = true;
+      if (prog) prog.hidden = true;
+      return;
+    }
     var due = packDueCards(pack).length;
     var total = pack.cards.length;
-    var left = packLeftCount(pack);
-    if (el("packReviewOnlyN")) el("packReviewOnlyN").textContent = String(left);
+    var studied = packStats(pack).studied;
+    if (prog) { prog.hidden = false; prog.title = "학습 " + studied + " / " + total + (due ? " · 오늘 복습 " + due + "장" : ""); }
+    if (el("packReviewOnlyN")) el("packReviewOnlyN").textContent = String(studied);
     if (el("packReviewOnlyTotal")) el("packReviewOnlyTotal").textContent = String(total);
-    btn.hidden = false;
+    if (el("packDueN")) el("packDueN").textContent = String(due);
+    if (!btn) return;
+    btn.hidden = due === 0;
     btn.classList.toggle("zero", due === 0);
-    btn.setAttribute("aria-label", "이 팩 남은 문장 " + left + " / " + total +
-      (due ? " · 오늘 복습할 카드 " + due + "장" : " · 오늘 복습할 카드 없음"));
+    btn.setAttribute("aria-label", "이 팩에서 오늘 복습할 카드 " + due + "장");
   }
 
   // 팩 하나만 골라서 복습 시작
@@ -7630,8 +7655,7 @@ body { overflow-x: clip; }
     try { checkMilestones(); } catch (e) {}
     try { renderPackMini(); } catch (e) {}
     try { renderPacks(); } catch (e) {}
-    try { toast(grade === "mastered" ? "외움 완료로 저장했어요." : "저장 완료 · " + res.label + " 복습"); } catch (e) {}
-    try { undoOffer(undoSnapNow); } catch (e) {}
+    try { undoOffer(undoSnapNow, grade === "mastered" ? "외움 완료로 저장했어요" : "저장 완료 · " + res.label + " 복습"); } catch (e) {}
     try { if (packState.player) packState.player.pause(); } catch (e) {}
   }
 
@@ -8027,6 +8051,7 @@ body { overflow-x: clip; }
         if (curQ) {
           curQ.prompt = gq2.prompt; curQ.options = gq2.options; curQ.answer = gq2.answer;
           curQ.full = gq2.full; curQ.ko = gq2.ko; curQ.kr = gq2.kr; curQ.unit = gq2.unit;
+          curQ.wrongKo = gq2.wrongKo;
           mergeSM2Into(curQ, gq2);
           curQ.missed = !!(curQ.missed || gq2.missed);
           gUpdated++;
@@ -8330,6 +8355,7 @@ body { overflow-x: clip; }
     var c = rv.current;
     hideHintOffer();
     var undoSnapNow = undoCaptureFor("review-sentences", c.id);
+    var gLabel = "";
     if (g === "mastered") {
       c.mastered = true;
       c.reps = Math.max(1, c.reps || 0);
@@ -8339,6 +8365,7 @@ body { overflow-x: clip; }
       rv.mastered++;
     } else {
       var res = gradeCardData(c, g, Date.now());
+      if (res && res.label) gLabel = res.label;
       // '모름' 카드는 3~5자리 뒤에 다시 넣어 이번 판에서 한 번 더 본다
       if (res && res.label === "10분") {
         rv.rq = rv.rq || {};
@@ -8357,7 +8384,7 @@ body { overflow-x: clip; }
     try { checkMilestones(); } catch (e) {}
     rv.idx++;
     showCard();
-    undoOffer(undoSnapNow);
+    undoOffer(undoSnapNow, g === "mastered" ? "외움 완료로 저장했어요" : (gLabel ? "저장 완료 · " + gLabel + " 복습" : "저장 완료"));
     if (g === "hard") hintOfferAfter(c.id);
   }
 
@@ -9796,8 +9823,8 @@ body { overflow-x: clip; }
   }
 
   /* ---------- 복습 대상: '이미 학습한 것'만 (새 항목 제외) ----------
-     단어장·문법 탭의 '오늘 남은 N'은 새 항목까지 세지만(leftToday*),
-     복습 탭의 하위 배지·한 판 큐와 상단 '복습 N' 배지는 이미 학습(평가)한 항목만 센다.
+     단어장·문법 탭 머리말은 '학습 완료 N / M'(진도)만 보여 주고,
+     '오늘 복습할 N'은 복습 탭의 하위 배지·한 판 큐와 상단 '복습 N' 배지만 센다(이미 학습한 항목만).
      '❌ 모름'은 10분 뒤가 되면 그대로 다시 복습 대상이 된다(학습했고 오늘 안에 기한이 옴). */
   function reviewDueWords() {
     var end = endOfToday();
@@ -9835,10 +9862,12 @@ body { overflow-x: clip; }
   // 머리말·배지·차트를 한 번에 다시 맞춘다(평가·되돌리기·날짜 바뀜 뒤)
   function refreshTodayCounts() {
     var now = Date.now();
-    try { if (el("vwDue")) el("vwDue").textContent = String(leftTodayWords()); } catch (e) {}
+    try { if (el("vwDue")) el("vwDue").textContent = String(vwDoneVisible()); } catch (e) {}
+    try { if (el("vwTotal")) el("vwTotal").textContent = String(vwVisibleTotal()); } catch (e) {}
     try { if (el("vwStreak")) el("vwStreak").textContent = String(wordStreak(now)); } catch (e) {}
-    try { if (el("grDue")) el("grDue").textContent = String(leftTodayGrammar()); } catch (e) {}
-    try { if (el("grModeTodayN")) el("grModeTodayN").textContent = String(leftTodayGrammar()); } catch (e) {}
+    try { if (el("grDue")) el("grDue").textContent = String(grDoneCount()); } catch (e) {}
+    try { if (el("grTotal")) el("grTotal").textContent = String(grVisibleTotal()); } catch (e) {}
+    try { if (el("grModeTodayN")) el("grModeTodayN").textContent = String(grUnstudiedCount()); } catch (e) {}
     // '틀린 문제 다시 풀기' 개수도 바로 맞춘다 — 오답을 고르면 즉시 1 이상으로 보여야 한다
     try { if (el("grModeWrongN")) el("grModeWrongN").textContent = String(grWrongCount()); } catch (e) {}
     try { if (el("grStreak")) el("grStreak").textContent = String(grammarStreak(now)); } catch (e) {}
@@ -9884,6 +9913,18 @@ body { overflow-x: clip; }
     if (vw.idx >= vw.queue.length) vw.idx = 0;
   }
 
+  // 단어장 머리말 진도: 지금 묶음(검색 포함)에서 한 번이라도 본 단어 / 전체
+  function vwDoneVisible() {
+    var list = vwFiltered();
+    var n = 0;
+    for (var i = 0; i < list.length; i++) if (studiedOnce(list[i]) || list[i].mastered) n++;
+    return n;
+  }
+
+  function vwVisibleTotal() {
+    return vwFiltered().length;
+  }
+
   function vwCurrent() {
     var id = vw.queue[vw.idx];
     return id ? findWord(id) : null;
@@ -9916,8 +9957,8 @@ body { overflow-x: clip; }
     if (!vw.queue.length) vwBuildQueue();
     if (vw.idx >= vw.queue.length) vw.idx = Math.max(0, vw.queue.length - 1);
 
-    if (el("vwTotal")) el("vwTotal").textContent = String(state.words.length);
-    if (el("vwDue")) el("vwDue").textContent = String(leftTodayWords());
+    if (el("vwTotal")) el("vwTotal").textContent = String(vwVisibleTotal());
+    if (el("vwDue")) el("vwDue").textContent = String(vwDoneVisible());
     var now = Date.now();
     if (el("vwToday")) el("vwToday").textContent = String(wordDayCount(dayKey(now)));
     if (el("vwStreak")) el("vwStreak").textContent = String(wordStreak(now));
@@ -10200,10 +10241,8 @@ body { overflow-x: clip; }
     vw.idx = 0;
     renderVocab(false);
     vwAutoSpeak();            // 평가로 다음 단어가 떠도 발음을 한 번 먼저
-    if (grade === "mastered") toast("외움 완료 · " + w.word);
-    else toast(label + " 다시 봐요 · " + w.word);
+    undoOffer(undoSnapNow, grade === "mastered" ? "외움 완료 · " + w.word : label + " 다시 봐요 · " + w.word);
     if (vw.queue.length <= 1) toast("이 묶음 단어를 끝까지 봤어요 🎉");
-    undoOffer(undoSnapNow);
     if (grade === "hard" || grade === "again") hintOfferAfter(w.id);
     vwScrollCardIntoView();
   }
@@ -10419,7 +10458,8 @@ body { overflow-x: clip; }
       options: ["have worked", "work", "worked", "am working"], answer: 0,
       full: "I have worked in this lab since 2021.",
       kr: "나는 2021년부터 이 실험실에서 일해 왔다.",
-      ko: "since 2021처럼 지금까지 이어지는 기간에는 현재완료(have worked)를 씁니다. worked는 끝난 과거라 since와 함께 쓰지 않습니다."
+      ko: "since 2021처럼 지금까지 이어지는 기간에는 현재완료(have worked)를 씁니다.",
+      wrongKo: { 1: "work는 현재시제(습관·일반 사실)라, since 2021부터 지금까지 이어지는 기간을 나타내지 못합니다.", 2: "worked는 끝난 과거라 since 2021처럼 지금까지 이어지는 기간과 함께 쓰지 않습니다.", 3: "am working은 지금 이 순간의 진행만 말하므로, since 2021부터 쌓아 온 기간을 담지 못합니다." },
     },
     {
       id: "g1-2", unit: "u1",
@@ -10427,7 +10467,8 @@ body { overflow-x: clip; }
       options: ["submitted", "has submitted", "submits", "is submitting"], answer: 0,
       full: "She submitted the report last Friday, so the numbers are final.",
       kr: "그녀는 지난 금요일에 보고서를 제출해서 수치는 확정됐다.",
-      ko: "last Friday처럼 끝난 시점이 있으면 과거시제를 씁니다. 현재완료는 지금과 이어지는 일에만 씁니다."
+      ko: "last Friday처럼 끝난 시점이 있으면 과거시제를 씁니다. 현재완료는 지금과 이어지는 일에만 씁니다.",
+      wrongKo: { 1: "has submitted는 현재완료라 last Friday처럼 끝난 시점과 함께 쓸 수 없습니다.", 2: "submits는 현재시제라 지난 금요일에 이미 끝난 일을 가리키지 못합니다.", 3: "is submitting은 지금 진행 중이라는 뜻이라 last Friday의 끝난 일과 맞지 않습니다." },
     },
     {
       id: "g1-3", unit: "u1",
@@ -10435,7 +10476,8 @@ body { overflow-x: clip; }
       options: ["have used", "used", "use", "are using"], answer: 0,
       full: "We have used this supplier for over three years.",
       kr: "우리는 3년 넘게 이 공급업체를 써 왔다.",
-      ko: "for + 기간(~동안)은 지금까지 이어지므로 현재완료(have used)를 씁니다."
+      ko: "for + 기간(~동안)은 지금까지 이어지므로 현재완료(have used)를 씁니다.",
+      wrongKo: { 1: "used는 끝난 과거라 for over three years처럼 지금까지 이어지는 기간과 쓰지 않습니다.", 2: "use는 현재의 습관·사실만 말해, 3년 넘게 이어져 온 기간을 나타내지 못합니다.", 3: "are using은 지금 이 순간 쓰고 있다는 뜻이라, 3년 넘게 이어져 온 관계를 말하지 못합니다." },
     },
     {
       id: "g1-4", unit: "u1",
@@ -10443,7 +10485,8 @@ body { overflow-x: clip; }
       options: ["attended", "attend", "attending", "attends"], answer: 0,
       full: "Have you ever attended a safety audit on your own?",
       kr: "혼자서 안전 감사를 진행해 본 적이 있나요?",
-      ko: "Have you ever 뒤에는 과거분사(p.p.)가 옵니다. ever는 '지금까지 한 번이라도'라는 현재완료 신호입니다."
+      ko: "Have you ever 뒤에는 과거분사(p.p.)가 옵니다. ever는 '지금까지 한 번이라도'라는 현재완료 신호입니다.",
+      wrongKo: { 1: "Have you ever 뒤에는 과거분사가 와야 하는데 attend는 동사원형이라 형태가 틀립니다.", 2: "Have you ever 뒤에는 과거분사가 오므로 -ing 형태인 attending은 쓸 수 없습니다.", 3: "attends는 3인칭 단수 현재형이라 Have you ever 뒤의 과거분사 자리에 올 수 없습니다." },
     },
     {
       id: "g1-5", unit: "u1",
@@ -10451,7 +10494,8 @@ body { overflow-x: clip; }
       options: ["since", "for", "during", "from"], answer: 0,
       full: "It's been three weeks since we last reviewed the data.",
       kr: "데이터를 마지막으로 검토한 지 3주가 됐다.",
-      ko: "'It's been + 기간 + since + 과거 시점' 형태입니다. since 뒤에는 시작점(절), for 뒤에는 기간이 옵니다."
+      ko: "'It's been + 기간 + since + 과거 시점' 형태입니다. since 뒤에는 시작점(절), for 뒤에는 기간이 옵니다.",
+      wrongKo: { 1: "for는 뒤에 기간이 오는 전치사라, we last reviewed처럼 절이 오는 자리에는 쓸 수 없습니다.", 2: "during은 명사(기간) 앞에 쓰는 전치사라 we last reviewed 같은 절을 이끌지 못합니다.", 3: "from은 시작점을 말하는 전치사라 'It's been + 기간 + from + 절' 형태로는 쓰지 않습니다." },
     },
 
     /* ---------- Unit 2: 현재완료진행 ---------- */
@@ -10461,7 +10505,8 @@ body { overflow-x: clip; }
       options: ["has been raining", "has been rained", "is rained", "rains"], answer: 0,
       full: "It has been raining for two hours, so the site visit is cancelled.",
       kr: "두 시간째 비가 오고 있어서 현장 방문이 취소됐다.",
-      ko: "for two hours 동안 계속된 일이 지금 결과로 이어지므로 현재완료진행(has been raining)입니다. rain은 자동사라 수동태로 쓸 수 없습니다."
+      ko: "for two hours 동안 계속된 일이 지금 결과로 이어지므로 현재완료진행(has been raining)입니다.",
+      wrongKo: { 1: "has been rained는 수동형인데, rain은 자동사라 수동태로 쓸 수 없습니다.", 2: "is rained는 현재 수동인데 rain은 수동이 될 수 없고, for two hours의 지속도 담지 못합니다.", 3: "rains는 현재시제라 두 시간째 계속되고 있다는 진행·지속을 나타내지 못합니다." },
     },
     {
       id: "g2-2", unit: "u2",
@@ -10469,7 +10514,8 @@ body { overflow-x: clip; }
       options: ["have been trying", "have been tried", "am trying", "tried"], answer: 0,
       full: "I have been trying to reach the supplier all morning, but the line is always busy.",
       kr: "아침 내내 공급업체에 연락하려고 했지만 전화가 계속 통화 중이다.",
-      ko: "all morning처럼 지금까지 이어진 반복·지속에는 현재완료진행을 씁니다. try는 자동사로 쓰여 수동(have been tried)이 될 수 없습니다."
+      ko: "all morning처럼 지금까지 이어진 반복·지속에는 현재완료진행(have been trying)을 씁니다.",
+      wrongKo: { 1: "have been tried는 수동이라 주어 I가 '시도되는' 쪽이 되어, 아침 내내 연락을 시도한 사람이 I라는 뜻과 맞지 않습니다.", 2: "am trying은 지금 이 순간만 말하므로 all morning 내내 이어져 온 반복을 담지 못합니다.", 3: "tried는 끝난 과거라, 지금도 통화가 계속 안 되는 all morning의 상황과 이어지지 않습니다." },
     },
     {
       id: "g2-3", unit: "u2",
@@ -10477,7 +10523,8 @@ body { overflow-x: clip; }
       options: ["has been running", "has been ran", "have been running", "is been running"], answer: 0,
       full: "The pump has been running for the last twenty minutes.",
       kr: "펌프가 지난 20분 동안 계속 돌고 있다.",
-      ko: "주어 The pump는 단수라 has를 쓰고, 진행형이므로 has been running입니다. run의 과거분사는 run이라 진행 의미가 되지 않습니다."
+      ko: "주어 The pump는 단수라 has를 쓰고, 진행형이므로 has been running입니다.",
+      wrongKo: { 1: "has been ran은 been 뒤에 과거분사가 아니라 과거형 ran이 와서 형태가 틀립니다(과거분사는 run).", 2: "have been running은 복수 주어에 쓰는 형태라 단수 주어 The pump와 맞지 않습니다.", 3: "is been running은 be동사 뒤에 been을 붙인 잘못된 형태이고, 주어가 3인칭 단수라 has been running이어야 합니다." },
     },
     {
       id: "g2-4", unit: "u2",
@@ -10485,7 +10532,8 @@ body { overflow-x: clip; }
       options: ["have been preparing", "have been prepared", "are prepared", "prepare"], answer: 0,
       full: "We have been preparing the samples since 8 a.m.",
       kr: "우리는 오전 8시부터 시료를 준비하고 있다.",
-      ko: "since 8 a.m.부터 지금까지 이어지는 동작이라 현재완료진행입니다. have been prepared는 '준비된 상태'라는 수동 의미라 the samples와 맞지 않습니다."
+      ko: "since 8 a.m.부터 지금까지 이어지는 동작이라 현재완료진행(have been preparing)입니다.",
+      wrongKo: { 1: "have been prepared는 수동이라 '시료가 준비되어 왔다'가 되어, 우리가 시료를 준비해 온 능동 의미와 다릅니다.", 2: "are prepared는 '준비된 상태'라는 현재 수동이라 since 8 a.m.부터 이어진 동작을 나타내지 못합니다.", 3: "prepare는 현재시제라 8시부터 지금까지 계속 준비 중이라는 의미를 담지 못합니다." },
     },
     {
       id: "g2-5", unit: "u2",
@@ -10493,7 +10541,8 @@ body { overflow-x: clip; }
       options: ["Have", "Has", "Are", "Did"], answer: 0,
       full: "Have you been waiting long?",
       kr: "오래 기다리셨어요?",
-      ko: "you에 맞는 조동사는 have이고 현재완료진행은 have/has been -ing입니다. Did 뒤에는 been이 올 수 없습니다."
+      ko: "you에 맞는 조동사는 have이고 현재완료진행은 have/has been -ing입니다.",
+      wrongKo: { 1: "Has는 3인칭 단수 주어에 쓰는 형태라 주어 you와 맞지 않습니다.", 2: "Are you been waiting은 be동사 뒤에 been이 이어지는 잘못된 형태입니다(Have you been waiting).", 3: "Did 뒤에는 동사원형이 오고 been을 쓸 수 없습니다(Did you wait long이면 가능)." },
     },
 
     /* ---------- Unit 3: 과거완료 ---------- */
@@ -10503,7 +10552,8 @@ body { overflow-x: clip; }
       options: ["had checked", "has checked", "checks", "was checked"], answer: 0,
       full: "She had checked the data before she sent the report.",
       kr: "그녀는 보고서를 보내기 전에 데이터를 확인했었다.",
-      ko: "과거(sent)보다 더 먼저 일어난 일은 과거완료(had + p.p.)로 씁니다."
+      ko: "과거(sent)보다 더 먼저 일어난 일은 과거완료(had + p.p.)로 씁니다.",
+      wrongKo: { 1: "has checked는 현재완료라 과거의 sent보다 앞선 일을 나타내지 못합니다.", 2: "checks는 현재시제라 과거에 이미 끝난 순서(before she sent)를 말할 수 없습니다.", 3: "was checked는 수동이라 '그녀가 데이터를 확인했다'는 능동 의미가 되지 않습니다." },
     },
     {
       id: "g3-2", unit: "u3",
@@ -10511,7 +10561,8 @@ body { overflow-x: clip; }
       options: ["had maintained", "has maintained", "maintains", "was maintained"], answer: 0,
       full: "The equipment failed because nobody had maintained it.",
       kr: "아무도 정비하지 않았기 때문에 장비가 고장 났다.",
-      ko: "고장(failed)보다 앞선 원인은 과거완료입니다. nobody가 주어라 능동 had maintained가 맞습니다."
+      ko: "고장(failed)보다 앞선 원인은 과거완료입니다. nobody가 주어라 능동 had maintained가 맞습니다.",
+      wrongKo: { 1: "has maintained는 현재완료라 과거의 failed보다 앞선 원인을 나타내지 못합니다.", 2: "maintains는 현재시제라 이미 일어난 고장의 원인이 될 수 없습니다.", 3: "was maintained는 수동이라 '아무도 정비하지 않았다'는 능동 부정 의미와 반대가 됩니다." },
     },
     {
       id: "g3-3", unit: "u3",
@@ -10519,7 +10570,8 @@ body { overflow-x: clip; }
       options: ["had led", "have led", "led", "was leading"], answer: 0,
       full: "It was the first time I had led a full-scale audit.",
       kr: "그때가 내가 전면 감사를 이끈 첫 번째였다.",
-      ko: "'It was the first time + 과거' 뒤에는 과거완료를 씁니다. 지금까지의 첫 경험은 현재완료지만, 과거 기준이면 과거완료입니다."
+      ko: "'It was the first time + 과거' 뒤에는 과거완료를 씁니다. 지금까지의 첫 경험은 현재완료지만, 과거 기준이면 과거완료입니다.",
+      wrongKo: { 1: "have led는 현재완료라 과거 기준(It was)의 첫 경험을 나타내지 못합니다.", 2: "led는 단순 과거라 '그 전에'라는 과거완료의 앞 선 시점을 담지 못합니다.", 3: "was leading은 진행형이라 '그때 처음 해 봤다'는 완료된 경험을 말하지 못합니다." },
     },
     {
       id: "g3-4", unit: "u3",
@@ -10527,7 +10579,8 @@ body { overflow-x: clip; }
       options: ["had received", "has received", "receives", "was receiving"], answer: 0,
       full: "He told me he had received the result the day before.",
       kr: "그는 전날 결과를 받았다고 내게 말했다.",
-      ko: "간접화법에서 과거(told)보다 앞선 일은 과거완료로 한 단계 물러나 표현합니다(the day before = 전날)."
+      ko: "간접화법에서 과거(told)보다 앞선 일은 과거완료로 한 단계 물러나 표현합니다(the day before = 전날).",
+      wrongKo: { 1: "has received는 현재완료라 과거의 told보다 앞선 일로 한 단계 물러나지 못합니다.", 2: "receives는 현재시제라 과거의 간접화법 안에서 시제가 맞지 않습니다.", 3: "was receiving은 '받는 중이었다'는 진행이라 the day before에 이미 받아 둔 결과와 맞지 않습니다." },
     },
     {
       id: "g3-5", unit: "u3",
@@ -10535,7 +10588,8 @@ body { overflow-x: clip; }
       options: ["had prepared", "have prepared", "prepare", "were prepare"], answer: 0,
       full: "By the time the auditor arrived, we had prepared everything.",
       kr: "감사관이 도착했을 때 우리는 모든 것을 준비해 둔 상태였다.",
-      ko: "By the time + 과거 시점보다 먼저 끝난 일이라 과거완료(had prepared)입니다."
+      ko: "By the time + 과거 시점보다 먼저 끝난 일이라 과거완료(had prepared)입니다.",
+      wrongKo: { 1: "have prepared는 현재완료라 과거의 arrived보다 먼저 끝난 일을 나타내지 못합니다.", 2: "prepare는 현재시제라 과거 시점(By the time ~ arrived)과 시제가 맞지 않습니다.", 3: "were prepare는 be동사 뒤에 동사원형이 온 잘못된 형태입니다(had prepared)." },
     },
 
     /* ---------- Unit 4: 미래 표현 ---------- */
@@ -10545,7 +10599,8 @@ body { overflow-x: clip; }
       options: ["will fix", "will fixing", "am fix", "fixes"], answer: 0,
       full: "Don't worry, I will fix it before the meeting.",
       kr: "걱정 마세요, 회의 전에 제가 고칠게요.",
-      ko: "그 자리에서 즉석으로 결정한 일에는 will을 씁니다(이미 정해 둔 계획은 be going to). will 뒤에는 동사원형만 옵니다."
+      ko: "그 자리에서 즉석으로 결정한 일에는 will을 씁니다(이미 정해 둔 계획은 be going to). will 뒤에는 동사원형만 옵니다.",
+      wrongKo: { 1: "will fixing은 조동사 will 뒤에 -ing가 온 잘못된 형태입니다(will fix).", 2: "am fix는 be동사 뒤에 동사원형이 온 잘못된 형태이고, 즉석 결정에도 will이 맞습니다.", 3: "fixes는 현재시제 습관이라 '회의 전에 내가 고칠게'라는 즉석 결정·의지를 나타내지 못합니다." },
     },
     {
       id: "g4-2", unit: "u4",
@@ -10553,7 +10608,8 @@ body { overflow-x: clip; }
       options: ["are going to", "are going", "will going", "go to"], answer: 0,
       full: "Look at that queue — we are going to miss the train.",
       kr: "저 줄 좀 봐 — 기차 놓치겠다.",
-      ko: "지금 눈앞의 증거로 예측할 때는 be going to를 씁니다. will going처럼 조동사 뒤에 -ing를 쓰지 않습니다."
+      ko: "지금 눈앞의 증거로 예측할 때는 be going to(are going to miss)를 씁니다.",
+      wrongKo: { 1: "are going만으로는 뒤의 miss와 이어지지 않습니다(are going to miss).", 2: "will going은 조동사 뒤에 -ing가 온 잘못된 형태입니다(will miss 또는 are going to miss).", 3: "go to는 '~하러 가다'라는 뜻이라 '놓칠 것이다'는 예측이 되지 않습니다." },
     },
     {
       id: "g4-3", unit: "u4",
@@ -10561,7 +10617,8 @@ body { overflow-x: clip; }
       options: ["departs", "is depart", "departing", "will departing"], answer: 0,
       full: "The flight to Frankfurt departs at 06:15, so let's leave at four.",
       kr: "프랑크푸르트행 비행기는 6시 15분에 출발하니 4시에 출발합시다.",
-      ko: "정해진 시간표(교통편·일정표)에는 현재시제를 씁니다. 미래라도 will을 쓰지 않습니다."
+      ko: "정해진 시간표(교통편·일정표)에는 현재시제를 씁니다. 미래라도 will을 쓰지 않습니다.",
+      wrongKo: { 1: "is depart는 be동사 뒤에 동사원형이 온 잘못된 형태입니다.", 2: "departing은 진행형 조각이라 주어 The flight의 정해진 출발 시각을 말하는 정동사가 되지 못합니다.", 3: "will departing은 조동사 뒤에 -ing가 온 잘못된 형태이고, 시간표에는 현재시제를 씁니다." },
     },
     {
       id: "g4-4", unit: "u4",
@@ -10569,7 +10626,8 @@ body { overflow-x: clip; }
       options: ["am meeting", "meet", "am meet", "will meeting"], answer: 0,
       full: "I am meeting the auditor at 10 tomorrow — the room is already booked.",
       kr: "내일 10시에 감사관을 만나기로 했다 — 회의실도 이미 예약했다.",
-      ko: "이미 잡아 둔 약속·일정에는 현재진행형(am meeting)을 씁니다."
+      ko: "이미 잡아 둔 약속·일정에는 현재진행형(am meeting)을 씁니다.",
+      wrongKo: { 1: "meet은 현재시제라 이미 잡아 둔 내일의 약속을 나타내지 못하고 습관·반복으로 읽힙니다.", 2: "am meet은 be동사 뒤에 동사원형이 온 잘못된 형태입니다(am meeting).", 3: "will meeting은 조동사 뒤에 -ing가 온 잘못된 형태입니다(will meet 또는 am meeting)." },
     },
     {
       id: "g4-5", unit: "u4",
@@ -10577,7 +10635,8 @@ body { overflow-x: clip; }
       options: ["are not going to", "will not going to", "don't going to", "not going to"], answer: 0,
       full: "We are not going to announce anything until the results are confirmed.",
       kr: "결과가 확정될 때까지 우리는 아무것도 발표하지 않을 것이다.",
-      ko: "부정 미래는 be not going to 또는 will not + 동사원형입니다. will not going to, don't going to는 형태가 틀립니다."
+      ko: "부정 미래는 be not going to 또는 will not + 동사원형입니다.",
+      wrongKo: { 1: "will not going to는 조동사 will 뒤에 going to가 겹친 잘못된 형태입니다.", 2: "don't going to는 do 조동사와 going to가 섞인 잘못된 형태입니다(aren't going to).", 3: "not going to는 주어 We에 맞는 be동사(are)가 빠져 문장이 성립하지 않습니다." },
     },
 
     /* ---------- Unit 5: 의무·조언 ---------- */
@@ -10587,7 +10646,8 @@ body { overflow-x: clip; }
       options: ["must", "should", "don't have to", "might"], answer: 0,
       full: "All visitors must wear safety goggles in this area — it's the rule.",
       kr: "이 구역에서는 모든 방문자가 보안경을 써야 한다 — 규정이다.",
-      ko: "규정에 따른 강한 의무는 must입니다. should는 조언, don't have to는 '할 필요 없음', might는 추측입니다."
+      ko: "규정에 따른 강한 의무는 must입니다.",
+      wrongKo: { 1: "should는 권고·조언이라 '규정이다(it's the rule)'처럼 강한 의무를 나타내지 못합니다.", 2: "don't have to는 '할 필요가 없다'라서 보안경을 반드시 써야 한다는 규정과 반대입니다.", 3: "might는 추측이라 규정에 따른 의무를 나타낼 수 없습니다." },
     },
     {
       id: "g5-2", unit: "u5",
@@ -10595,7 +10655,8 @@ body { overflow-x: clip; }
       options: ["don't have to", "mustn't", "shouldn't", "must"], answer: 0,
       full: "You don't have to bring your own laptop — we provide one for every trainee.",
       kr: "노트북을 가져올 필요는 없다 — 교육생 모두에게 제공한다.",
-      ko: "'할 필요가 없다'는 don't have to입니다. mustn't는 '하면 안 된다'는 금지라 뜻이 반대입니다."
+      ko: "'할 필요가 없다'는 don't have to입니다.",
+      wrongKo: { 1: "mustn't는 '하면 안 된다'는 금지라, '가져올 필요가 없다'는 뜻과 다릅니다.", 2: "shouldn't는 '~하지 않는 편이 좋다'는 조언·비권장이라, '굳이 가져올 필요가 없다'는 뜻과 다릅니다.", 3: "must는 '반드시 해야 한다'는 의무라, 노트북을 제공하므로 필요 없다는 문맥과 반대입니다." },
     },
     {
       id: "g5-3", unit: "u5",
@@ -10603,7 +10664,8 @@ body { overflow-x: clip; }
       options: ["mustn't", "don't have to", "needn't", "not have to"], answer: 0,
       full: "You mustn't touch that valve while the system is pressurized.",
       kr: "시스템에 압력이 걸려 있는 동안 그 밸브를 만지면 안 된다.",
-      ko: "금지에는 mustn't를 씁니다. don't have to와 needn't는 '할 필요 없음'입니다."
+      ko: "금지에는 mustn't를 씁니다.",
+      wrongKo: { 1: "don't have to는 '할 필요가 없다'라서, 만지면 안 된다는 금지와 뜻이 다릅니다.", 2: "needn't는 '할 필요가 없다'는 뜻이라 금지가 되지 않습니다.", 3: "'not have to'는 조동사 자리에 그대로 쓰는 형태가 아니고(do not have to), 뜻도 '할 필요가 없다'라서 금지와 다릅니다." },
     },
     {
       id: "g5-4", unit: "u5",
@@ -10611,7 +10673,8 @@ body { overflow-x: clip; }
       options: ["should", "must", "have to", "can"], answer: 0,
       full: "You should have told me earlier — I could have fixed it.",
       kr: "더 일찍 말해 줬어야지 — 그러면 내가 고칠 수 있었을 텐데.",
-      ko: "과거에 하지 않은 일에 대한 후회·비판은 should have + p.p.입니다. must have p.p.는 '~했음이 틀림없다'는 추측입니다."
+      ko: "과거에 하지 않은 일에 대한 후회·비판은 should have + p.p.입니다.",
+      wrongKo: { 1: "must have told는 '틀림없이 말했다'는 과거 추측이라, 말해 줬어야 했다는 후회·비판이 되지 않습니다.", 2: "have to는 조동사가 아니라서 have told와 이어지지 않고, 과거에 대한 후회도 나타내지 못합니다.", 3: "can have told는 '말했을 수 있다'는 가능성이라 '~했어야 했다'는 비판의 뜻이 아닙니다." },
     },
     {
       id: "g5-5", unit: "u5",
@@ -10619,7 +10682,8 @@ body { overflow-x: clip; }
       options: ["have", "must", "should", "can"], answer: 0,
       full: "In Korea, drivers have to carry a licence at all times.",
       kr: "한국에서는 운전자가 항상 면허증을 소지해야 한다.",
-      ko: "have to는 외부 규정·제도에 따른 의무입니다. must·should·can 뒤에는 to를 쓰지 않습니다."
+      ko: "have to는 외부 규정·제도에 따른 의무이고, 뒤에 to를 붙여 have to + 동사원형으로 씁니다.",
+      wrongKo: { 1: "must 뒤에는 to를 쓰지 않으므로 must to carry는 형태가 틀립니다.", 2: "should 뒤에도 to를 쓰지 않으므로 should to carry는 형태가 틀립니다.", 3: "can 뒤에는 to를 쓰지 않고, '소지해야 한다'는 규정상 의무도 나타내지 못합니다." },
     },
 
     /* ---------- Unit 6: 추측 ---------- */
@@ -10629,7 +10693,8 @@ body { overflow-x: clip; }
       options: ["can't be", "must be", "might be", "should be"], answer: 0,
       full: "The lights are off and the door is locked — they can't be at home.",
       kr: "불이 꺼져 있고 문이 잠겨 있다 — 그들이 집에 있을 리 없다.",
-      ko: "상황상 '있을 수 없다'는 확신을 나타내므로 can't be입니다. must be는 반대 뜻입니다."
+      ko: "상황상 '있을 수 없다'는 확신을 나타내므로 can't be입니다.",
+      wrongKo: { 1: "must be는 '틀림없이 있다'는 강한 추측이라, 불이 꺼지고 문이 잠긴 상황과 반대입니다.", 2: "might be는 '있을지도 모른다'는 약한 가능성이라, 문이 잠긴 상황에서의 확신을 담지 못합니다.", 3: "should be는 '아마 ~일 것이다'는 기대라, 집에 있을 수 없다는 확신과 맞지 않습니다." },
     },
     {
       id: "g6-2", unit: "u6",
@@ -10637,7 +10702,8 @@ body { overflow-x: clip; }
       options: ["can't", "must", "should", "might"], answer: 0,
       full: "He can't be at his desk — I just saw him walk into the meeting room.",
       kr: "그가 책상에 있을 리 없다 — 방금 회의실로 들어가는 걸 봤다.",
-      ko: "직접 본 사실과 반대되므로 '~일 리 없다'는 can't입니다. must·should·might는 여기서 상황과 맞지 않습니다."
+      ko: "직접 본 사실과 반대되므로 '~일 리 없다'는 can't입니다.",
+      wrongKo: { 1: "must be는 '틀림없이 있다'라는 뜻이라, 방금 회의실로 들어가는 걸 봤다는 사실과 반대입니다.", 2: "should be는 '아마 있다'는 기대라, 직접 본 사실과 어긋납니다.", 3: "might는 '있을지도 모른다'는 약한 가능성이라, 회의실로 들어가는 걸 봤다는 확신을 담지 못합니다." },
     },
     {
       id: "g6-3", unit: "u6",
@@ -10645,7 +10711,8 @@ body { overflow-x: clip; }
       options: ["must", "can't", "needn't", "mustn't"], answer: 0,
       full: "The light is on in her office, so she must be working late.",
       kr: "그녀 사무실 불이 켜져 있어서 야근 중인 게 틀림없다.",
-      ko: "근거를 바탕으로 '틀림없다'는 강한 추측은 must be -ing입니다."
+      ko: "근거를 바탕으로 '틀림없다'는 강한 추측은 must be -ing입니다.",
+      wrongKo: { 1: "can't be는 '~일 리 없다'라서 불이 켜져 있다는 근거와 반대가 됩니다.", 2: "needn't be는 '~할 필요가 없다'는 뜻이라 추측이 되지 않습니다.", 3: "mustn't be는 '~하면 안 된다'는 금지라 추측이 되지 않습니다." },
     },
     {
       id: "g6-4", unit: "u6",
@@ -10653,7 +10720,8 @@ body { overflow-x: clip; }
       options: ["might", "must", "can't", "mustn't"], answer: 0,
       full: "I'm not sure where the samples are — they might be in the cold room.",
       kr: "시료가 어디 있는지 확실치 않다 — 냉장실에 있을지도 모른다.",
-      ko: "확신이 없는 가능성은 might be입니다. must는 강한 확신이라 I'm not sure와 어울리지 않습니다."
+      ko: "확신이 없는 가능성은 might be입니다.",
+      wrongKo: { 1: "must be는 강한 확신이라 'I'm not sure'라는 문맥과 어울리지 않습니다.", 2: "can't be는 '있을 리 없다'는 부정 확신이라, 있을지도 모른다는 뜻과 반대입니다.", 3: "mustn't be는 '~하면 안 된다'는 금지라 가능성을 말하는 자리에 맞지 않습니다." },
     },
     {
       id: "g6-5", unit: "u6",
@@ -10661,7 +10729,8 @@ body { overflow-x: clip; }
       options: ["must have missed", "must miss", "can't have missed", "should have missed"], answer: 0,
       full: "He must have missed the email — otherwise he would have replied by now.",
       kr: "그가 메일을 못 본 게 틀림없다 — 그렇지 않으면 벌써 답장했을 테니까.",
-      ko: "과거 사실에 대한 강한 추측은 must have + p.p.입니다. can't have p.p.는 '~했을 리 없다'입니다."
+      ko: "과거 사실에 대한 강한 추측은 must have + p.p.입니다.",
+      wrongKo: { 1: "must miss는 현재 추측이라 과거의 일(벌써 답장했을 텐데)을 말하지 못합니다.", 2: "can't have missed는 '못 봤을 리 없다'라서 답장이 없는 이유를 설명하지 못합니다.", 3: "should have missed는 '못 봤어야 했다'는 뜻이 되어 이 문맥과 맞지 않습니다." },
     },
 
     /* ---------- Unit 7: 조건문 ---------- */
@@ -10671,7 +10740,8 @@ body { overflow-x: clip; }
       options: ["had", "have", "would have", "will have"], answer: 0,
       full: "If I had more time, I would double-check every figure.",
       kr: "시간이 더 있다면 모든 수치를 다시 확인할 텐데.",
-      ko: "가정법 과거: If + 과거형, would + 동사원형. 지금 사실의 반대를 상상할 때 씁니다."
+      ko: "가정법 과거: If + 과거형, would + 동사원형. 지금 사실의 반대를 상상할 때 씁니다.",
+      wrongKo: { 1: "have는 현재시제라 뒤의 would와 짝이 맞지 않습니다(가정법 과거는 If + 과거형).", 2: "would have는 if절에 쓰지 않는 형태이고, 뒤에 명사(more time)가 와서 성립하지 않습니다.", 3: "will have는 if절에 쓰지 않고, would와 함께 가정법 과거를 만들지 못합니다." },
     },
     {
       id: "g7-2", unit: "u7",
@@ -10679,7 +10749,8 @@ body { overflow-x: clip; }
       options: ["had known", "knew", "have known", "would know"], answer: 0,
       full: "If I had known about the deadline, I would have started earlier.",
       kr: "마감을 알았더라면 더 일찍 시작했을 텐데.",
-      ko: "가정법 과거완료: If + had p.p., would have p.p. 과거에 하지 못한 일에 대한 아쉬움입니다."
+      ko: "가정법 과거완료: If + had p.p., would have p.p. 과거에 하지 못한 일에 대한 아쉬움입니다.",
+      wrongKo: { 1: "knew는 가정법 과거라 뒤의 would have started(과거완료)와 시제가 맞지 않습니다.", 2: "have known은 현재완료라 if절에서 과거 사실의 반대를 나타내지 못합니다.", 3: "would know는 if절에 쓰지 않는 형태이고, 과거의 아쉬움도 담지 못합니다." },
     },
     {
       id: "g7-3", unit: "u7",
@@ -10687,7 +10758,8 @@ body { overflow-x: clip; }
       options: ["opened", "open", "will open", "would open"], answer: 0,
       full: "Would you mind if I opened the window?",
       kr: "창문을 열어도 괜찮을까요?",
-      ko: "Would you mind if I + 과거형은 정중한 허락 요청입니다. if절에는 will·would를 쓰지 않습니다."
+      ko: "Would you mind if I + 과거형은 정중한 허락 요청입니다. if절에는 will·would를 쓰지 않습니다.",
+      wrongKo: { 1: "open은 현재시제라 Would you mind if I 뒤에서 정중한 가정을 만들지 못합니다.", 2: "will open은 if절에 쓰지 않는 형태이고, Would you mind와도 어울리지 않습니다.", 3: "would open은 if절에 쓰지 않으므로 if I would open은 틀립니다." },
     },
     {
       id: "g7-4", unit: "u7",
@@ -10695,7 +10767,8 @@ body { overflow-x: clip; }
       options: ["fails", "failed", "will fail", "would fail"], answer: 0,
       full: "If the pump fails again, call the maintenance team immediately.",
       kr: "펌프가 또 고장 나면 즉시 정비팀에 연락하세요.",
-      ko: "명령문과 함께 쓰는 첫 번째 조건문은 If + 현재시제입니다. 미래 일이라도 if절에 will을 쓰지 않습니다."
+      ko: "명령문과 함께 쓰는 첫 번째 조건문은 If + 현재시제입니다. 미래 일이라도 if절에 will을 쓰지 않습니다.",
+      wrongKo: { 1: "failed는 가정법 과거라 '또 고장 나면'이라는 실제 조건을 나타내지 못합니다.", 2: "will fail은 if절에 쓰지 않으므로 미래 일이라도 If the pump will fail은 틀립니다.", 3: "would fail은 if절에 쓰지 않고, 명령문과 짝이 되는 조건도 되지 못합니다." },
     },
     {
       id: "g7-5", unit: "u7",
@@ -10703,7 +10776,8 @@ body { overflow-x: clip; }
       options: ["approve", "approved", "will approve", "would approve"], answer: 0,
       full: "Unless we approve the budget, the project will be delayed.",
       kr: "예산을 승인하지 않으면 프로젝트가 늦어질 것이다.",
-      ko: "unless는 if not의 뜻입니다. 조건절에는 현재시제를 씁니다."
+      ko: "unless는 if not의 뜻입니다. 조건절에는 현재시제를 씁니다.",
+      wrongKo: { 1: "approved는 과거형이라 '승인하지 않으면'이라는 현재 조건을 나타내지 못합니다.", 2: "will approve는 조건절(unless)에 쓰지 않으므로 형태가 틀립니다.", 3: "would approve는 조건절에 쓰지 않고, 뒤의 will be delayed와도 시제가 맞지 않습니다." },
     },
 
     /* ---------- Unit 8: 수동태 ---------- */
@@ -10713,7 +10787,8 @@ body { overflow-x: clip; }
       options: ["is being reviewed", "is reviewing", "has reviewed", "reviews"], answer: 0,
       full: "The report is being reviewed by the compliance team right now.",
       kr: "보고서는 지금 컴플라이언스 팀이 검토하고 있다.",
-      ko: "지금 진행 중인 수동은 is being + p.p.입니다. by the compliance team이 행위자를 보여 줍니다."
+      ko: "지금 진행 중인 수동은 is being + p.p.입니다. by the compliance team이 행위자를 보여 줍니다.",
+      wrongKo: { 1: "is reviewing은 능동이라 '보고서가 검토한다'가 되어 by the compliance team과 맞지 않습니다.", 2: "has reviewed는 능동 현재완료라 보고서가 검토하는 쪽이 되고, right now의 진행도 담지 못합니다.", 3: "reviews는 능동 현재시제라 보고서가 검토한다는 뜻이 되고 수동 의미가 없습니다." },
     },
     {
       id: "g8-2", unit: "u8",
@@ -10721,7 +10796,8 @@ body { overflow-x: clip; }
       options: ["must be tested", "must test", "must have test", "must being tested"], answer: 0,
       full: "All samples must be tested before the shipment leaves the plant.",
       kr: "출하 전에 모든 시료를 시험해야 한다.",
-      ko: "조동사 + be + p.p.가 수동의 기본형입니다(must be tested). must being은 형태가 틀립니다."
+      ko: "조동사 + be + p.p.가 수동의 기본형입니다(must be tested).",
+      wrongKo: { 1: "must test는 능동이라 '시료가 시험한다'가 되어, 시험받아야 한다는 뜻과 반대입니다.", 2: "must have test는 have 뒤에 과거분사가 아닌 원형이 와서 수동 형태가 되지 못합니다.", 3: "must being tested는 조동사 뒤에 being이 온 잘못된 형태입니다(must be tested)." },
     },
     {
       id: "g8-3", unit: "u8",
@@ -10729,7 +10805,8 @@ body { overflow-x: clip; }
       options: ["will be installed", "will install", "will be install", "is install"], answer: 0,
       full: "The new reactor will be installed next month.",
       kr: "새 반응기는 다음 달에 설치될 것이다.",
-      ko: "미래 수동은 will be + p.p.입니다. will be install처럼 p.p.를 빼먹지 않습니다."
+      ko: "미래 수동은 will be + p.p.입니다.",
+      wrongKo: { 1: "will install은 능동이라 '반응기가 설치한다'가 되어 주어 The new reactor와 맞지 않습니다.", 2: "will be install은 be 뒤에 과거분사 대신 원형이 와서 수동이 되지 못합니다.", 3: "is install은 be동사 뒤에 동사원형이 온 잘못된 형태이고 수동도 아닙니다." },
     },
     {
       id: "g8-4", unit: "u8",
@@ -10737,7 +10814,8 @@ body { overflow-x: clip; }
       options: ["was verified", "verified", "has verified", "is verifying"], answer: 0,
       full: "The data was verified by an external lab last year.",
       kr: "그 데이터는 작년에 외부 연구소에서 검증되었다.",
-      ko: "과거의 수동은 was/were + p.p.이고, by an external lab이 행위자를 보여 줍니다. last year라 현재완료도 아닙니다."
+      ko: "과거의 수동은 was/were + p.p.이고, by an external lab이 행위자를 보여 줍니다. last year라 현재완료도 아닙니다.",
+      wrongKo: { 1: "verified는 능동 과거라 '데이터가 검증했다'가 되어 by an external lab과 맞지 않습니다.", 2: "has verified는 능동 현재완료라 수동 의미가 없고, last year와도 함께 쓰지 않습니다.", 3: "is verifying은 능동 진행형이라 데이터가 검증하는 쪽이 되고, last year와도 맞지 않습니다." },
     },
     {
       id: "g8-5", unit: "u8",
@@ -10745,7 +10823,8 @@ body { overflow-x: clip; }
       options: ["are shown", "is shown", "are showing", "show"], answer: 0,
       full: "The results are shown in the appendix.",
       kr: "결과는 부록에 실려 있다.",
-      ko: "주어 The results가 복수라 are를 쓰고, 결과가 '보여 지는' 대상이므로 수동 are shown입니다."
+      ko: "주어 The results가 복수라 are를 쓰고, 결과가 '보여 지는' 대상이므로 수동 are shown입니다.",
+      wrongKo: { 1: "is shown은 단수 be동사라 복수 주어 The results와 맞지 않습니다.", 2: "are showing은 능동 진행이라 '결과가 보여 준다'가 되어, 부록에 실려 있다는 뜻과 다릅니다.", 3: "show는 능동 현재시제라 결과가 보여 주는 쪽이 되어 수동 의미가 없습니다." },
     },
 
     /* ---------- Unit 9: 관계사 ---------- */
@@ -10755,7 +10834,8 @@ body { overflow-x: clip; }
       options: ["who", "which", "whose", "where"], answer: 0,
       full: "The engineer who designed the pump will join the call.",
       kr: "펌프를 설계한 엔지니어가 통화에 참여할 것이다.",
-      ko: "사람 선행사 engineer를 받는 주격 관계대명사는 who입니다."
+      ko: "사람 선행사 engineer를 받는 주격 관계대명사는 who입니다.",
+      wrongKo: { 1: "which는 사물 선행사에 쓰므로 사람 engineer를 받지 못합니다.", 2: "whose는 소유를 나타내는 관계대명사라 뒤에 명사 없이 designed가 오는 자리에 맞지 않습니다.", 3: "where는 장소를 나타내는 관계부사라 사람 선행사 engineer와 맞지 않습니다." },
     },
     {
       id: "g9-2", unit: "u9",
@@ -10763,7 +10843,8 @@ body { overflow-x: clip; }
       options: ["whose", "who", "which", "where"], answer: 0,
       full: "The company whose equipment we use is based in Daejeon.",
       kr: "우리가 장비를 쓰는 그 회사는 대전에 있다.",
-      ko: "'그 회사의 장비'처럼 소유 관계를 이어 줄 때는 whose입니다."
+      ko: "'그 회사의 장비'처럼 소유 관계를 이어 줄 때는 whose입니다.",
+      wrongKo: { 1: "who는 사람 선행사에 쓰고, 뒤에 명사(equipment)를 두는 소유 관계를 만들지 못합니다.", 2: "which는 equipment 앞에서 '그 회사의'라는 소유 관계를 나타내지 못합니다.", 3: "where는 장소 관계부사라 뒤에 명사 equipment가 오는 소유 관계 자리에 맞지 않습니다." },
     },
     {
       id: "g9-3", unit: "u9",
@@ -10771,7 +10852,8 @@ body { overflow-x: clip; }
       options: ["where", "which", "who", "whose"], answer: 0,
       full: "The lab where we ran the tests is on the third floor.",
       kr: "우리가 시험을 한 실험실은 3층에 있다.",
-      ko: "장소 선행사 lab 뒤에서 '거기서'라는 뜻을 담당하는 관계부사는 where입니다."
+      ko: "장소 선행사 lab 뒤에서 '거기서'라는 뜻을 담당하는 관계부사는 where입니다.",
+      wrongKo: { 1: "which는 관계대명사라 뒤 절에 빠진 성분이 있어야 하는데, we ran the tests는 성분이 다 갖춰진 절입니다.", 2: "who는 사람 선행사에 쓰는 관계대명사라 장소 선행사 lab과 맞지 않습니다.", 3: "whose는 소유 관계를 나타내므로 '거기서 시험했다'는 장소의 뜻을 담지 못합니다." },
     },
     {
       id: "g9-4", unit: "u9",
@@ -10779,7 +10861,8 @@ body { overflow-x: clip; }
       options: ["which", "that", "who", "where"], answer: 0,
       full: "Our new sensor array, which was installed in March, has already failed.",
       kr: "3월에 설치한 새 센서 어레이가 벌써 고장 났다.",
-      ko: "쉼표로 이어지는 계속적 용법에서는 that을 쓰지 않고 which를 씁니다(사물)."
+      ko: "쉼표로 이어지는 계속적 용법에서는 which를 씁니다(사물).",
+      wrongKo: { 1: "that은 쉼표로 이어지는 계속적 용법에서는 쓸 수 없습니다.", 2: "who는 사람 선행사에 쓰므로 사물 선행사 sensor array와 맞지 않습니다.", 3: "where는 장소 관계부사라 뒤의 was installed 수동의 주어 자리를 채우지 못합니다." },
     },
     {
       id: "g9-5", unit: "u9",
@@ -10787,7 +10870,8 @@ body { overflow-x: clip; }
       options: ["who", "which", "whose", "where"], answer: 0,
       full: "My manager, who has worked here for ten years, reviewed the draft.",
       kr: "여기서 10년 일한 내 매니저가 초안을 검토했다.",
-      ko: "사람 선행사의 계속적 용법에는 who를 씁니다."
+      ko: "사람 선행사의 계속적 용법에는 who를 씁니다.",
+      wrongKo: { 1: "which는 사물 선행사에 쓰므로 사람 선행사 manager와 맞지 않습니다.", 2: "whose는 소유 관계라 뒤에 명사가 와야 하는데 has worked가 이어져 맞지 않습니다.", 3: "where는 장소 관계부사라 사람 선행사와 맞지 않습니다." },
     },
 
     /* ---------- Unit 10: 동명사 vs to부정사 ---------- */
@@ -10797,7 +10881,8 @@ body { overflow-x: clip; }
       options: ["postponing", "to postpone", "postpone", "postponed"], answer: 0,
       full: "I suggest postponing the meeting until Thursday.",
       kr: "회의를 목요일로 미루는 게 좋겠다.",
-      ko: "suggest는 동명사(-ing)를 받습니다(suggest + -ing). suggest to do는 쓰지 않습니다."
+      ko: "suggest는 동명사(-ing)를 받습니다.",
+      wrongKo: { 1: "suggest는 to부정사를 받지 않으므로 suggest to postpone은 틀립니다.", 2: "postpone은 동사원형이라 suggest 뒤 목적어 자리에 올 수 없습니다(suggest postponing).", 3: "postponed는 과거형·과거분사라 동명사 목적어 자리에 맞지 않습니다." },
     },
     {
       id: "g10-2", unit: "u10",
@@ -10805,7 +10890,8 @@ body { overflow-x: clip; }
       options: ["to delay", "delaying", "delay", "delayed"], answer: 0,
       full: "We decided to delay the pilot test.",
       kr: "우리는 파일럿 테스트를 미루기로 했다.",
-      ko: "decide는 to부정사를 받습니다(decide to + 동사원형)."
+      ko: "decide는 to부정사를 받습니다(decide to + 동사원형).",
+      wrongKo: { 1: "decide는 to부정사를 받는 동사라 뒤에 -ing(delaying)가 올 수 없습니다.", 2: "delay는 동사원형이라 decided 뒤 목적어 자리에 그대로 올 수 없습니다(decided to delay).", 3: "delayed는 과거형이라 to부정사 자리를 채우지 못합니다." },
     },
     {
       id: "g10-3", unit: "u10",
@@ -10813,7 +10899,8 @@ body { overflow-x: clip; }
       options: ["exposing", "to expose", "expose", "exposed"], answer: 0,
       full: "Please avoid exposing the samples to room temperature.",
       kr: "시료가 상온에 노출되지 않도록 하세요.",
-      ko: "avoid는 동명사를 받습니다(avoid + -ing)."
+      ko: "avoid는 동명사를 받습니다(avoid + -ing).",
+      wrongKo: { 1: "avoid는 동명사를 받는 동사라 to부정사(to expose)를 쓰지 않습니다.", 2: "expose는 동사원형이라 avoid 뒤 목적어 자리에 올 수 없습니다(avoid exposing).", 3: "exposed는 과거형·과거분사라 동명사 목적어 자리에 맞지 않습니다." },
     },
     {
       id: "g10-4", unit: "u10",
@@ -10821,7 +10908,8 @@ body { overflow-x: clip; }
       options: ["used to", "is used to", "uses to", "was used to"], answer: 0,
       full: "Our plant used to use coal, but it switched to gas in 2019.",
       kr: "우리 공장은 석탄을 썼지만 2019년에 가스로 바꿨다.",
-      ko: "used to + 동사원형은 '예전에는 ~했다'는 과거 습관입니다. is used to는 '~에 익숙하다'입니다."
+      ko: "used to + 동사원형은 '예전에는 ~했다'는 과거 습관입니다.",
+      wrongKo: { 1: "is used to는 '~에 익숙하다'라는 뜻이라 '예전에는 석탄을 썼다'는 과거 습관이 되지 않습니다.", 2: "uses to는 존재하지 않는 형태입니다(used to + 동사원형).", 3: "was used to는 '~에 익숙했다'는 뜻이라, 2019년에 가스로 바꿨다는 과거 습관과 다릅니다." },
     },
     {
       id: "g10-5", unit: "u10",
@@ -10829,7 +10917,8 @@ body { overflow-x: clip; }
       options: ["working", "work", "to work", "worked"], answer: 0,
       full: "She is used to working under pressure.",
       kr: "그녀는 압박 속에서 일하는 데 익숙하다.",
-      ko: "be used to + -ing는 '~에 익숙하다'입니다. be used to + 동사원형은 없습니다(be used to do는 '~하는 데 쓰이다')."
+      ko: "be used to + -ing는 '~에 익숙하다'입니다.",
+      wrongKo: { 1: "be used to 뒤에는 동명사가 오므로 동사원형 work는 쓸 수 없습니다.", 2: "be used to + to work는 to가 겹친 잘못된 형태입니다(be used to working).", 3: "worked는 과거형이라 전치사 to 뒤의 동명사 자리에 맞지 않습니다." },
     },
 
     /* ---------- Unit 11: 관사·불가산명사 ---------- */
@@ -10839,7 +10928,8 @@ body { overflow-x: clip; }
       options: ["some", "an", "a", "many"], answer: 0,
       full: "Could you send me some information about the new protocol?",
       kr: "새 절차에 관한 정보를 좀 보내 줄 수 있나요?",
-      ko: "information은 불가산명사라 a/an을 쓰지 않고 some으로 수량을 나타냅니다. many도 쓸 수 없습니다."
+      ko: "information은 불가산명사라 a/an을 쓰지 않고 some으로 수량을 나타냅니다.",
+      wrongKo: { 1: "an은 모음 앞 셀 수 있는 단수 명사에 붙는 부정관사라, 불가산 information과 맞지 않습니다.", 2: "a는 셀 수 있는 단수 명사에 붙는 부정관사라, 불가산 information과 맞지 않습니다.", 3: "many는 셀 수 있는 복수 명사에 쓰므로 불가산 information과 맞지 않습니다." },
     },
     {
       id: "g11-2", unit: "u11",
@@ -10847,7 +10937,8 @@ body { overflow-x: clip; }
       options: ["some", "a", "an", "many"], answer: 0,
       full: "We need some new equipment for the lab.",
       kr: "실험실에 새 장비가 좀 필요하다.",
-      ko: "equipment는 불가산명사입니다. a/an을 붙이지 않고 some으로 표현합니다."
+      ko: "equipment는 불가산명사입니다. a/an을 붙이지 않고 some으로 표현합니다.",
+      wrongKo: { 1: "a는 셀 수 있는 단수 명사에 붙는 부정관사라, 불가산 equipment와 맞지 않습니다.", 2: "an은 모음 앞 셀 수 있는 단수 명사에 붙는 부정관사라, 불가산 equipment와 맞지 않습니다.", 3: "many는 셀 수 있는 복수 명사에 쓰므로 불가산 equipment와 맞지 않습니다." },
     },
     {
       id: "g11-3", unit: "u11",
@@ -10855,7 +10946,8 @@ body { overflow-x: clip; }
       options: ["was", "were", "are", "have been"], answer: 0,
       full: "The feedback from the client was very positive.",
       kr: "고객의 피드백은 매우 긍정적이었다.",
-      ko: "feedback은 불가산명사라 단수로 취급합니다(feedback ... was)."
+      ko: "feedback은 불가산명사라 단수로 취급합니다(feedback ... was).",
+      wrongKo: { 1: "were는 복수 주어에 쓰는 be동사라 단수로 취급하는 불가산 feedback과 맞지 않습니다.", 2: "are는 복수 주어에 쓰는 be동사라 단수로 취급하는 불가산 feedback과 맞지 않습니다.", 3: "have been은 주어 feedback을 복수로 본 형태라 단수 불가산명사와 맞지 않습니다." },
     },
     {
       id: "g11-4", unit: "u11",
@@ -10863,7 +10955,8 @@ body { overflow-x: clip; }
       options: ["The", "A", "An", "Many"], answer: 0,
       full: "The information you sent was very helpful.",
       kr: "보내 주신 정보는 큰 도움이 됐다.",
-      ko: "이미 언급한 특정 정보라 정관사 the를 씁니다. information은 불가산이라 a/an을 쓸 수 없고, 관계절로 한정된 명사라 some도 맞지 않습니다."
+      ko: "이미 언급한 특정 정보라 정관사 the를 씁니다.",
+      wrongKo: { 1: "A는 불가산 information 앞에 쓸 수 없고, you sent로 한정된 특정 정보라 정관사가 필요합니다.", 2: "An은 불가산 information 앞에 쓸 수 없습니다.", 3: "Many는 셀 수 있는 복수 명사에 쓰므로 불가산 information과 맞지 않습니다." },
     },
     {
       id: "g11-5", unit: "u11",
@@ -10871,7 +10964,8 @@ body { overflow-x: clip; }
       options: ["a little", "a few", "many", "few"], answer: 0,
       full: "We have a little feedback from the pilot run.",
       kr: "파일럿 운전에서 받은 피드백이 조금 있다.",
-      ko: "불가산명사 feedback에는 a little을 씁니다. a few·many는 셀 수 있는 명사에만 씁니다."
+      ko: "불가산명사 feedback에는 a little을 씁니다.",
+      wrongKo: { 1: "a few는 셀 수 있는 복수 명사에 쓰므로 불가산 feedback과 맞지 않습니다.", 2: "many는 셀 수 있는 복수 명사에 쓰므로 불가산 feedback과 맞지 않습니다.", 3: "few는 셀 수 있는 명사에 쓰고 '거의 없다'는 부정 뜻이라, 조금 있다는 의미와도 다릅니다." },
     },
 
     /* ---------- Unit 12: 회의·업무 전치사 ---------- */
@@ -10881,7 +10975,8 @@ body { overflow-x: clip; }
       options: ["by", "until", "during", "since"], answer: 0,
       full: "Please send the draft by Friday at the latest.",
       kr: "늦어도 금요일까지 초안을 보내 주세요.",
-      ko: "by는 '~까지(마감)'입니다. until은 어떤 상태가 그때까지 계속된다는 뜻이라 마감에는 쓰지 않습니다."
+      ko: "by는 '~까지(마감)'입니다.",
+      wrongKo: { 1: "until은 어떤 상태가 그때까지 계속된다는 뜻이라 '늦어도 금요일까지 보내라'는 마감에는 쓰지 않습니다.", 2: "during은 '~동안'이라는 기간을 나타내는 전치사라 마감 시점을 말하지 못합니다.", 3: "since는 시작점을 말하는 전치사라 '~까지'라는 마감이 되지 않습니다." },
     },
     {
       id: "g12-2", unit: "u12",
@@ -10889,7 +10984,8 @@ body { overflow-x: clip; }
       options: ["until", "by", "during", "in"], answer: 0,
       full: "The machine must stay off until the repair is finished.",
       kr: "수리가 끝날 때까지 기계는 꺼 둬야 한다.",
-      ko: "'그때까지 계속 꺼 둔다'이므로 until입니다. by는 마감 시점이라 계속되는 상태와 어울리지 않습니다."
+      ko: "'그때까지 계속 꺼 둔다'이므로 until입니다.",
+      wrongKo: { 1: "by는 마감 시점이라 '수리가 끝날 때까지 계속 꺼 둔다'는 상태의 지속을 나타내지 못합니다.", 2: "during은 절(the repair is finished)이 아니라 명사 앞에 쓰므로 형태가 맞지 않습니다.", 3: "in은 '~후'라는 시점을 말할 뿐 그때까지 계속된다는 뜻이 없습니다." },
     },
     {
       id: "g12-3", unit: "u12",
@@ -10897,7 +10993,8 @@ body { overflow-x: clip; }
       options: ["During", "While", "Since", "From"], answer: 0,
       full: "During the meeting, she took detailed notes.",
       kr: "회의 중에 그녀는 자세히 메모했다.",
-      ko: "during은 명사 앞에, while은 절(주어+동사) 앞에 씁니다. the meeting은 명사입니다."
+      ko: "during은 명사 앞에 쓰는 전치사입니다. the meeting은 명사입니다.",
+      wrongKo: { 1: "while은 절(주어+동사) 앞에 쓰므로 명사 the meeting 앞에는 쓸 수 없습니다.", 2: "since는 시작점을 나타내는 전치사라 '회의 중에'라는 뜻이 되지 않습니다.", 3: "from은 '~부터'라는 시작점만 말해 '회의 중에'라는 기간의 뜻이 되지 않습니다." },
     },
     {
       id: "g12-4", unit: "u12",
@@ -10905,7 +11002,8 @@ body { overflow-x: clip; }
       options: ["While", "During", "By", "Until"], answer: 0,
       full: "While I was presenting, the projector failed.",
       kr: "내가 발표하는 동안 프로젝터가 멈췄다.",
-      ko: "while + 주어+동사(I was presenting)입니다. during 뒤에는 명사만 옵니다."
+      ko: "while + 주어+동사(I was presenting) 형태로 씁니다.",
+      wrongKo: { 1: "during 뒤에는 명사만 오므로 절(I was presenting) 앞에는 쓸 수 없습니다.", 2: "by는 '~까지'라는 마감을 나타내는 전치사라 '~하는 동안'이 되지 않습니다.", 3: "until은 '~까지 계속'이라는 뜻이라 '발표하는 동안'의 동시 상황을 나타내지 못합니다." },
     },
     {
       id: "g12-5", unit: "u12",
@@ -10913,7 +11011,8 @@ body { overflow-x: clip; }
       options: ["in charge", "responsible", "in responsible", "charged"], answer: 0,
       full: "She is in charge of the quality team.",
       kr: "그녀는 품질팀을 책임지고 있다.",
-      ko: "'~을 책임지다'는 be in charge of 또는 be responsible for입니다. responsible는 of와 쓰지 않습니다."
+      ko: "'~을 책임지다'는 be in charge of로 씁니다.",
+      wrongKo: { 1: "responsible은 of가 아니라 for와 씁니다(be responsible for).", 2: "in responsible은 전치사 in 뒤에 형용사가 온 잘못된 형태입니다(in charge of).", 3: "charged는 '청구하다·충전하다'라는 동사라 be charged of로 '책임지다'를 만들지 못합니다." },
     }
   ];
 
@@ -10954,6 +11053,20 @@ body { overflow-x: clip; }
     else d.sentences = reviewCatCount("sentences") + 1;
   }
 
+  // 보기별 오답 해설 — 보기가 섞여도 원래 인덱스로 찾는다. 정답 자리는 비운다.
+  function sanitizeWrongKo(raw, n, ans) {
+    var out = {};
+    if (!raw || typeof raw !== "object" || Array.isArray(raw)) return out;
+    var len = Math.max(0, Math.floor(Number(n) || 0));
+    for (var i = 0; i < len; i++) {
+      if (i === ans) continue;
+      var v = raw[i] == null ? raw[String(i)] : raw[i];
+      v = v == null ? "" : String(v).trim();
+      if (v) out[i] = v;
+    }
+    return out;
+  }
+
   function normalizeQuestion(raw) {
     if (!raw || typeof raw !== "object") return null;
     var prompt = String(raw.prompt || "").trim();
@@ -10984,6 +11097,7 @@ body { overflow-x: clip; }
       full: String(raw.full || prompt.replace("____", opts[ans])),
       kr: String(raw.kr || ""),
       ko: String(raw.ko || ""),
+      wrongKo: sanitizeWrongKo(raw.wrongKo, opts.length, ans),
       reps: Math.max(0, Math.floor(Number(raw.reps) || 0)),
       interval: Math.max(0, Number(raw.interval) || 0),
       ef: clamp(Number(raw.ef) || 2.5, 1.3, 3.2),
@@ -10998,18 +11112,48 @@ body { overflow-x: clip; }
 
   // 처음 열 때 60문제를 한 번만 채운다(저장은 사용자가 실제로 뭔가 할 때 함께 된다)
   function seedGrammar() {
-    if (state.grammarSeeded) return;
-    if (!state.grammar.length) {
-      var now = Date.now();
-      for (var i = 0; i < STARTER_GRAMMAR.length; i++) {
-        var q = normalizeQuestion(STARTER_GRAMMAR[i]);
-        if (!q) continue;
-        q.due = now;
-        q.createdAt = now - (STARTER_GRAMMAR.length - i) * 1000;
-        state.grammar.push(q);
+    if (!state.grammarSeeded) {
+      if (!state.grammar.length) {
+        var now = Date.now();
+        for (var i = 0; i < STARTER_GRAMMAR.length; i++) {
+          var q = normalizeQuestion(STARTER_GRAMMAR[i]);
+          if (!q) continue;
+          q.due = now;
+          q.createdAt = now - (STARTER_GRAMMAR.length - i) * 1000;
+          state.grammar.push(q);
+        }
       }
+      state.grammarSeeded = true;
     }
-    state.grammarSeeded = true;
+    // 이미 풀던 문제에도 새 해설(보기별 오답 해설 포함)을 채워 넣는다 — 진도(SM-2)는 건드리지 않는다
+    try { syncGrammarContent(); } catch (e) {}
+  }
+
+  // 저장된 문제의 정적 내용(문제·보기·정답·해설·보기별 오답 해설)을 최신 문법 데이터와 맞춘다.
+  // 학습 기록(reps·due·ef·mastered 등)은 그대로 둔다.
+  function syncGrammarContent() {
+    if (!state.grammar.length) return false;
+    var changed = false;
+    for (var i = 0; i < STARTER_GRAMMAR.length; i++) {
+      var cur = findQuestion(STARTER_GRAMMAR[i].id);
+      if (!cur) continue;
+      var ref = normalizeQuestion(STARTER_GRAMMAR[i]);
+      if (!ref) continue;
+      if (cur.prompt === ref.prompt && cur.full === ref.full && cur.kr === ref.kr &&
+          cur.ko === ref.ko && cur.answer === ref.answer &&
+          String(cur.options) === String(ref.options) &&
+          JSON.stringify(cur.wrongKo || {}) === JSON.stringify(ref.wrongKo || {})) continue;
+      cur.prompt = ref.prompt;
+      cur.options = ref.options;
+      cur.answer = ref.answer;
+      cur.full = ref.full;
+      cur.kr = ref.kr;
+      cur.ko = ref.ko;
+      cur.wrongKo = ref.wrongKo;
+      changed = true;
+    }
+    if (changed) saveStore();
+    return changed;
   }
 
   function findQuestion(id) {
@@ -11017,6 +11161,14 @@ body { overflow-x: clip; }
       if (state.grammar[i].id === id) return state.grammar[i];
     }
     return null;
+  }
+
+  // 보기 인덱스(섞이기 전 원래 자리)로 그 보기의 오답 해설을 꺼낸다.
+  function grWrongKo(q, idx) {
+    if (!q || !q.wrongKo) return "";
+    var v = q.wrongKo[idx];
+    if (v == null) v = q.wrongKo[String(idx)];
+    return v == null ? "" : String(v);
   }
 
   function logGrammarStudied(id, ts) {
@@ -11063,7 +11215,7 @@ body { overflow-x: clip; }
     for (var i = 0; i < state.grammar.length; i++) {
       var q = state.grammar[i];
       if (q.unit !== unitId) continue;
-      if (q.mastered || q.reps > 0) n++;
+      if (q.mastered || studiedOnce(q)) n++;
     }
     return n;
   }
@@ -11076,18 +11228,35 @@ body { overflow-x: clip; }
     return n;
   }
 
-  // 문법 탭 머리말의 '오늘 남은 문제' 기준(새 문제 포함) — 복습 탭은 reviewDueGrammar()를 쓴다
+  // 문법 탭 머리말의 '학습 완료 N / M' 기준(유닛 필터 적용) — 복습 탭은 reviewDueGrammar()를 쓴다
   function grDueAllCount() {
     return leftTodayGrammar();
   }
 
-  function grDueCount() {
-    var now = Date.now();
+  function grDoneCount() {
     var n = 0;
     for (var i = 0; i < state.grammar.length; i++) {
       var q = state.grammar[i];
       if (!grInUnit(q)) continue;
-      if (isDueBy(q, now)) n++;
+      if (q.mastered || studiedOnce(q)) n++;
+    }
+    return n;
+  }
+
+  function grVisibleTotal() {
+    var n = 0;
+    for (var i = 0; i < state.grammar.length; i++) {
+      if (grInUnit(state.grammar[i])) n++;
+    }
+    return n;
+  }
+
+  function grUnstudiedCount() {
+    var n = 0;
+    for (var i = 0; i < state.grammar.length; i++) {
+      var q = state.grammar[i];
+      if (!grInUnit(q)) continue;
+      if (!studiedOnce(q) && !q.mastered) n++;
     }
     return n;
   }
@@ -11159,12 +11328,12 @@ body { overflow-x: clip; }
     return n;
   }
 
-  // 한 번이라도 푼 문제 수(유닛 타일의 진도 표시와 같은 기준)
+  // 한 번이라도 푼 문제 수(유닛 타일의 진도 표시와 같은 기준) — 오답(모름)도 '학습'으로 센다
   function grSolvedCount() {
     var n = 0;
     for (var i = 0; i < state.grammar.length; i++) {
       var q = state.grammar[i];
-      if (q.mastered || q.reps > 0) n++;
+      if (q.mastered || studiedOnce(q)) n++;
     }
     return n;
   }
@@ -11217,9 +11386,36 @@ body { overflow-x: clip; }
     return reviewDueSentences();
   }
 
-  // 필터를 적용한 오늘 복습할 개수(복습 탭의 배지·한 판 큐) — 이미 학습한 항목만 센다
+  // 필터를 적용한 오늘 복습할 개수(복습 탭의 배지·한 판 큐) — 이미 학습한 항목만 센다.
+  // 각 하위 탭의 배지는 '그 탭에서 지금 시작하면 들어오는 큐'(언어 필터 포함)와 정확히 같아야 한다.
   function rvDueOf(cat) {
-    return reviewDue(cat);
+    var end = endOfToday();
+    var i, n = 0;
+    if (cat === "words") {
+      for (i = 0; i < state.words.length; i++) {
+        var w = state.words[i];
+        if (studiedOnce(w) && isDueBy(w, end) && rvLangOk(w.lang)) n++;
+      }
+      return n;
+    }
+    if (cat === "grammar") {
+      // 복습 탭의 문법은 영어 문제만 있다 — 독일어 필터에서는 큐가 비어 있다
+      if (rvLang === "de") return 0;
+      for (i = 0; i < state.grammar.length; i++) {
+        if (studiedOnce(state.grammar[i]) && isDueBy(state.grammar[i], end)) n++;
+      }
+      return n;
+    }
+    for (i = 0; i < state.cards.length; i++) {
+      var c = state.cards[i];
+      if (studiedOnce(c) && isDueBy(c, end) && rvLangOk(c.lang)) n++;
+    }
+    return n;
+  }
+
+  // 상단 '복습 N' = 하위 세 배지(단어·문법·문장)의 합 — 항상 같은 함수로 센다
+  function rvDueBadgeTotal() {
+    return rvDueOf("words") + rvDueOf("grammar") + rvDueOf("sentences");
   }
 
   // 필터와 무관한 전체 개수(오늘 목표 판정·상단 복습 배지)
@@ -11362,7 +11558,14 @@ body { overflow-x: clip; }
     h += '<div class="gr-explain"' + (this.answered ? "" : " hidden") + ">";
     h += '<div class="gr-result ' + (this.correct ? "ok" : "no") + '">' +
       (this.correct ? "⭕ 정답! 앎으로 기록됨" : "❌ 오답 — 모름(10분 뒤 복습)으로 기록됨 · 정답은 '" + esc(q.options[q.answer]) + "'") + "</div>";
-    h += '<div class="gr-why">' + esc(q.ko) + "</div>";
+    h += '<div class="gr-why">';
+    // 오답이면 '내가 고른 그 보기'가 왜 틀렸는지를 먼저, 그다음 핵심 규칙(q.ko)
+    var pickKo = (!this.correct && this.picked >= 0) ? grWrongKo(q, this.order[this.picked]) : "";
+    if (pickKo) {
+      h += '<div class="gr-pick"><b>고른 &#39;' + esc(q.options[this.order[this.picked]]) + '&#39;</b> ' + esc(pickKo) + "</div>";
+    }
+    h += '<div class="gr-rule">' + esc(q.ko) + "</div>";
+    h += "</div>";
     h += '<div class="gr-full">' + esc(q.full) + "</div>";
     if (q.kr) h += '<div class="gr-kr">' + esc(q.kr) + "</div>";
     h += '<button type="button" class="btn ghost wide gr-listen" data-gsay="last">🔊 소리 다시 듣기</button>';
@@ -11435,7 +11638,7 @@ body { overflow-x: clip; }
     grScrollIntoView();
     // 발음은 '보기를 고른 직후' 한 번만 — 문제가 새로 뜰 때(다음/건너뛰기/이전)는 읽지 않는다
     try { autoSpeak(q.full || q.prompt, lastSayTag); } catch (e) {}
-    undoOffer(undoSnapNow);
+    undoOffer(undoSnapNow, this.correct ? "정답 — 앎으로 저장했어요" : "오답 — 모름(10분)으로 저장했어요");
     if (!this.correct) hintOfferAfter(q.id);
   };
 
@@ -11668,8 +11871,7 @@ body { overflow-x: clip; }
     renderReviewWords(false);
     rwAutoSpeak();            // 다음 단어가 떠면 발음을 한 번 먼저
     try { updateWordBadge(); } catch (e) {}
-    toast(grade === "mastered" ? "외움 완료 · " + w.word : label + " 다시 봐요 · " + w.word);
-    undoOffer(undoSnapNow);
+    undoOffer(undoSnapNow, grade === "mastered" ? "외움 완료 · " + w.word : label + " 다시 봐요 · " + w.word);
     if (grade === "hard") hintOfferAfter(w.id);
   }
 
@@ -11824,6 +12026,7 @@ body { overflow-x: clip; }
     if (undoTimer) { clearTimeout(undoTimer); undoTimer = 0; }
     var t = el("undoToast");
     if (t) { t.hidden = true; t.classList.remove("show"); }
+    try { document.body.classList.remove("undo-open"); } catch (e) {}
   }
 
   function undoCaptureFor(ctx, id, sess) {
@@ -11849,10 +12052,11 @@ body { overflow-x: clip; }
     return s;
   }
 
-  function undoOffer(snap) {
+  // 평가 안내와 '되돌리기'를 한 장의 스낵바로 묶어 4초 보여 준다 — 따로 toast()를 띄우지 않는다
+  function undoOffer(snap, msg) {
     if (!snap) return;
     undoSnap = snap;
-    // 같은 자리에 겹치지 않도록 일반 토스트는 잠시 내린다(되돌리기가 그 자리를 대신한다)
+    // 같은 자리에 겹치지 않도록 일반 토스트는 내린다(이 스낵바가 그 자리를 대신한다)
     try {
       var plain = el("toast");
       if (plain) plain.classList.remove("show");
@@ -11860,9 +12064,12 @@ body { overflow-x: clip; }
     } catch (e) {}
     var t = el("undoToast");
     if (!t) return;
+    var m = el("undoMsg");
+    if (m) m.textContent = msg ? String(msg) : "방금 평가를 저장했어요";
     t.hidden = false;
     void t.offsetWidth;
     t.classList.add("show");
+    try { document.body.classList.add("undo-open"); } catch (e) {}
     if (undoTimer) clearTimeout(undoTimer);
     undoTimer = setTimeout(undoHide, 4000);
   }
@@ -12051,7 +12258,7 @@ body { overflow-x: clip; }
     }
     if (el("rvAllClear")) el("rvAllClear").hidden = !rvAllClear();
     if (el("dueBadge")) {
-      var tot3 = reviewDueSentences() + reviewDueWords() + reviewDueGrammar();
+      var tot3 = rvDueBadgeTotal();
       el("dueBadge").textContent = tot3 > 999 ? "999+" : String(tot3);
       el("dueBadge").classList.toggle("zero", tot3 === 0);
     }
@@ -12088,9 +12295,47 @@ body { overflow-x: clip; }
     renderReviewWords(false);
     grr.startSession();
     grr.render(false);
+    // 복습 > 문장이 진행 중이면 그 자리에서 큐를 새 언어로 다시 짠다(진행 중 필터가 안 먹던 버그)
+    try { rvRebuildForLang(); } catch (e) {}
     try { refreshReviewStart(); } catch (e) {}
     updateReviewSubCounts();
     toast(rvLang === "all" ? "복습 언어: 전체" : (rvLang === "en" ? "복습 언어: 영어" : "복습 언어: 독일어"));
+  }
+
+  // 복습 > 문장: 언어 필터가 바뀔 때 판을 즉시 다시 만든다.
+  //  - 시작 전: 개수·시작 버튼만 갱신(refreshReviewStart)
+  //  - 진행 중: 같은 자리에서 새 언어 큐로 교체, 그 언어에 카드가 없으면 판을 접고 시작 패널로
+  function rvRebuildForLang() {
+    var end = endOfToday();
+    var list = state.cards.filter(function (c) {
+      return studiedOnce(c) && isDueBy(c, end) && rvLangOk(cardLang(c));
+    });
+    if (!rv.active) return;
+    if (!list.length) {
+      rv.active = false;
+      rv.queue = [];
+      rv.idx = 0;
+      rv.current = null;
+      rv.revealed = false;
+      if (rv.player) { try { rv.player.pause(); } catch (e) {} }
+      historyDropSilent();
+      if (el("reviewStage")) el("reviewStage").hidden = true;
+      if (el("reviewDone")) el("reviewDone").hidden = true;
+      if (el("reviewStartPanel")) el("reviewStartPanel").hidden = false;
+      return;
+    }
+    list.sort(typeof rvSmartSort === "function" ? rvSmartSort : function (a, b) { return a.due - b.due; });
+    if (list.length > RV_CAP) list = list.slice(0, RV_CAP);
+    rv.queue = list;
+    rv.idx = 0;
+    rv.done = 0;
+    rv.mastered = 0;
+    rv.revealed = false;
+    rv.rq = {};
+    if (el("reviewDone")) el("reviewDone").hidden = true;
+    if (el("reviewStartPanel")) el("reviewStartPanel").hidden = true;
+    if (el("reviewStage")) el("reviewStage").hidden = false;
+    showCard();
   }
 
   function rvSetSub(name) {
@@ -12111,9 +12356,9 @@ body { overflow-x: clip; }
     var now = Date.now();
     if (el("grToday")) el("grToday").textContent = String(grammarDayCount(dayKey(now)));
     if (el("grStreak")) el("grStreak").textContent = String(grammarStreak(now));
-    if (el("grDue")) el("grDue").textContent = String(leftTodayGrammar());
-    if (el("grTotal")) el("grTotal").textContent = String(state.grammar.length);
-    if (el("grModeTodayN")) el("grModeTodayN").textContent = String(leftTodayGrammar());
+    if (el("grDue")) el("grDue").textContent = String(grDoneCount());
+    if (el("grTotal")) el("grTotal").textContent = String(grVisibleTotal());
+    if (el("grModeTodayN")) el("grModeTodayN").textContent = String(grUnstudiedCount());
     if (el("grModeWrongN")) el("grModeWrongN").textContent = String(grWrongCount());
     if (el("grModeToday")) {
       el("grModeToday").classList.toggle("on", gr.mode === "today");
@@ -12178,7 +12423,7 @@ body { overflow-x: clip; }
     grs.idx = 0;
     grs.prepare();
     renderGrammarTab(false);
-    toast((gr.mode === "wrong" ? "틀린 문제 " : "오늘 풀 문제 ") + grs.queue.length + "개");
+    toast((gr.mode === "wrong" ? "틀린 문제 " : "문법 문제 ") + grs.queue.length + "개");
   }
 
   /* ---------- 문법 탭: 유닛 자세히 보기 (history.pushState / popstate) ---------- */
@@ -12427,7 +12672,7 @@ body { overflow-x: clip; }
   function refreshAfterDayChange() {
     activeDayKey = dayKey(Date.now());
     try { reviewDayState(); } catch (e) {}
-    try { if (el("grModeTodayN")) el("grModeTodayN").textContent = String(leftTodayGrammar()); } catch (e) {}
+    try { if (el("grModeTodayN")) el("grModeTodayN").textContent = String(grUnstudiedCount()); } catch (e) {}
     try { grs.build(); grs.idx = 0; grs.prepare(); grs.render(false); } catch (e) {}
     try { grr.build(); grr.idx = 0; grr.prepare(); grr.render(false); } catch (e) {}
     try { rwStartSession(); renderReviewWords(false); } catch (e) {}
