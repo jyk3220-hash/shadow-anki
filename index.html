@@ -705,6 +705,22 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.5; }
 .sl-col.today .sl-date { color: var(--text); font-weight: 800; }
 .sl-foot { margin-top: 9px; font-size: 11px; color: #5f6d85; line-height: 1.5; }
 
+/* 잔잔한 성취감 — 오늘 목표 pill (막지 않는 한 줄 표시) */
+.goal-line { display: flex; margin: 10px 0 0; }
+.goal-line.rv { margin: 0 0 12px; }
+.goal-pill {
+  display: inline-flex; align-items: center; gap: 8px; max-width: 100%;
+  padding: 4px 11px 4px 10px; border-radius: 999px; border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03); color: var(--muted);
+  font-size: 12.5px; font-weight: 750; letter-spacing: -0.01em; line-height: 1.45;
+}
+.goal-pill .gp-bar { flex: 0 0 auto; width: 54px; height: 4px; border-radius: 99px; background: rgba(255, 255, 255, 0.11); overflow: hidden; }
+.goal-pill .gp-bar i { display: block; height: 100%; width: 0; border-radius: 99px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width 0.35s ease; }
+.goal-pill b { color: var(--text); font-weight: 850; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.goal-pill.done { border-color: rgba(61, 220, 151, 0.42); background: rgba(61, 220, 151, 0.10); color: #b8ffdf; }
+.goal-pill.done b { color: #b8ffdf; }
+.goal-pill.done .gp-bar i { background: linear-gradient(90deg, #8bf0c4, var(--good)); }
+
 .review-topline {
   display: flex;
   justify-content: space-between;
@@ -1075,7 +1091,7 @@ kbd {
 .pack-name { font-weight: 800; font-size: 15px; letter-spacing: -0.02em; line-height: 1.3; }
 .pack-sub { font-size: 11.5px; color: var(--muted-2); font-weight: 650; margin-top: 3px; line-height: 1.5; }
 .pack-desc { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
-.pack-bar { height: 6px; border-radius: 99px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
+.pack-bar { height: 4px; border-radius: 99px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
 .pack-bar i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width 0.3s ease; }
 .pack-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 11.5px; color: var(--muted-2); font-weight: 700; }
 .pack-meta .m-done { color: #b8ffdf; }
@@ -1533,7 +1549,11 @@ kbd {
 .gr-unit { border: 1px solid var(--line); background: rgba(255, 255, 255, 0.03); color: var(--muted); border-radius: 11px; padding: 5px 3px 6px; font-weight: 700; line-height: 1.18; display: flex; flex-direction: column; align-items: center; gap: 0; min-width: 0; }
 .gr-unit .n { font-size: 8.5px; font-weight: 800; color: var(--muted-2); letter-spacing: 0.02em; }
 .gr-unit .s { font-size: 11px; font-weight: 750; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.gr-unit .c { font-size: 9px; font-weight: 700; color: var(--muted-2); }
+.gr-unit .c { font-size: 9px; font-weight: 700; color: var(--muted-2); font-variant-numeric: tabular-nums; }
+.gr-unit .gbar { width: 100%; height: 3px; margin-top: 4px; border-radius: 99px; background: rgba(255, 255, 255, 0.09); overflow: hidden; }
+.gr-unit .gbar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, rgba(124, 140, 255, 0.95), rgba(169, 112, 255, 0.9)); }
+.gr-unit.on .gbar { background: rgba(255, 255, 255, 0.3); }
+.gr-unit.on .gbar i { background: #fff; }
 .gr-unit.on { color: #fff; background: linear-gradient(135deg, rgba(124, 140, 255, 0.95), rgba(169, 112, 255, 0.9)); border-color: transparent; box-shadow: 0 8px 20px -14px rgba(124, 140, 255, 1); }
 .gr-unit.on .n, .gr-unit.on .c { color: rgba(255, 255, 255, 0.82); }
 @media (min-width: 700px) { .gr-units { grid-template-columns: repeat(7, minmax(0, 1fr)); } }
@@ -2024,6 +2044,8 @@ body { overflow-x: clip; }
         </div>
       </div>
 
+      <div class="goal-line rv"><span class="goal-pill" id="goalPillRv" role="status" aria-live="polite"></span></div>
+
       <div id="rvPaneSentences" hidden>
 
       <div class="card review-start" id="reviewStartPanel">
@@ -2142,6 +2164,7 @@ body { overflow-x: clip; }
           <button type="button" class="sl-tab" data-range="14">14일</button>
         </div>
       </div>
+      <div class="goal-line"><span class="goal-pill" id="goalPillLib" role="status" aria-live="polite"></span></div>
       <div class="sl-chart" id="slChart" data-range="7" role="img" aria-label="최근 일별 학습 문장 수"></div>
       <div class="sl-foot" id="slFoot">문장을 하나 평가하거나 저장하면 그날 1문장으로 세요. 같은 문장은 하루에 한 번만 셉니다. 단어장에서 외운 단어는 단어장 탭에 따로 셉니다.</div>
     </div>
@@ -2565,6 +2588,7 @@ body { overflow-x: clip; }
     grammarSeeded: false,// 문법 문제를 한 번 넣었는지
     reviewDay: null,     // 오늘 영역별(단어·문법·문장) 복습 횟수 — 복습 20개 목표 판정
     hints: {},           // '모름'으로 넘긴 카드에 적어 둔 한 줄 힌트(id → {text, at})
+    milestones: {},      // 잔잔한 성취감 알림 — 한 번만 뜨는 마일스톤 기록(key → 시각)
     lastBackupAt: 0      // 마지막으로 백업 파일을 내려받은 시각(라이브러리의 백업 알림)
   };
 
@@ -2583,6 +2607,7 @@ body { overflow-x: clip; }
         grammarSeeded: !!state.grammarSeeded,
         reviewDay: state.reviewDay || null,
         hints: state.hints || {},
+        milestones: state.milestones || {},
         lastBackupAt: state.lastBackupAt || 0,
         savedAt: Date.now()
       }));
@@ -2684,6 +2709,7 @@ body { overflow-x: clip; }
       };
     }
     state.hints = sanitizeHints(data.hints);
+    state.milestones = sanitizeMilestones(data.milestones);
     state.wordsSeeded = !!data.wordsSeeded || state.words.length > 0;
     state.wordsSeedVersion = Math.max(0, Math.floor(Number(data.wordsSeedVersion) || (data.wordsSeeded ? 1 : 0)));
     if (isFinite(Number(data.lastBackupAt)) && Number(data.lastBackupAt) > 0) {
@@ -2785,6 +2811,34 @@ body { overflow-x: clip; }
     return out;
   }
 
+  // 마일스톤 기록은 정해진 키만, 시각(ms)만 남긴다(백업·합치기에 그대로 실린다)
+  var MILESTONE_KEY_RE = /^(first-mastered|goal-(\d{4}-\d{2}-\d{2})|streak-(3|7|14|30)|total-(50|100|300))$/;
+  function sanitizeMilestones(raw) {
+    var out = {};
+    if (!raw || typeof raw !== "object" || Array.isArray(raw)) return out;
+    var keys = Object.keys(raw).slice(0, 4000);
+    for (var i = 0; i < keys.length; i++) {
+      var key = String(keys[i] || "").slice(0, 40);
+      if (!MILESTONE_KEY_RE.test(key)) continue;
+      var at = Math.floor(Number(raw[keys[i]]) || 0);
+      out[key] = at > 0 ? at : 1;
+    }
+    return out;
+  }
+
+  // 백업을 합칠 때: 양쪽 어느 쪽에서든 달성한 마일스톤은 남기고, 시각은 이른 쪽을 쓴다
+  function mergeMilestones(raw) {
+    var inc = sanitizeMilestones(raw);
+    var added = 0;
+    if (!state.milestones) state.milestones = {};
+    for (var k in inc) {
+      if (!Object.prototype.hasOwnProperty.call(inc, k)) continue;
+      if (!state.milestones[k]) { state.milestones[k] = inc[k]; added++; }
+      else state.milestones[k] = Math.min(state.milestones[k], inc[k]);
+    }
+    return added;
+  }
+
   function sanitizeDailyLog(raw) {
     var out = {};
     if (!raw || typeof raw !== "object" || Array.isArray(raw)) return out;
@@ -2876,6 +2930,150 @@ body { overflow-x: clip; }
       b.classList.toggle("on", on);
       b.setAttribute("aria-pressed", on ? "true" : "false");
     });
+    try { renderGoalPills(now); } catch (e) {}
+  }
+
+  /* =========================================================
+     잔잔한 성취감 — 오늘 목표 · 한 번만 뜨는 마일스톤
+     (XP · 리그 · 요란한 애니메이션 없이 조용히 쌓이는 느낌만)
+     ========================================================= */
+  var DAILY_GOAL = 10;
+
+  // 오늘 평가한 항목(쉐도잉 문장 + 단어장 + 문법) — 같은 항목은 하루에 한 번만 센다
+  function todayTotalCount(ts) {
+    var k = dayKey(ts);
+    return dayCount(k) + wordDayCount(k) + grammarDayCount(k);
+  }
+
+  // 지금까지 한 번이라도 평가한 항목(문장·단어·문법)의 고유 개수
+  // (지운 카드도 학습 기록에 남아 있으면 센다 — 쌓인 시간은 사라지지 않으니까)
+  function cumulativeStudiedCount() {
+    var seen = {}, n = 0;
+    function add(prefix, id) {
+      id = String(id || "");
+      if (!id) return;
+      var key = prefix + "|" + id;
+      if (seen[key]) return;
+      seen[key] = 1;
+      n++;
+    }
+    var logs = [state.dailyLog, state.wordLog, state.grammarLog];
+    var prefixes = ["s", "w", "g"];
+    for (var li = 0; li < logs.length; li++) {
+      var log = logs[li] || {};
+      for (var k in log) {
+        if (!Object.prototype.hasOwnProperty.call(log, k)) continue;
+        var list = log[k] || [];
+        for (var i = 0; i < list.length; i++) add(prefixes[li], list[i]);
+      }
+    }
+    var groups = [state.cards, state.words, state.grammar];
+    for (var gi = 0; gi < groups.length; gi++) {
+      var arr = groups[gi] || [];
+      for (var j = 0; j < arr.length; j++) {
+        if (studiedOnce(arr[j])) add(prefixes[gi], arr[j].id);
+      }
+    }
+    return n;
+  }
+
+  function goalPillInner(n) {
+    var done = n >= DAILY_GOAL;
+    if (done) {
+      return '<span class="gp-bar"><i style="width:100%"></i></span><b>오늘 목표 달성 ✓</b>';
+    }
+    var pct = Math.max(0, Math.min(100, Math.round((n / DAILY_GOAL) * 100)));
+    return '<span class="gp-bar"><i style="width:' + pct + '%"></i></span>오늘 목표 <b>' +
+      Math.max(0, n) + " / " + DAILY_GOAL + "</b>";
+  }
+
+  // 복습 탭과 라이브러리 학습 기록 위에 같은 한 줄을 조용히 맞춘다
+  function renderGoalPills(ts) {
+    var n = todayTotalCount(ts);
+    var done = n >= DAILY_GOAL;
+    var html = goalPillInner(n);
+    var ids = ["goalPillLib", "goalPillRv"];
+    for (var i = 0; i < ids.length; i++) {
+      var node = el(ids[i]);
+      if (!node) continue;
+      if (node.innerHTML !== html) node.innerHTML = html;
+      node.classList.toggle("done", done);
+      node.setAttribute("aria-label", done
+        ? "오늘 목표 " + DAILY_GOAL + "개 달성"
+        : "오늘 목표 " + Math.max(0, n) + " / " + DAILY_GOAL);
+    }
+  }
+
+  function milestoneEarned(key) {
+    return !!(state.milestones && state.milestones[key]);
+  }
+
+  function milestoneEarn(key, at) {
+    if (milestoneEarned(key)) return false;
+    if (!state.milestones) state.milestones = {};
+    state.milestones[key] = Number(at) || Date.now();
+    return true;
+  }
+
+  var milestoneQueue = [];
+  var milestoneTimer = null;
+
+  // 저장 토스트를 가리지 않도록 잠시 뒤에, 여러 개면 하나씩 천천히
+  function queueMilestone(msg) {
+    if (!msg) return;
+    milestoneQueue.push(msg);
+    if (milestoneTimer) return;
+    milestoneTimer = setTimeout(pumpMilestone, 2700);
+  }
+
+  function pumpMilestone() {
+    milestoneTimer = null;
+    var msg = milestoneQueue.shift();
+    if (!msg) return;
+    toast(msg);
+    if (milestoneQueue.length) milestoneTimer = setTimeout(pumpMilestone, 2900);
+  }
+
+  // 평가가 끝날 때마다 조용히 확인한다 — 이미 지난 마일스톤은 다시 뜨지 않는다
+  function checkMilestones() {
+    var now = Date.now();
+    var earned = [];
+    if (state.cards && state.cards.some(function (c) { return c && c.mastered; })) {
+      if (milestoneEarn("first-mastered", now)) earned.push("첫 '외움' 달성 🏆! 천천히 쌓이고 있어요.");
+    }
+    if (todayTotalCount(now) >= DAILY_GOAL) {
+      if (milestoneEarn("goal-" + dayKey(now), now)) {
+        earned.push("오늘 목표 " + DAILY_GOAL + "개 달성 ✓ 수고하셨어요!");
+      }
+    }
+    var streak = appStreak(now);
+    [3, 7, 14, 30].forEach(function (n) {
+      if (streak < n) return;
+      if (milestoneEarn("streak-" + n, now)) earned.push("연속 " + n + "일 달성 🔥");
+    });
+    var cum = cumulativeStudiedCount();
+    [50, 100, 300].forEach(function (n) {
+      if (cum < n) return;
+      if (milestoneEarn("total-" + n, now)) earned.push("누적 " + n + "개 학습 달성 ✨");
+    });
+    if (!earned.length) return false;
+    saveStore();
+    for (var i = 0; i < earned.length; i++) queueMilestone(earned[i]);
+    return true;
+  }
+
+  // 새 버전을 처음 열었을 때 이미 지나온 지점은 조용히 기록만 해 둔다
+  // (지난 진도가 뒤늦은 알림으로 한꺼번에 쏟아지지 않게)
+  function milestoneBackfill() {
+    var now = Date.now(), changed = false;
+    function mark(key) { if (milestoneEarn(key, now)) changed = true; }
+    if (state.cards && state.cards.some(function (c) { return c && c.mastered; })) mark("first-mastered");
+    if (todayTotalCount(now) >= DAILY_GOAL) mark("goal-" + dayKey(now));
+    var streak = appStreak(now);
+    [3, 7, 14, 30].forEach(function (n) { if (streak >= n) mark("streak-" + n); });
+    var cum = cumulativeStudiedCount();
+    [50, 100, 300].forEach(function (n) { if (cum >= n) mark("total-" + n); });
+    if (changed) saveStore();
   }
 
   /* 기본 샘플 카드는 넣지 않는다 — 처음 설치한 화면은 카드 0장에서 시작하고,
@@ -6956,16 +7154,17 @@ body { overflow-x: clip; }
   }
 
   function packStats(pack) {
-    var saved = 0, mastered = 0, dueNow = 0;
+    var saved = 0, studied = 0, mastered = 0, dueNow = 0;
     var now = Date.now();
     for (var i = 0; i < pack.cards.length; i++) {
       var c = packDeckCard(pack, i);
       if (!c) continue;
       saved++;
+      if (studiedOnce(c)) studied++;
       if (c.mastered) mastered++;
       else if (isDueBy(c, now)) dueNow++;
     }
-    return { saved: saved, mastered: mastered, dueNow: dueNow, total: pack.cards.length };
+    return { saved: saved, studied: studied, mastered: mastered, dueNow: dueNow, total: pack.cards.length };
   }
 
   // 이 팩에서 지금 복습할 카드(저장됐고, 외우지 않았고, due가 지난 것)
@@ -7058,7 +7257,7 @@ body { overflow-x: clip; }
     for (var i = 0; i < CURATED_PACKS.length; i++) {
       var pack = CURATED_PACKS[i];
       var st = packStats(pack);
-      var pct = st.total ? Math.round((st.saved / st.total) * 100) : 0;
+      var pct = st.total ? Math.round((st.studied / st.total) * 100) : 0;
       html += '<div class="pack-card" data-pack="' + esc(pack.id) + '">' +
         '<div class="pack-card-top">' +
           '<div class="pack-emoji" aria-hidden="true">' + pack.emoji + "</div>" +
@@ -7071,9 +7270,10 @@ body { overflow-x: clip; }
             : "") +
         "</div>" +
         '<div class="pack-desc">' + esc(pack.desc) + "</div>" +
-        '<div class="pack-bar"><i style="width:' + pct + '%"></i></div>' +
-        '<div class="pack-meta"><span>저장 ' + st.saved + " / " + st.total + "</span>" +
-          (st.mastered ? '<span class="m-done">외움 ' + st.mastered + "</span>" : "<span>통째로 누르면 저장</span>") +
+        '<div class="pack-bar" title="학습 ' + st.studied + " / " + st.total + " · 외움 " + st.mastered + '"><i style="width:' + pct + '%"></i></div>' +
+        '<div class="pack-meta"><span>학습 ' + st.studied + " / " + st.total + "</span>" +
+          (st.mastered ? '<span class="m-done">외움 ' + st.mastered + "</span>"
+            : (st.saved ? "<span>저장 " + st.saved + "</span>" : "<span>통째로 누르면 저장</span>")) +
         "</div>" +
         '<button class="btn primary" data-open="' + esc(pack.id) + '">' +
           (st.saved ? "이어서 하기" : "시작하기") + "</button>" +
@@ -7427,6 +7627,7 @@ body { overflow-x: clip; }
       }
     } catch (e) {}
     try { refreshTodayCounts(); } catch (e) {}
+    try { checkMilestones(); } catch (e) {}
     try { renderPackMini(); } catch (e) {}
     try { renderPacks(); } catch (e) {}
     try { toast(grade === "mastered" ? "외움 완료로 저장했어요." : "저장 완료 · " + res.label + " 복습"); } catch (e) {}
@@ -7713,7 +7914,8 @@ body { overflow-x: clip; }
       grammarLog: state.grammarLog,
       grammarSeeded: !!state.grammarSeeded,
       reviewDay: state.reviewDay || null,
-      hints: state.hints || {}
+      hints: state.hints || {},
+      milestones: state.milestones || {}
     };
     var blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
     var url = URL.createObjectURL(blob);
@@ -7846,6 +8048,9 @@ body { overflow-x: clip; }
         if (!state.hints[hid]) hAdded++;
         state.hints[hid] = incomingHints[hid];
       }
+
+      // 마일스톤도 합친다 — 어느 기기에서든 달성한 것은 다시 뜨지 않게 그대로 남긴다
+      mergeMilestones(!Array.isArray(data) ? data.milestones : null);
 
       // 오늘 복습 횟수는 같은 날이면 큰 값을 남긴다(다른 기기 백업을 합칠 때)
       if (data && data.reviewDay && typeof data.reviewDay === "object" && data.reviewDay.day) {
@@ -8149,6 +8354,7 @@ body { overflow-x: clip; }
     logStudied(c.id, Date.now());
     saveStore();
     try { refreshTodayCounts(); } catch (e) {}
+    try { checkMilestones(); } catch (e) {}
     rv.idx++;
     showCard();
     undoOffer(undoSnapNow);
@@ -9987,6 +10193,7 @@ body { overflow-x: clip; }
     saveStore();
     updateWordBadge();
     try { refreshTodayCounts(); } catch (e) {}
+    try { checkMilestones(); } catch (e) {}
     vwSetFace(false, false);
     // 평가한 단어는 간격이 뒤로 밀리므로, 목록과 같은 순서로 다시 세우고 맨 앞(가장 급한 단어)으로 간다
     vwBuildQueue();
@@ -10152,6 +10359,8 @@ body { overflow-x: clip; }
       if (e.key === "Enter") { e.preventDefault(); vwAddWord(); }
     });
     el("vwFlip").addEventListener("keydown", function (e) {
+      // 카드 안의 발음 버튼에 포커스가 있을 때 Enter/Space는 그 버튼 몫이다(카드까지 뒤집지 않게)
+      if (e.target && e.target.closest && e.target.closest("[data-say]")) return;
       if (e.key === "Enter" || e.code === "Space" || e.key === " ") {
         e.preventDefault();
         vwSetFace(!vw.flipped, true);
@@ -10950,6 +11159,16 @@ body { overflow-x: clip; }
     return n;
   }
 
+  // 한 번이라도 푼 문제 수(유닛 타일의 진도 표시와 같은 기준)
+  function grSolvedCount() {
+    var n = 0;
+    for (var i = 0; i < state.grammar.length; i++) {
+      var q = state.grammar[i];
+      if (q.mastered || q.reps > 0) n++;
+    }
+    return n;
+  }
+
   function grSentenceHTML(q, answered) {
     if (!q) return "";
     var parts = String(q.prompt).split("____");
@@ -11211,6 +11430,7 @@ body { overflow-x: clip; }
     }
     saveStore();
     try { refreshTodayCounts(); } catch (e) {}
+    try { checkMilestones(); } catch (e) {}
     this.render(false);
     grScrollIntoView();
     // 발음은 '보기를 고른 직후' 한 번만 — 문제가 새로 뜰 때(다음/건너뛰기/이전)는 읽지 않는다
@@ -11431,6 +11651,7 @@ body { overflow-x: clip; }
     noteReviewDone("words");
     saveStore();
     try { refreshTodayCounts(); } catch (e) {}
+    try { checkMilestones(); } catch (e) {}
     rws.flipped = false;
     rws.doneCount++;
     // '모름'은 세션에서 지우지 않는다 — 3~5자리 뒤에 다시 넣어 이번 판에서 한 번 더 본다
@@ -11904,13 +12125,15 @@ body { overflow-x: clip; }
     }
 
     var tiles = ['<button type="button" class="gr-unit' + (gr.unit === "all" ? " on" : "") + '" data-gunit="all">' +
-      '<span class="n">ALL</span><span class="s">전체</span><span class="c">' + state.grammar.length + "</span></button>"];
+      '<span class="n">ALL</span><span class="s">전체</span><span class="c">' + grSolvedCount() + "/" + state.grammar.length + "</span>" +
+      '<span class="gbar"><i style="width:' + (state.grammar.length ? Math.round((grSolvedCount() / state.grammar.length) * 100) : 0) + '%"></i></span></button>'];
     for (var u = 0; u < GRAMMAR_UNITS.length; u++) {
       var un = GRAMMAR_UNITS[u];
       var total = grUnitTotal(un.id), solved = grUnitSolved(un.id);
       if (!total) continue;
-      tiles.push('<button type="button" class="gr-unit' + (gr.unit === un.id ? " on" : "") + '" data-gunit="' + un.id + '" title="' + esc(un.title) + '">' +
-        '<span class="n">' + un.n + '</span><span class="s">' + esc(un.short || un.title) + '</span><span class="c">' + solved + "/" + total + "</span></button>");
+      tiles.push('<button type="button" class="gr-unit' + (gr.unit === un.id ? " on" : "") + '" data-gunit="' + un.id + '" title="' + esc(un.title) + " · 학습 " + solved + " / " + total + '">' +
+        '<span class="n">' + un.n + '</span><span class="s">' + esc(un.short || un.title) + '</span><span class="c">' + solved + "/" + total + "</span>" +
+        '<span class="gbar"><i style="width:' + Math.round((solved / total) * 100) + '%"></i></span></button>');
     }
     if (el("grUnits")) el("grUnits").innerHTML = tiles.join("");
 
@@ -11922,7 +12145,7 @@ body { overflow-x: clip; }
         if (!sn) continue;
         var pctU = Math.round((sv / sn) * 100);
         rows.push('<div class="vw-item gr-urow" data-gopen="' + ur.id + '">' +
-          '<div class="tt"><b>' + ur.emoji + " " + ur.n + ". " + esc(ur.title) + "</b><span>" + esc(ur.sub) + " · " + sv + "/" + sn + "문제</span>" +
+          '<div class="tt"><b>' + ur.emoji + " " + ur.n + ". " + esc(ur.title) + "</b><span>" + esc(ur.sub) + " · 학습 " + sv + " / " + sn + "</span>" +
           '<div class="gr-mini"><span style="width:' + pctU + '%"></span></div></div>' +
           '<span class="bdg' + (sv >= sn ? " done" : "") + '">' + pctU + "%</span>" +
           '<div class="acts"><button type="button" data-gopen="' + ur.id + '" aria-label="유닛 자세히">›</button></div></div>');
@@ -12070,8 +12293,8 @@ body { overflow-x: clip; }
         }
         var more = e.target.closest("[data-rmore]");
         if (more) { rws.finished = false; rwStartSession(); renderReviewWords(false); return; }
-        var flip = e.target.closest("[data-rwflip]") || e.target.closest("#rwFlip");
-        if (flip) { rws.flipped = !rws.flipped; renderReviewWords(false); return; }
+        // 발음 버튼은 카드 뒤집기(#rwFlip) 안에 들어 있으므로 반드시 뒤집기보다 먼저 처리한다.
+        // 순서가 바뀌면 '🔊 예문 듣기'를 누를 때 카드가 앞면으로 돌아가며 소리는 나지 않는다.
         var say = e.target.closest("[data-rwsay]") || e.target.closest("[data-say]");
         if (say) {
           var cur = rwCurrent();
@@ -12081,6 +12304,8 @@ body { overflow-x: clip; }
           vwSpeak(what === "example" ? cur.example : cur.word, tag, say);
           return;
         }
+        var flip = e.target.closest("[data-rwflip]") || e.target.closest("#rwFlip");
+        if (flip) { rws.flipped = !rws.flipped; renderReviewWords(false); return; }
         var nav = e.target.closest("[data-rwnav]");
         if (nav) {
           if (!rws.queue.length) return;
@@ -12154,6 +12379,8 @@ body { overflow-x: clip; }
       if (currentTab === "review" && rvSub === "words") {
         var w = rwCurrent();
         if (!w) return;
+        // 발음 버튼에 포커스가 있으면 Space는 발음만 — 카드가 같이 뒤집히지 않게
+        if (e.target && e.target.closest && e.target.closest("[data-rwsay],[data-say]")) return;
         if (e.code === "Space" || e.key === " ") {
           e.preventDefault();
           rws.flipped = !rws.flipped;
@@ -12253,6 +12480,7 @@ body { overflow-x: clip; }
     bindVocab();
     seedWords();
     seedGrammar();
+    try { milestoneBackfill(); } catch (e) {}
     bindGrammar();
     syncTopbarOffset();
     window.addEventListener("resize", function () { try { syncTopbarOffset(); } catch (e) {} });
