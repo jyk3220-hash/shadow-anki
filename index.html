@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#080a10">
+<meta name="color-scheme" content="dark">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
@@ -51,6 +52,7 @@
   --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI",
           "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", Roboto, sans-serif;
   --mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
+  color-scheme: dark;
 }
 
 html { -webkit-text-size-adjust: 100%; }
@@ -422,6 +424,13 @@ textarea { resize: vertical; min-height: 62px; line-height: 1.5; }
 .btn.lg { padding: 13px 20px; font-size: 15px; border-radius: 14px; }
 .btn.wide { width: 100%; }
 .btn.icon { padding: 8px; width: 38px; height: 38px; border-radius: 11px; }
+/* 인라인 SVG 아이콘 — 글꼴 글리프가 깨지지 않도록 */
+.btn .ico, .icon-btn .ico { width: 18px; height: 18px; display: block; flex: 0 0 auto; }
+.btn.ghost.icon-btn { color: #cfd7ea; border-color: var(--line-strong); }
+.btn.ghost.icon-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.1); }
+.vw-item .acts .icon-btn { display: inline-flex; align-items: center; justify-content: center; background: transparent; border: 1px solid var(--line); color: #b9c5d8; }
+.vw-item .acts .icon-btn .ico { width: 15px; height: 15px; }
+.vw-item .acts .icon-btn:hover { color: #fff; border-color: var(--line-strong); }
 
 .mini {
   border: 1px solid var(--line);
@@ -1101,13 +1110,14 @@ kbd {
 .pack-ctl { display: flex; align-items: center; gap: 7px; margin-top: 10px; flex-wrap: nowrap; }
 .pack-ctl .seg-btns { margin-left: auto; flex: 0 0 auto; }
 .pack-ctl .btn { flex: 0 0 auto; }
-/* 플레이어 위에 겹쳐 보이는 구간 정보 */
-.player-box .seg-note {
-  position: absolute; left: 8px; top: 8px; z-index: 4;
-  padding: 3px 7px; border-radius: 8px;
-  background: rgba(0, 0, 0, 0.62); border: 1px solid rgba(255, 255, 255, 0.14);
-  color: #cfd7ff; font-family: var(--mono); font-size: 10.5px; letter-spacing: -0.01em;
-  pointer-events: none; white-space: nowrap;
+/* 구간 정보는 영상 프레임 '밖'에 둔다 — 유튜브 제목·컨트롤 오버레이와 겹치지 않게 */
+.pack-segline { display: flex; justify-content: flex-end; margin: 0 0 8px; }
+.seg-note {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 999px;
+  background: rgba(124, 140, 255, 0.12); border: 1px solid rgba(124, 140, 255, 0.32);
+  color: #d7dfff; font-family: var(--mono); font-size: 12px; letter-spacing: -0.01em;
+  white-space: nowrap;
 }
 /* 좁은 화면에서는 버튼 글자를 줄인다(← 이전 → 다음 → ← →) */
 @media (max-width: 700px) { .btn-x { display: none; } }
@@ -1371,6 +1381,13 @@ kbd {
 .vw-meaning { font-size: 17px; font-weight: 750; line-height: 1.5; letter-spacing: -0.01em; }
 .vw-ex { margin-top: 10px; font-size: 14.5px; line-height: 1.55; color: var(--text); }
 .vw-exko { margin-top: 4px; font-size: 12.5px; color: var(--muted-2); line-height: 1.5; }
+/* 카드 분은 항상 밝은 글씨로 — 배경과 대비를 확실히 준다(상속/시스템 다크 모드 반전에 흔들리지 않게) */
+.vw-back { color: #f1f5f9; }
+.vw-back .vw-meaning { color: #f1f5f9; }
+.vw-back .vw-ex { color: #dbe5f5; }
+.vw-back .vw-exko { color: #cfd9ea; }
+.vw-back .vw-saybtn { color: #f1f5f9; border-color: rgba(255, 255, 255, 0.28); background: rgba(255, 255, 255, 0.09); }
+.vw-back .vw-hint { color: #b9c5d8; }
 .vw-back .vw-say { margin-top: 12px; }
 .vw-nav { display: flex; gap: 8px; margin-top: 10px; }
 .vw-nav .btn { flex: 0 0 auto; }
@@ -1421,6 +1438,18 @@ kbd {
 .rv-note { font-size: 12.5px; color: var(--muted-2); font-weight: 600; margin: 0 2px 10px; line-height: 1.5; }
 .rv-top { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
 .rv-top .rv-sub { flex: 1 1 200px; margin-bottom: 0; }
+/* 복습 서브탭(단어·문법·문장)은 스크롤해도 고정 헤더 바로 아래에 붙어 있게 한다 */
+#tab-review .rv-top {
+  position: sticky;
+  top: var(--topbar-h, 0px);
+  z-index: 30;
+  padding: 8px 0 10px;
+  margin: -8px 0 12px;
+  background: rgba(8, 10, 16, 0.95);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+  backdrop-filter: saturate(160%) blur(14px);
+  border-bottom: 1px solid var(--line);
+}
 .rv-lang { display: flex; gap: 3px; padding: 4px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255, 255, 255, 0.035); flex: 0 0 auto; }
 .rv-langbtn { border: 0; background: transparent; color: var(--muted); border-radius: 999px; padding: 6px 9px; font-size: 11.5px; font-weight: 750; white-space: nowrap; }
 .rv-langbtn.on { color: #fff; background: linear-gradient(135deg, rgba(124, 140, 255, 0.9), rgba(169, 112, 255, 0.85)); }
@@ -1522,11 +1551,11 @@ kbd {
 .gr-unitview-stat { font-size: 12px; color: var(--muted); font-weight: 700; margin: 6px 0 10px; }
 .gr-unitview-card .btn.wide { margin-top: 12px; }
 
-/* ---------------- 5탭 한 줄 (좁은 화면) ---------------- */
+/* ---------------- 5탭 한 줄 (좁은 화면) --------------
+   탭(.tabs/.tab) 크기는 아래 Step 3 블록이 최종 결정한다(16.5px · overflow-x: auto).
+   여기서 탭을 12px로 줄이던 규칙은 나중 블록에 덮여 죽은 규칙이라 지웠다
+   — 둘 다 남아 있으면 어느 쪽이 이기는지 헷갈린다. */
 @media (max-width: 600px) {
-  .tabs { width: 100%; margin-left: 0; gap: 2px; padding: 4px 3px; justify-content: space-between; }
-  .tab { flex: 0 1 auto; min-width: 0; padding: 7px 5px; font-size: 12px; gap: 4px; }
-  .tab .badge { min-width: 17px; height: 17px; padding: 0 4px; font-size: 9.5px; }
   .gr-opt { padding: 10px 11px; font-size: 14px; }
   .rv-subbtn { padding: 7px 8px; font-size: 12.5px; }
   .vw-sub { font-size: 11.5px; }
@@ -1552,8 +1581,11 @@ kbd {
   .vw-saybtn { flex: 1 1 auto; min-height: 46px; justify-content: center; font-size: 13.5px; padding: 10px 14px; }
 }
 @media (max-width: 380px) {
-  .tab { padding: 7px 3px; font-size: 11.5px; gap: 3px; }
-  .tab .badge { min-width: 16px; height: 16px; font-size: 9px; }
+  /* 360px 폭에서도 5탭이 한 줄에 들어가게 — 글씨 크기(16.5px)는 Step 3 그대로 두고
+     좌우 여백만 조금 줄인다(넘치면 .tabs 안에서 가로 스크롤은 그대로 동작) */
+  .topbar .tabs { gap: 2px; padding: 4px 3px; }
+  .topbar .tab { padding: 10px 5px; }
+  .tab .badge { min-width: 18px; height: 18px; padding: 0 3px; }
   .rv-subbtn { padding: 7px 5px; font-size: 12px; gap: 4px; }
   .rv-subbtn b { min-width: 18px; height: 17px; }
 }
@@ -1668,6 +1700,36 @@ kbd {
   .toast { bottom: calc(194px + env(safe-area-inset-bottom, 0px)); font-size: 15px; }
 }
 
+/* 복습 서브탭 줄: 좁은 화면에서도 한 줄로 — 두 줄로 감기면 sticky 바가 너무 높아져
+   복습 무대(영상+카드)가 화면 밖으로 밀려난다 */
+@media (max-width: 600px) {
+  #tab-review .rv-top {
+    flex-wrap: nowrap; gap: 6px;
+    padding: 6px 0 7px; margin: -6px 0 10px;
+  }
+  #tab-review .rv-top .rv-sub { flex: 1 1 auto; min-width: 0; padding: 4px; gap: 2px; }
+  #tab-review .rv-subbtn { padding: 6px 5px; font-size: 12.5px; gap: 4px; }
+  #tab-review .rv-subbtn b { min-width: 17px; height: 16px; padding: 0 4px; font-size: 10.5px; }
+  #tab-review .rv-lang { padding: 3px; gap: 2px; }
+  #tab-review .rv-langbtn { padding: 6px 6px; font-size: 11px; }
+}
+
+/* 복습>단어 평가 바는 버튼 2개 — 2칸 그리드로 고정(자동 흐름과 섞이지 않게) */
+#rwMount .rv-word-ratings {
+  grid-auto-flow: row;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-columns: auto;
+}
+
+/* 긴 영어 단어·내부 그리드 때문에 페이지가 좌우로 흔들리지 않게.
+   clip은 스크롤 컨테이너를 만들지 않아 sticky(상단바·복습 서브탭)를 깨지 않는다. */
+html, body { max-width: 100%; }
+html { overflow-x: clip; }
+body { overflow-x: clip; }
+@supports not (overflow: clip) {
+  html, body { overflow-x: hidden; }
+}
+
 /* 세로가 짧은 폰(360x640 등): 브랜드 줄을 접어 탭과 카드에 높이를 내어 준다 */
 @media (max-width: 600px) and (max-height: 720px) {
   .brand { display: none; }
@@ -1747,9 +1809,11 @@ kbd {
 
       <div class="grid shadow-grid">
         <div class="card">
+          <div class="pack-segline">
+            <span class="seg-note" id="packSegInfo">0:00 – 0:00</span>
+          </div>
           <div class="player-box" id="playerPackBox">
             <div id="player-pack"></div>
-            <span class="seg-note" id="packSegInfo">0:00 – 0:00</span>
           </div>
           <div class="pack-ctl">
             <button class="btn primary sm" id="packPlayBtn" title="구간 반복 재생">▶ 구간 반복</button>
@@ -2347,6 +2411,12 @@ kbd {
     });
   }
 
+  // 버튼 아이콘은 글꼴 글리프(↺ ✕ 등) 대신 SVG로 그린다 — 안드로이드·리눅스 폰트에서 ▯로 깨지던 문제
+  var SVG_ATTR = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" ' +
+    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"';
+  var ICON_RESET = '<svg class="ico" ' + SVG_ATTR + '><path d="M3.2 12a8.8 8.8 0 1 0 2.7-6.4"/><path d="M3.2 4.4V9.2h4.8"/></svg>';
+  var ICON_TRASH = '<svg class="ico" ' + SVG_ATTR + '><path d="M4 7h16"/><path d="M9.5 7V5.2c0-.7.5-1.2 1.2-1.2h2.6c.7 0 1.2.5 1.2 1.2V7"/><path d="M6.2 7l.9 12.1c.1 1 .9 1.9 2 1.9h5.8c1.1 0 1.9-.8 2-1.9L17.8 7"/><path d="M10 11.2v6"/><path d="M14 11.2v6"/></svg>';
+
   var toastTimer = null;
   function toast(msg) {
     var t = el("toast");
@@ -2450,10 +2520,17 @@ kbd {
     return (y < 2 ? y.toFixed(1) : String(Math.round(y))) + "년";
   }
 
+  // 다음 복습까지 남은 시간을 실제 due 시각으로 보여 준다.
+  // (10분 뒤·오늘 밤처럼 하루 안쪽이면 '내일'이 아니라 '10분 뒤'·'오늘')
   function dueText(card, now) {
     now = now || Date.now();
-    if (card.due <= now) return "지금 복습";
-    var d = Math.ceil((card.due - now) / DAY);
+    var due = Number(card && card.due) || 0;
+    if (!due) return "—";
+    if (due <= now) return "지금 복습";
+    var mins = Math.round((due - now) / 60000);
+    if (mins < 60) return Math.max(1, mins) + "분 뒤";
+    if (due <= endOfToday(now)) return "오늘";
+    var d = Math.ceil((due - now) / DAY);
     if (d <= 1) return "내일";
     return d + "일 후";
   }
@@ -5793,6 +5870,7 @@ kbd {
     qsa(".tabpane").forEach(function (p) {
       p.classList.toggle("active", p.id === "tab-" + name);
     });
+    try { syncTopbarOffset(); } catch (e) {}
     if (name === "library") renderLibrary();
     if (name === "words") renderVocab();
     if (name === "grammar") { seedGrammar(); renderGrammarTab(); }
@@ -7274,6 +7352,22 @@ kbd {
     return { card: card, label: label };
   }
 
+  // 평가 직후 이동할 다음 문장 번호 — '모름'은 3~5자리 뒤에 한 번 더 넣어 둔 자리로 먼저 간다
+  function packNextIndex(pack, from) {
+    if (!pack || !pack.cards || !pack.cards.length) return -1;
+    var next = from + 1;
+    var plan = packState.againPlan || [];
+    for (var pi = 0; pi < plan.length; pi++) {
+      if (plan[pi].at <= next) {
+        var at = plan[pi].idx;
+        plan.splice(pi, 1);
+        return Math.min(at, pack.cards.length - 1);
+      }
+    }
+    if (next > pack.cards.length - 1 && plan.length) next = plan.shift().idx;
+    return next;
+  }
+
   function ratePackCurrent(grade) {
     var pack = packState.active;
     if (!pack || packState.lock) return;
@@ -7281,8 +7375,9 @@ kbd {
     var idx = packState.idx;
     hideHintOffer();
     var undoSnapNow = undoCaptureFor("pack", packCardId(pack, idx));
-    var res = savePackCard(pack, idx, grade);
-    if (!res) return;
+    var res = null;
+    try { res = savePackCard(pack, idx, grade); } catch (e) { res = null; }
+    if (!res) { packState.lock = false; toast("저장하지 못했어요. 잠시 뒤 다시 눌러 주세요."); return; }
     // '모름'은 이번 판에서 3~5자리 뒤에 한 번 더 보여 준다(카드당 한 번만)
     if (grade === "hard") {
       packState.againPlan = packState.againPlan || [];
@@ -7297,41 +7392,43 @@ kbd {
     var seq = packGradeSeq;
     packState.lock = true;
 
-    var badge = el("packBadge");
-    badge.classList.add("show");
-    if (grade === "mastered") {
-      badge.classList.add("mastered");
-      badge.textContent = "외움 완료 · 라이브러리에서 언제든 되살릴 수 있어요";
-    } else {
-      badge.classList.remove("mastered");
-      badge.textContent = "복습 예정: " + res.label;
-    }
-    try { refreshTodayCounts(); } catch (e) {}
-    renderPackMini();
-    renderPacks();
-    toast(grade === "mastered" ? "외움 완료로 저장했어요." : "저장 완료 · " + res.label + " 복습");
-    undoOffer(undoSnapNow);
-    if (packState.player) packState.player.pause();
-
+    // 다음 문장은 지금 정해 두고 '이동 예약'을 가장 먼저 걸어 둔다.
+    // (배지·목록·플레이어 갱신 중 무엇이 실패해도 자동 이동은 반드시 일어나게)
+    var nextIdx = packNextIndex(pack, idx);
     setTimeout(function () {
-      if (!packState.active || seq !== packGradeSeq) return;
-      if (packState.idx !== idx) return;
-      var next = packState.idx + 1;
-      var plan = packState.againPlan || [];
-      for (var pi = 0; pi < plan.length; pi++) {
-        if (plan[pi].at <= next) { next = plan[pi].idx; plan.splice(pi, 1); break; }
-      }
-      if (next > pack.cards.length - 1) {
-        if (plan.length) next = plan.shift().idx;
-      }
-      if (next <= pack.cards.length - 1) {
-        packState.idx = next;
-        showPackSentence(true);
+      if (seq !== packGradeSeq) return;   // 더 최근 평가가 있으면 그쪽이 이동을 맡는다
+      if (!packState.active) return;
+      if (packState.idx !== idx) return;  // 그 사이 직접 이동했으면 그대로 둔다
+      if (nextIdx >= 0 && nextIdx <= pack.cards.length - 1) {
+        packState.idx = nextIdx;
+        try { el("packCount").textContent = (nextIdx + 1) + " / " + pack.cards.length; } catch (e) {}
+        try { showPackSentence(true); } catch (e) { packState.lock = false; }
       } else {
         packState.lock = false;
-        toast("팩의 마지막 문장까지 왔어요 🎉");
+        try { toast("팩의 마지막 문장까지 왔어요 🎉"); } catch (e) {}
       }
-    }, 850);
+    }, 520);
+
+    // 아래 갱신은 하나씩 따로 감싼다 — 하나가 실패해도 위의 자동 이동에 영향을 주지 않는다
+    try {
+      var badge = el("packBadge");
+      if (badge) {
+        badge.classList.add("show");
+        if (grade === "mastered") {
+          badge.classList.add("mastered");
+          badge.textContent = "외움 완료 · 라이브러리에서 언제든 되살릴 수 있어요";
+        } else {
+          badge.classList.remove("mastered");
+          badge.textContent = "복습 예정: " + res.label;
+        }
+      }
+    } catch (e) {}
+    try { refreshTodayCounts(); } catch (e) {}
+    try { renderPackMini(); } catch (e) {}
+    try { renderPacks(); } catch (e) {}
+    try { toast(grade === "mastered" ? "외움 완료로 저장했어요." : "저장 완료 · " + res.label + " 복습"); } catch (e) {}
+    try { undoOffer(undoSnapNow); } catch (e) {}
+    try { if (packState.player) packState.player.pause(); } catch (e) {}
   }
 
   /* =========================================================
@@ -7387,7 +7484,7 @@ kbd {
           ? '<button class="btn sm ghost" data-act="unmaster" title="다시 복습하기">되살리기</button>'
           : '<button class="btn sm ghost" data-act="master" title="외움으로 표시">외움</button>') +
         '<button class="btn sm ghost" data-act="edit" title="수정">수정</button>' +
-        '<button class="btn sm ghost" data-act="delete" title="삭제">✕</button>' +
+        '<button class="btn sm ghost icon-btn" data-act="delete" title="삭제" aria-label="이 카드 삭제">' + ICON_TRASH + "</button>" +
       "</div>" +
     "</div>";
   }
@@ -7801,11 +7898,31 @@ kbd {
     return h;
   }
 
+  // 고정 헤더 높이를 CSS 변수로 내보낸다 — 복습 서브탭(sticky)이 그 바로 아래에 붙는다
+  function syncTopbarOffset() {
+    try {
+      var h = Math.max(0, Math.round(stickyTopHeight()));
+      document.documentElement.style.setProperty("--topbar-h", h + "px");
+      return h;
+    } catch (e) { return 0; }
+  }
+
   // 복습 무대를 고정 헤더 바로 아래로 올린다(카드를 바꿀 때마다 같은 자리에서 시작)
+  // 서브탭(단어·문법·문장) 줄은 sticky라 항상 헤더 아래에 붙어 있으므로,
+  // 무대는 '서브탭 높이만큼' 더 내려서 서로 가리지 않게 맞춘다.
   function scrollReviewTop() {
     var stage = el("reviewStage");
     if (!stage || stage.hidden || typeof stage.getBoundingClientRect !== "function") return;
-    var y = stage.getBoundingClientRect().top + (window.pageYOffset || 0) - stickyTopHeight() - 8;
+    var head = syncTopbarOffset();
+    var subH = 0;
+    try {
+      var subs = document.querySelector("#tab-review .rv-top");
+      if (subs) {
+        var sr = subs.getBoundingClientRect();
+        if (sr.height) subH = Math.round(sr.height) + 6;
+      }
+    } catch (e) {}
+    var y = stage.getBoundingClientRect().top + (window.pageYOffset || 0) - head - subH - 6;
     if (!isFinite(y) || y < 0) y = 0;
     try { window.scrollTo({ top: y, behavior: "smooth" }); }
     catch (e) { try { window.scrollTo(0, y); } catch (e2) {} }
@@ -7970,7 +8087,24 @@ kbd {
     s.classList.remove("reveal-anim");
     void s.offsetWidth;
     s.classList.add("reveal-anim");
+    ensureAnswerVisible();
     ensureRatingsVisible();
+  }
+
+  // 정답(문장·뜻)이 하단 고정 평가 바에 가리지 않게 필요한 만큼만 내린다
+  function ensureAnswerVisible() {
+    var box = el("answerBlock");
+    if (!box || box.hidden || typeof box.getBoundingClientRect !== "function") return;
+    var vh = window.innerHeight || 0;
+    if (!vh) return;
+    var bar = el("ratings");
+    var limit = vh - 10;
+    if (bar && bar.getBoundingClientRect().height) limit = bar.getBoundingClientRect().top - 10;
+    var r = box.getBoundingClientRect();
+    var over = r.bottom - limit;
+    if (over <= 0) return;
+    var y = (window.pageYOffset || 0) + over + 6;
+    try { window.scrollTo(0, y); } catch (e) {}
   }
 
   // 빠른 연속 탭이 한 카드를 두 번 평가하지 않도록 300ms 잠금(다음 카드가 그려질 때까지)
@@ -9456,6 +9590,9 @@ kbd {
     try { if (el("vwDue")) el("vwDue").textContent = String(leftTodayWords()); } catch (e) {}
     try { if (el("vwStreak")) el("vwStreak").textContent = String(wordStreak(now)); } catch (e) {}
     try { if (el("grDue")) el("grDue").textContent = String(leftTodayGrammar()); } catch (e) {}
+    try { if (el("grModeTodayN")) el("grModeTodayN").textContent = String(leftTodayGrammar()); } catch (e) {}
+    // '틀린 문제 다시 풀기' 개수도 바로 맞춘다 — 오답을 고르면 즉시 1 이상으로 보여야 한다
+    try { if (el("grModeWrongN")) el("grModeWrongN").textContent = String(grWrongCount()); } catch (e) {}
     try { if (el("grStreak")) el("grStreak").textContent = String(grammarStreak(now)); } catch (e) {}
     try { renderStudyLog(now); } catch (e) {}
     try { updateDueBadge(); } catch (e) {}
@@ -9607,7 +9744,7 @@ kbd {
         (dueCls ? '<span class="bdg ' + dueCls + '">' + esc(dueLabel) + "</span>" : "") +
         '<div class="acts">' +
           '<button type="button" data-wsay="' + esc(w.id) + '" aria-label="발음 듣기">🔊</button>' +
-          '<button type="button" data-wdel="' + esc(w.id) + '" aria-label="이 단어 지우기">✕</button>' +
+          '<button type="button" class="icon-btn" data-wdel="' + esc(w.id) + '" aria-label="이 단어 지우기" title="이 단어 지우기">' + ICON_TRASH + "</button>" +
         "</div></div>");
     }
     el("vwList").innerHTML = rows.length ? rows.join("") :
@@ -10975,7 +11112,7 @@ kbd {
     h += '<div class="vw-nav gr-nav">' +
       '<button type="button" class="btn sm ghost" data-gnav="-1" aria-label="이전 문제">←</button>' +
       '<button type="button" class="btn primary sm" data-gnav="1">' + (this.answered ? "다음 문제" : "건너뛰기") + "</button>" +
-      '<button type="button" class="btn sm ghost" data-gnav="0" aria-label="이 문제 다시 풀기">↺</button>' +
+      '<button type="button" class="btn sm ghost icon-btn" data-gnav="0" aria-label="이 문제 다시 풀기" title="이 문제 다시 풀기">' + ICON_RESET + "</button>" +
       "</div>";
     h += '<div class="gr-note">' + (this.answered
       ? "보기를 고르면 정답은 '앎', 오답은 '모름(10분)'으로 자동 기록돼요. 해설을 읽고 다음 문제로 넘어가세요."
@@ -11124,6 +11261,28 @@ kbd {
 
   var rws = { queue: [], idx: 0, flipped: false, doneCount: 0, finished: false, againIds: {} };
 
+  // 대기열에서 '지금은 복습 대상이 아닌' 단어를 덜어 낸다.
+  // 단어장에서 오늘 이미 '앎'으로 평가한 단어는 due가 내일 이후라 복습 큐에 남으면 중복 출제된다.
+  function rwPruneQueue() {
+    if (!rws.queue.length) return;
+    var end = endOfToday();
+    var curId = rws.queue[rws.idx];
+    var keep = [];
+    for (var i = 0; i < rws.queue.length; i++) {
+      var id = rws.queue[i];
+      var w = findWord(id);
+      if (!w || w.mastered) continue;
+      if (!isDueBy(w, end)) continue;
+      if (!rvLangOk(w.lang)) continue;
+      keep.push(id);
+    }
+    rws.queue = keep;
+    if (!keep.length) { rws.idx = 0; return; }
+    var ni = curId ? keep.indexOf(curId) : -1;
+    if (ni >= 0) rws.idx = ni;
+    else if (rws.idx >= keep.length) rws.idx = keep.length - 1;
+  }
+
   function rwStartSession() {
     var list = rwList().slice(0, RV_CAP);
     rws.queue = [];
@@ -11160,7 +11319,10 @@ kbd {
   function renderReviewWords(rebuild) {
     var box = el("rwMount");
     if (!box) return;
-    if (rebuild && !rws.queue.length && !rws.finished) rwStartSession();
+    // 다시 그릴 때는 언제나 '오늘 복습 대상(isDueBy)'으로 대기열을 새로 만든다.
+    // 단어장에서 평가를 마친 단어가 예전 대기열에 남아 다시 나오는 일을 막는다.
+    if (rebuild) { rws.finished = false; rwStartSession(); }
+    else rwPruneQueue();
     if (!rws.queue.length && !rws.finished && rwList().length) rwStartSession();
     if (rws.finished) {
       box.innerHTML = rwCompletionHTML();
@@ -12047,6 +12209,9 @@ kbd {
     seedWords();
     seedGrammar();
     bindGrammar();
+    syncTopbarOffset();
+    window.addEventListener("resize", function () { try { syncTopbarOffset(); } catch (e) {} });
+    try { if (window.visualViewport) window.visualViewport.addEventListener("resize", function () { try { syncTopbarOffset(); } catch (e) {} }); } catch (e) {}
     renderPacks();
     renderLibrary();
     renderVocab();
