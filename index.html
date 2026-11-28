@@ -1370,6 +1370,8 @@ kbd {
 .vw-stats { display: flex; gap: 6px; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); }
 .vw-pill { border: 1px solid var(--line); border-radius: 999px; padding: 5px 10px; background: rgba(255, 255, 255, 0.03); font-weight: 700; white-space: nowrap; }
 .vw-pill b { color: var(--text); font-weight: 800; }
+/* 숨김 전용(계산용) 숫자 — 어떤 브라우저에서도 통계 줄에 섞여 보이지 않게 */
+.vw-stats [hidden], .vw-stats .stat-hidden { display: none !important; }
 .vw-pill.due { border-color: rgba(255, 180, 84, 0.4); color: #ffd9a3; background: rgba(255, 180, 84, 0.1); }
 .vw-pill.due b { color: #fff; }
 .vw-decks { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
@@ -1387,7 +1389,7 @@ kbd {
 .vw-say { display: flex; gap: 7px; flex-wrap: wrap; justify-content: center; margin-top: 14px; }
 .vw-saybtn { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--line-strong); background: rgba(255, 255, 255, 0.055); color: var(--text); border-radius: 999px; padding: 8px 12px; font-size: 12.5px; font-weight: 700; }
 .vw-saybtn:active { transform: scale(0.97); }
-.vw-saybtn.on { border-color: rgba(124, 140, 255, 0.85); background: rgba(124, 140, 255, 0.22); }
+.vw-saybtn.on, .vw-saybtn.acc-on { border-color: rgba(124, 140, 255, 0.85); background: rgba(124, 140, 255, 0.22); }
 .vw-hint { margin-top: 12px; font-size: 11.5px; color: var(--muted-2); }
 .vw-meaning { font-size: 17px; font-weight: 750; line-height: 1.5; letter-spacing: -0.01em; }
 .vw-ex { margin-top: 10px; font-size: 14.5px; line-height: 1.55; color: var(--text); }
@@ -1448,6 +1450,7 @@ kbd {
 .rv-done-sum { margin-top: 10px; font-size: 12.5px; font-weight: 700; color: var(--text); line-height: 1.6; }
 .backlog-nudge { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(255, 180, 84, 0.4); background: rgba(255, 180, 84, 0.1); color: #ffe0b6; font-size: 12px; font-weight: 650; line-height: 1.45; }
 .backlog-nudge[hidden] { display: none; }
+.banner[hidden], .backlog-nudge[hidden], .rv-allclear[hidden] { display: none !important; }
 .backlog-nudge .bl-ico { font-size: 15px; flex: 0 0 auto; }
 .backlog-nudge .bl-t { flex: 1 1 auto; min-width: 0; }
 .backlog-nudge .bl-t b { color: #fff; font-weight: 800; }
@@ -1479,9 +1482,6 @@ kbd {
 .rv-done-sub { margin-top: 6px; font-size: 12.5px; color: var(--muted-2); line-height: 1.55; }
 .rv-goal { margin-top: 8px; font-size: 12.5px; font-weight: 800; color: #8bf0c4; }
 .rv-done-card .btn { margin-top: 10px; }
-.gr-over { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
-.gr-ovbtn { flex: 1 1 auto; border: 1px solid var(--line-strong); background: rgba(255, 255, 255, 0.055); color: var(--text); border-radius: 999px; padding: 9px 10px; font-size: 12.5px; font-weight: 750; }
-.gr-ovbtn.on { border-color: rgba(124, 140, 255, 0.85); background: rgba(124, 140, 255, 0.22); }
 
 /* ---------------- 문법 (12유닛 · 60문제) ---------------- */
 .gr-mount { margin-bottom: 14px; }
@@ -1636,7 +1636,6 @@ kbd {
   .vw-listen { margin-top: 10px; }
   .gr-opt { min-height: 56px; font-size: 18px; padding: 13px 14px; }
   .gr-opt .k { width: 28px; height: 28px; font-size: 14px; }
-  .gr-over .gr-ovbtn { min-height: 54px; font-size: 17px; }
   .vw-deck { font-size: 15px; font-weight: 800; padding: 10px 14px; min-height: 44px; }
   .rv-subbtn { font-size: 15px; min-height: 44px; }
   .rv-langbtn { font-size: 15px; padding: 9px 11px; }
@@ -2177,7 +2176,7 @@ kbd {
       <div class="vw-stats">
         <span class="vw-pill due">오늘 남은 단어 <b id="vwDue">0</b>개</span>
         <span class="vw-pill">연속 <b id="vwStreak">0</b>일</span>
-        <span hidden><b id="vwTotal">0</b><b id="vwToday">0</b></span>
+        <span hidden style="display:none" aria-hidden="true"><b id="vwTotal">0</b><b id="vwToday">0</b></span>
       </div>
     </div>
 
@@ -2268,13 +2267,13 @@ kbd {
       <div class="vw-head">
         <div>
           <div class="vw-title">문법</div>
-          <div class="vw-sub">12유닛 · 60문제 · 정답을 누르면 바로 해설과 발음이 나옵니다.</div>
+          <div class="vw-sub">12유닛 · 60문제 · 정답을 고르면 바로 채점(정답=앎, 오답=모름)되고 해설·발음이 나옵니다.</div>
         </div>
         <div class="vw-stats">
           <span class="vw-pill due">오늘 남은 문제 <b id="grDue">0</b></span>
           <span class="vw-pill">연속 <b id="grStreak">0</b>일</span>
-          <span hidden id="grTodayPill"><b id="grToday">0</b></span>
-          <span hidden><b id="grTotal">0</b></span>
+          <span hidden style="display:none" id="grTodayPill" aria-hidden="true"><b id="grToday">0</b></span>
+          <span hidden style="display:none" aria-hidden="true"><b id="grTotal">0</b></span>
         </div>
       </div>
 
@@ -9336,6 +9335,7 @@ kbd {
   var DECK_EMOJI = { biz: "💼", energy: "⚗️", ai: "🤖", de: "🇩🇪", custom: "✍️" };
 
   var vw = { deck: "all", q: "", idx: 0, flipped: false, queue: [], voiceWarn: {} };
+  var lastSayTag = "en-US";   // 문법 '🔊 소리 다시 듣기'가 기억하는 마지막 발음(미국식/영국식)
 
   function normalizeWord(raw) {
     if (!raw || typeof raw !== "object") return null;
@@ -9698,15 +9698,25 @@ kbd {
     for (var i = 0; i < delays.length; i++) setTimeout(vwVoicesReady, delays[i]);
   }
 
+  function vwVoiceNameHint(voice, want) {
+    var n = String((voice && voice.name) || "").toLowerCase();
+    if (!n) return false;
+    if (want === "en-gb") return /(^|[^a-z])(uk|british|united kingdom|great britain|england)([^a-z]|$)/.test(n);
+    if (want === "en-us") return /(^|[^a-z])(us|usa|american|united states)([^a-z]|$)/.test(n);
+    return false;
+  }
+
   function vwPickVoice(tag) {
     var list = vwVoices();
     var want = String(tag || "").toLowerCase().replace("_", "-");
     var base = want.split("-")[0];
     var exact = [], near = [];
     for (var i = 0; i < list.length; i++) {
-      var lg = String(list[i].lang || "").toLowerCase().replace("_", "-");
-      if (lg === want) exact.push(list[i]);
-      else if (lg.split("-")[0] === base) near.push(list[i]);
+      var v = list[i];
+      var lg = String(v.lang || "").toLowerCase().replace("_", "-");
+      // lang이 en처럼 두루뭉실해도 이름에 UK/British, US/American 힌트가 있으면 그 발음으로 본다
+      if (lg === want || (lg.split("-")[0] === base && vwVoiceNameHint(v, want))) exact.push(v);
+      else if (lg.split("-")[0] === base) near.push(v);
     }
     // 같은 언어가 여럿이면 기기에 들어 있는(오프라인) 음성을 먼저 고른다 — 기본 음성이 흔들리지 않게
     var prefer = function (arr) {
@@ -9714,7 +9724,8 @@ kbd {
       return arr[0];
     };
     if (exact.length) return { voice: prefer(exact), exact: true };
-    if (near.length) return { voice: prefer(near), exact: false };
+    // 영어는 다른 지역 음성으로 대신 읽히지 않는다 — 미국식/영국식이 똑같이 들리는 원인이었다
+    if (near.length && base !== "en") return { voice: prefer(near), exact: false };
     return { voice: null, exact: false };
   }
 
@@ -9750,6 +9761,7 @@ kbd {
       toast("이 기기에는 독일어 음성이 없어요. 기기 설정에서 독일어 음성을 추가하면 들을 수 있어요.");
       return;
     }
+    if (tag === "en-US" || tag === "en-GB") lastSayTag = tag;   // '소리 다시 듣기'는 마지막 발음을 기억한다
     try { window.speechSynthesis.cancel(); } catch (e) {}
     var u = new SpeechSynthesisUtterance(s);
     u.lang = p.voice ? (p.voice.lang || tag) : tag;
@@ -9757,9 +9769,15 @@ kbd {
     u.rate = 0.9;
     u.pitch = 1;
     if (!p.voice) {
-      if (!vw.voiceWarn["default|" + tag]) {
-        vw.voiceWarn["default|" + tag] = 1;
-        toast("이 기기의 기본 음성으로 읽어요. (" + label + " 전용 음성 없음)");
+      var missKey = "noexact|" + tag;
+      if (!vw.voiceWarn[missKey]) {
+        vw.voiceWarn[missKey] = 1;
+        if (tag === "en-GB" || tag === "en-US") {
+          toast("이 기기에는 " + label + "(" + tag + ") 전용 음성이 없어요. 그래서 다른 영어 음성과 똑같이 들릴 수 있어요 — 기기 설정 > 텍스트 음성 변환(TTS)에서 English (" +
+            (tag === "en-GB" ? "United Kingdom" : "United States") + ") 음성을 설치하면 달라져요.");
+        } else {
+          toast("이 기기의 기본 음성으로 읽어요. (" + label + " 전용 음성 없음)");
+        }
       }
     }
     if (!p.exact && p.voice) {
@@ -9983,7 +10001,7 @@ kbd {
   /* =========================================================
      문법 (12유닛 · 60문제) + 복습 하위 3영역(단어·문법·문장)
      - 복습은 하루 한 판 20개까지: 20개를 채우면 그 영역은 '오늘 목표 달성'
-     - 정답을 누르면 바로 SM-2(정답=앎, 오답=10분)를 잡고, 아래에서 바꿀 수 있다
+     - 정답을 누르면 바로 SM-2(정답=앎, 오답=10분)를 잡는다 — 따로 평가 버튼을 누르지 않는다
      - 보기 4개는 문제가 바뀔 때마다 자리를 섞는다
      ========================================================= */
   /* =========================================================
@@ -10973,18 +10991,14 @@ kbd {
 
     h += '<div class="gr-explain"' + (this.answered ? "" : " hidden") + ">";
     h += '<div class="gr-result ' + (this.correct ? "ok" : "no") + '">' +
-      (this.correct ? "정답이에요 ✅ · '앎'으로 잡았어요" : "아쉬워요 · 정답은 '" + esc(q.options[q.answer]) + "' · 10분 뒤 '모름'으로 잡았어요") + "</div>";
+      (this.correct ? "⭕ 정답! 앎으로 기록됨" : "❌ 오답 — 모름(10분 뒤 복습)으로 기록됨 · 정답은 '" + esc(q.options[q.answer]) + "'") + "</div>";
     h += '<div class="gr-why">' + esc(q.ko) + "</div>";
     h += '<div class="gr-full">' + esc(q.full) + "</div>";
     if (q.kr) h += '<div class="gr-kr">' + esc(q.kr) + "</div>";
-    h += '<button type="button" class="btn ghost wide gr-listen" data-gsay="en-US">🔊 소리 다시 듣기</button>';
+    h += '<button type="button" class="btn ghost wide gr-listen" data-gsay="last">🔊 소리 다시 듣기</button>';
     h += '<div class="vw-say gr-say">' +
-      '<button type="button" class="vw-saybtn" data-gsay="en-US">🇺🇸 미국식</button>' +
-      '<button type="button" class="vw-saybtn" data-gsay="en-GB">🇬🇧 영국식</button></div>';
-    h += '<div class="gr-over" role="group" aria-label="평가 바꾸기">' +
-      '<button type="button" class="gr-ovbtn' + (this.overridden && this.lastOverride === "hard" ? " on" : "") + '" data-gov="hard">❌ 모름</button>' +
-      '<button type="button" class="gr-ovbtn' + (this.overridden && this.lastOverride === "good" ? " on" : "") + '" data-gov="good">⭕ 앎</button>' +
-      "</div>";
+      '<button type="button" class="vw-saybtn' + (lastSayTag === "en-US" ? " acc-on" : "") + '" data-gsay="en-US">🇺🇸 미국식</button>' +
+      '<button type="button" class="vw-saybtn' + (lastSayTag === "en-GB" ? " acc-on" : "") + '" data-gsay="en-GB">🇬🇧 영국식</button></div>';
     h += "</div>";
 
     h += '<div class="vw-nav gr-nav">' +
@@ -10993,7 +11007,7 @@ kbd {
       '<button type="button" class="btn sm ghost" data-gnav="0" aria-label="이 문제 다시 풀기">↺</button>' +
       "</div>";
     h += '<div class="gr-note">' + (this.answered
-      ? "정답을 고르면 자동으로 일정이 잡혀요. 다르면 위 버튼으로 바꾸고 다음 문제로 넘어가세요."
+      ? "보기를 고르면 정답은 '앎', 오답은 '모름(10분)'으로 자동 기록돼요. 해설을 읽고 다음 문제로 넘어가세요."
       : "보기를 누르면 바로 채점되고 해설이 열려요.") + "</div>";
     h += "</div>";
     return h;
@@ -11029,7 +11043,7 @@ kbd {
     this.picked = shown;
     this.answered = true;
     this.correct = real === q.answer;
-    // 정답이면 '앎', 틀리면 '모름(10분)'으로 바로 잡는다 — 아래 2버튼으로 바꿀 수 있다
+    // 정답이면 '앎', 틀리면 '모름(10분)'으로 바로 잡는다 — 수동 평가 버튼은 없앴다(보기 선택 = 채점)
     applyPackGrade(q, this.correct ? "good" : "again", false, now);
     q.missed = !this.correct;
     logGrammarStudied(q.id, now);
@@ -11039,23 +11053,6 @@ kbd {
     grScrollIntoView();
     undoOffer(undoSnapNow);
     if (!this.correct) hintOfferAfter(q.id);
-  };
-
-  GRSession.prototype.override = function (g) {
-    var q = this.current();
-    if (!q || !this.answered || this.overridden) return;
-    var grade = g === "good" ? "good" : "hard";
-    hideHintOffer();
-    var undoSnapNow = undoCaptureFor(this.kind === "review" ? "review-grammar" : "grammar", q.id, this);
-    applyPackGrade(q, grade, false, Date.now());
-    q.missed = grade === "hard";
-    this.overridden = true;
-    this.lastOverride = grade;
-    saveStore();
-    this.render(false);
-    toast(grade === "good" ? "'앎'으로 바꿨어요" : "'모름'으로 바꿨어요");
-    undoOffer(undoSnapNow);
-    if (grade === "hard") hintOfferAfter(q.id);
   };
 
   GRSession.prototype.next = function () {
@@ -11945,11 +11942,17 @@ kbd {
     if (say) {
       var q = sess.current();
       if (!q) return;
-      vwSpeak(q.full, say.getAttribute("data-gsay") || "en-US", say);
+      var sayTag = say.getAttribute("data-gsay") || "en-US";
+      if (sayTag === "last") sayTag = lastSayTag;
+      if (sayTag === "en-US" || sayTag === "en-GB") {
+        var accBtns = sess.mountId ? document.querySelectorAll("#" + sess.mountId + " .vw-saybtn") : [];
+        for (var bi = 0; bi < accBtns.length; bi++) {
+          accBtns[bi].classList.toggle("acc-on", accBtns[bi].getAttribute("data-gsay") === sayTag);
+        }
+      }
+      vwSpeak(q.full, sayTag, say);
       return;
     }
-    var ov = e.target.closest("[data-gov]");
-    if (ov) { sess.override(ov.getAttribute("data-gov")); return; }
     var nav = e.target.closest("[data-gnav]");
     if (nav) {
       var d = Number(nav.getAttribute("data-gnav"));
